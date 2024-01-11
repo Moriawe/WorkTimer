@@ -1,0 +1,9 @@
+<resources>
+    <!-- Headers -->
+    <string name="app_name">WorkTimer</string>
+    <string name="timer">Timer</string>
+    <string name="time_sheet">Time Sheet</string>
+
+    <!-- Buttons -->
+    <string name="back_button">Back</string>
+</resources>
