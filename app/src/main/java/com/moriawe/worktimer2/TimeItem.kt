@@ -12,6 +12,8 @@ data class TimeItem(
 data class TimeItem2(
     val startTime: LocalDateTime?,
     val endTime: LocalDateTime?,
+    val totalTimeInString: String,
     val totalTimeInSeconds: Long,
-    val totalTimeInDuration: Duration
+    val totalTimeInDuration: Duration,
+    val description: String
     )

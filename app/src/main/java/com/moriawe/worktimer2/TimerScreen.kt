@@ -32,75 +32,67 @@ fun TimerScreen(modifier: Modifier = Modifier) {
     val viewModel: TimerViewModel = viewModel()
     var isRunning by remember { mutableStateOf(false) }
 
-    val dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM HH:mm:ss")
-    val timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss")
-
+    // Parent column
     Column(
         modifier = modifier
     ) {
+        // Scrollable column that shows the timecards
         Column(
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
         ) {
             for (time in viewModel.timeList2) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(5.dp)
-                        .border(1.dp, Color.Black, shape = RectangleShape)
-                        .padding(5.dp)
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                    ) {
-                        /*
-                            var timeColor = if (time.isStartTime) Color.Green else Color.Red
-                            Text(
-                                text = time.timeAsText,
-                                color = timeColor
-                            )
-                         */
-                        Text("${time.startTime?.format(dateTimeFormatter)} - ")
-                        //Spacer(modifier = Modifier.width(4.dp))
-                        Text("${time.endTime?.format(timeFormatter)}")
-                        val seconds = time.totalTimeInDuration.toSecondsPart()
-                        val minutes = time.totalTimeInDuration.toMinutesPart()
-                        val hours = time.totalTimeInDuration.toHoursPart()
-                        Text("Total Time: $hours:$minutes:$seconds")
-                        //Text("Total Time: ${time.totalTimeInSeconds}")
-
-                    }
-                    //Spacer(modifier = Modifier.height(5.dp))
-                    Text("Something you did")
-
-                }
+                TimeItemCard(time)
             }
         }
-        BottomRowButton()
+        // Bottom row start/stop button
+        Row(
+            modifier = Modifier
+                .fillMaxSize(),
+            verticalAlignment = Alignment.Bottom
+        ) {
+            Button(
+                modifier = Modifier
+                    .padding(10.dp)
+                    .fillMaxWidth(),
+                onClick = {
+                    if (isRunning) viewModel.stopTimer() else viewModel.startTimer()
+                    isRunning = !isRunning
+                }
+            ) {
+                Text(
+                    fontSize = 20.sp,
+                    text = if (isRunning) "Stop" else "Start"
+                )
+            }
+        }
     }
 }
 
 @Composable
-fun BottomRowButton(onClick: () -> Unit) {
-    Row(
+fun TimeItemCard(time: TimeItem2) {
+
+    // TODO move out the formatters
+    // TODO maybe also have one function that writes total time in string
+    val dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM HH:mm:ss")
+    val timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss")
+
+    Column(
         modifier = Modifier
-            .fillMaxSize(),
-        verticalAlignment = Alignment.Bottom
+            .fillMaxSize()
+            .padding(5.dp)
+            .border(1.dp, Color.Black, shape = RectangleShape)
+            .padding(5.dp)
     ) {
-        Button(
+        Row(
             modifier = Modifier
-                .padding(10.dp)
-                .fillMaxWidth(),
-            onClick = {
-                if (isRunning) viewModel.stopTimer() else viewModel.startTimer()
-                isRunning = !isRunning
-            }
+                .fillMaxWidth()
         ) {
-            Text(
-                fontSize = 20.sp,
-                text = if (isRunning) "Stop" else "Start"
-            )
+            Text("${time.startTime?.format(dateTimeFormatter)} - ")
+            Text("${time.endTime?.format(timeFormatter)}")
+            Text("Total Time: ${time.totalTimeInString}")
+
         }
+        Text(time.description)
     }
 }

@@ -9,12 +9,9 @@ import java.time.format.DateTimeFormatter
 
 class TimerViewModel(): ViewModel() {
 
-    val timeList = mutableStateListOf<TimeItem>()
-
     val timeList2 = mutableStateListOf<TimeItem2>()
 
-    //private var workTime = MutableStateFlow<Duration>()'
-    var totalTime: Long = 0
+    var totalTimeInSeconds: Long = 0
     var totalTimeInDuration: Duration? = null
     private var startTime: LocalDateTime? = null
     private var stopTime: LocalDateTime? = null
@@ -23,20 +20,10 @@ class TimerViewModel(): ViewModel() {
 
 
     fun startTimer() {
-        timeList.add(TimeItem(
-            LocalDateTime.now(),
-            LocalDateTime.now().format(formatter),
-            true))
-
         startTime = LocalDateTime.now()
     }
 
     fun stopTimer() {
-        timeList.add(TimeItem(
-            LocalDateTime.now(),
-            LocalDateTime.now().format(formatter),
-            false))
-
         stopTime = LocalDateTime.now()
         calculateWorkTime()
     }
@@ -46,8 +33,6 @@ class TimerViewModel(): ViewModel() {
         val time = Duration.between(startTime, stopTime)
         // Storing duration
         totalTimeInDuration?.plus(time)
-        // Storing time in seconds
-        totalTime = time.plus(time).toSeconds()
 
         // Converting duration to hours, minutes and seconds.
         val seconds = time.toSecondsPart()
@@ -56,15 +41,15 @@ class TimerViewModel(): ViewModel() {
 
         Log.d("TimerViewModel", "$time $hours:$minutes:$seconds")
         Log.d("TimerViewModel", "$totalTimeInDuration")
-        Log.d("TimerViewModel", "$totalTime")
+        Log.d("TimerViewModel", "$totalTimeInSeconds")
 
         // Adding start and stop to list
-        timeList2.add(TimeItem2(startTime, stopTime, time.toSeconds(), time))
+        timeList2.add(TimeItem2(
+            startTime,
+            stopTime,
+            "$hours:$minutes:$seconds",
+            time.toSeconds(),
+            time,
+            "Test string"))
     }
-
-    fun printTime() {
-
-    }
-
-
 }
