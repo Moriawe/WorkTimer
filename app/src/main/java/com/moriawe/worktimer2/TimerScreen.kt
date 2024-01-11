@@ -1,14 +1,11 @@
 package com.moriawe.worktimer2
 
-import androidx.compose.foundation.border
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
@@ -20,17 +17,24 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import java.time.format.DateTimeFormatter
 
 @Composable
 fun TimerScreen(modifier: Modifier = Modifier) {
     val viewModel: TimerViewModel = viewModel()
-    var isRunning by remember { mutableStateOf(false) }
+    var isStarted by remember { mutableStateOf(false) }
+
+    val showDialog =  remember { mutableStateOf(false) }
+
+    if(showDialog.value)
+        CustomDialog(value = "", setShowDialog = {
+            showDialog.value = it
+        }) {
+            Log.i("HomePage","HomePage : $it")
+        }
+
 
     // Parent column
     Column(
@@ -41,8 +45,14 @@ fun TimerScreen(modifier: Modifier = Modifier) {
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
         ) {
-            for (time in viewModel.timeList2) {
-                TimeItemCard(time)
+            for (time in viewModel.timeList) {
+                TimeCard(
+                    time = time,
+                    onClick = {
+                        showDialog.value = true
+                        Log.d("TimerScreen", "TimeCard pressed")
+                    }
+                )
             }
         }
         // Bottom row start/stop button
@@ -56,43 +66,15 @@ fun TimerScreen(modifier: Modifier = Modifier) {
                     .padding(10.dp)
                     .fillMaxWidth(),
                 onClick = {
-                    if (isRunning) viewModel.stopTimer() else viewModel.startTimer()
-                    isRunning = !isRunning
+                    if (isStarted) viewModel.stopTimer() else viewModel.startTimer()
+                    isStarted = !isStarted
                 }
             ) {
                 Text(
                     fontSize = 20.sp,
-                    text = if (isRunning) "Stop" else "Start"
+                    text = if (isStarted) "Stop" else "Start"
                 )
             }
         }
-    }
-}
-
-@Composable
-fun TimeItemCard(time: TimeItem2) {
-
-    // TODO move out the formatters
-    // TODO maybe also have one function that writes total time in string
-    val dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM HH:mm:ss")
-    val timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss")
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(5.dp)
-            .border(1.dp, Color.Black, shape = RectangleShape)
-            .padding(5.dp)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
-            Text("${time.startTime?.format(dateTimeFormatter)} - ")
-            Text("${time.endTime?.format(timeFormatter)}")
-            Text("Total Time: ${time.totalTimeInString}")
-
-        }
-        Text(time.description)
     }
 }
