@@ -1,4 +1,4 @@
-package com.moriawe.worktimer2.presentation
+package com.moriawe.worktimer2.navigation
 
 import androidx.annotation.StringRes
 import com.moriawe.worktimer2.R

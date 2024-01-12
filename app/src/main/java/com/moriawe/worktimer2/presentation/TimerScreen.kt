@@ -13,22 +13,31 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.moriawe.worktimer2.R
 import com.moriawe.worktimer2.presentation.components.TimeCard
 
 @Composable
 fun TimerScreen() {
 
     val viewModel: TimerViewModel = viewModel()
-    var isStarted by remember { mutableStateOf(false) }
 
-    // Parent column
+    // TODO: Should this be here or in the ViewModel?
+    //  Changed to saveable to remember between config changes
+    var isStarted by rememberSaveable { mutableStateOf(false) }
+
+    //val timeList by viewModel.testList.observeAsState(null)
+
+    // -*- Parent column -*- //
     Column() {
-        // Scrollable column that shows the timecards
+
+        // -*- Scrollable column with Time Cards -*- //
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -37,11 +46,15 @@ fun TimerScreen() {
         ) {
             for (time in viewModel.timeList) {
                 TimeCard(
-                    time = time
+                    time = time,
+                    onValueChange = { workDescription ->
+                        viewModel.changeDescription(workDescription)
+                    }
                 )
             }
         }
-        // Bottom row start/stop button
+
+        // -*- Bottom row start/stop button -*- //
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -57,7 +70,8 @@ fun TimerScreen() {
             ) {
                 Text(
                     fontSize = 20.sp,
-                    text = if (isStarted) "Stop" else "Start"
+                    text = if (isStarted) stringResource(id = R.string.stop)
+                    else stringResource(id = R.string.start)
                 )
             }
         }

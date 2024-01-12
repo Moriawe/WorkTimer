@@ -16,9 +16,9 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -26,24 +26,25 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import com.moriawe.worktimer2.domain.TimeItem
+import com.moriawe.worktimer2.R
+import com.moriawe.worktimer2.domain.model.TimeItem
 import java.time.format.DateTimeFormatter
 
 @Composable
-fun CustomDialog(
+fun EditTimeCardDialog(
     value: String,
     timeItem: TimeItem?,
     setShowDialog: (Boolean) -> Unit,
     onValueChange: (String) -> Unit
 ) {
 
-    val txtFieldError = remember { mutableStateOf("") }
     val txtField = remember { mutableStateOf(value) }
 
     val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
@@ -64,8 +65,9 @@ fun CustomDialog(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
+                            // TODO: How to use this as a R.string?
                             text = "Between ${timeItem?.startTime?.format(timeFormatter)} " +
-                                    "- ${timeItem?.endTime?.format(timeFormatter)}",
+                                    "- ${timeItem?.stopTime?.format(timeFormatter)}",
                             style = TextStyle(
                                 fontSize = 18.sp,
                                 fontFamily = FontFamily.Default,
@@ -85,17 +87,15 @@ fun CustomDialog(
 
                     Spacer(modifier = Modifier.height(20.dp))
 
-                    TextField(
+                    OutlinedTextField(
                         modifier = Modifier
                             .fillMaxWidth(),
                         colors = TextFieldDefaults.colors(),
-                        placeholder = { Text(text = "I worked on") },
                         value = txtField.value,
-                        //keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                        onValueChange = { work ->
-                            txtField.value = work
-                            // txtField.value = it.take(10)
-                        })
+                        onValueChange = { description ->
+                            txtField.value = description
+                        },
+                        label = { Text(stringResource(id = R.string.work_description) ) })
 
                     Spacer(modifier = Modifier.height(20.dp))
 
@@ -110,7 +110,7 @@ fun CustomDialog(
                                 .fillMaxWidth()
                                 .height(50.dp)
                         ) {
-                            Text(text = "Done")
+                            Text(stringResource(id = R.string.done))
                         }
                     }
                 }

@@ -19,9 +19,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.moriawe.worktimer2.domain.model.TimeCardItem
 
 @Composable
-fun OverViewScreen() {
+fun TimeSheetScreen() {
 
-    val viewModel: OverViewViewModel = viewModel()
+    val viewModel: TimeSheetViewModel = viewModel()
 
     // -*- Parent column -*- //
     Column(modifier = Modifier.fillMaxSize()) {

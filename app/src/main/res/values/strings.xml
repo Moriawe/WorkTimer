@@ -6,4 +6,10 @@
 
     <!-- Buttons -->
     <string name="back_button">Back</string>
+    <string name="start">Start</string>
+    <string name="stop">Stop</string>
+    <string name="done">Done</string>
+
+    <!-- labels -->
+    <string name="work_description">Work Description</string>
 </resources>

@@ -6,7 +6,7 @@ import com.moriawe.worktimer2.domain.model.TimeCardItem
 import com.moriawe.worktimer2.domain.model.TimeItem
 import java.time.format.DateTimeFormatter
 
-class OverViewViewModel() : ViewModel() {
+class TimeSheetViewModel() : ViewModel() {
 
     val timeItemList = generateTimeItemList()
 
