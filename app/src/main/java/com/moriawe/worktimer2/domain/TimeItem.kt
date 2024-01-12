@@ -1,4 +1,4 @@
-package com.moriawe.worktimer2
+package com.moriawe.worktimer2.domain
 
 import java.time.Duration
 import java.time.LocalDateTime

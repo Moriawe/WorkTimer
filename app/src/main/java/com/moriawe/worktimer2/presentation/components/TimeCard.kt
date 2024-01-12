@@ -1,4 +1,4 @@
-package com.moriawe.worktimer2
+package com.moriawe.worktimer2.presentation.components
 
 import android.util.Log
 import androidx.compose.foundation.background
@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
+import com.moriawe.worktimer2.domain.TimeItem
 import java.time.format.DateTimeFormatter
 
 @Composable

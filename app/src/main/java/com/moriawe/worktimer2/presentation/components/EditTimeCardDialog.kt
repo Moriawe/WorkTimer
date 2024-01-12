@@ -1,4 +1,4 @@
-package com.moriawe.worktimer2
+package com.moriawe.worktimer2.presentation.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -32,6 +32,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import com.moriawe.worktimer2.domain.TimeItem
 import java.time.format.DateTimeFormatter
 
 @Composable

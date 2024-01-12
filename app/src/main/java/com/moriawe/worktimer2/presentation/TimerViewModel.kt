@@ -1,7 +1,8 @@
-package com.moriawe.worktimer2
+package com.moriawe.worktimer2.presentation
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
+import com.moriawe.worktimer2.domain.TimeItem
 import java.time.Duration
 import java.time.LocalDateTime
 
@@ -29,10 +30,12 @@ class TimerViewModel(): ViewModel() {
         totalTimeInDuration?.plus(totalTime)
 
         // Adding item to list
-        timeList.add(TimeItem(
+        timeList.add(
+            TimeItem(
             startTime = startTime,
             endTime = stopTime,
             totalTimeInDuration = totalTime,
-            description = ""))
+            description = "")
+        )
     }
 }
