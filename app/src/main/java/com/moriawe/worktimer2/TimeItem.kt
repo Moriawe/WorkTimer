@@ -7,5 +7,5 @@ data class TimeItem(
     val startTime: LocalDateTime?,
     val endTime: LocalDateTime?,
     val totalTimeInDuration: Duration,
-    val description: String
+    var description: String
     )

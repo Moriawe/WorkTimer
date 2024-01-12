@@ -33,6 +33,6 @@ class TimerViewModel(): ViewModel() {
             startTime = startTime,
             endTime = stopTime,
             totalTimeInDuration = totalTime,
-            description = "Test string"))
+            description = ""))
     }
 }

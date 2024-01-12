@@ -67,7 +67,10 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
-
+    // Compose
     implementation("androidx.navigation:navigation-compose:2.7.6")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
+
+    // Dialogs
+    implementation("io.github.vanpra.compose-material-dialogs:datetime:0.8.1-rc")
 }
