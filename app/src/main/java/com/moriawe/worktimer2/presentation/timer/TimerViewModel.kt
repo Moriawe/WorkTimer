@@ -1,4 +1,4 @@
-package com.moriawe.worktimer2.presentation
+package com.moriawe.worktimer2.presentation.timer
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.LiveData

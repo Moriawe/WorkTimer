@@ -7,8 +7,8 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.moriawe.worktimer2.presentation.TimeSheetScreen
-import com.moriawe.worktimer2.presentation.TimerScreen
+import com.moriawe.worktimer2.presentation.time_sheet.TimeSheetScreen
+import com.moriawe.worktimer2.presentation.timer.TimerScreen
 
 @Composable
 fun NavigationGraph(navController: NavHostController, innerPadding: PaddingValues) {
