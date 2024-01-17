@@ -1,54 +1,59 @@
 package com.moriawe.worktimer2.presentation.timer
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.moriawe.worktimer2.R
+import com.moriawe.worktimer2.presentation.components.AddDescriptionDialog
 import com.moriawe.worktimer2.presentation.components.TimeCard
 
+
 @Composable
-fun TimerScreen() {
+fun TimerScreen(
+    timerViewModel: TimerViewModel = viewModel(),
+    //state: TimerState = timerViewModel.state,
+    //onEvent: (TimerEvent) -> Unit
+) {
 
-    val viewModel: TimerViewModel = viewModel()
+    val state by timerViewModel.state.collectAsState()
+    val onEvent = timerViewModel::onEvent
 
-    // TODO: Should this be here or in the ViewModel?
-    //  Changed to saveable to remember between config changes
-    var isStarted by rememberSaveable { mutableStateOf(false) }
-
-    //val timeList by viewModel.testList.observeAsState(null)
+    // -*- Dialog -*- //
+    if (state.isModifyingTimeCard)
+        AddDescriptionDialog(state = state, onEvent = onEvent)
 
     // -*- Parent column -*- //
     Column() {
 
         // -*- Scrollable column with Time Cards -*- //
-        Column(
+        LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .weight(1f)
-                .verticalScroll(rememberScrollState())
+                .weight(1f),
+                //.verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            for (time in viewModel.timeList) {
+            items(state.timeItems) { timeItem ->
                 TimeCard(
-                    time = time,
-                    onValueChange = { workDescription ->
-                        viewModel.changeDescription(workDescription)
-                    }
+                    time = timeItem,
+                    onClick = { onEvent(TimerEvent.ShowDialog) }
                 )
             }
         }
@@ -63,13 +68,13 @@ fun TimerScreen() {
                     .padding(10.dp)
                     .fillMaxWidth(),
                 onClick = {
-                    if (isStarted) viewModel.stopTimer() else viewModel.startTimer()
-                    isStarted = !isStarted
+                    if (state.isTimerStarted) onEvent(TimerEvent.StopTimer)
+                    else onEvent(TimerEvent.StartTimer)
                 }
             ) {
                 Text(
                     fontSize = 20.sp,
-                    text = if (isStarted) stringResource(id = R.string.stop)
+                    text = if (state.isTimerStarted) stringResource(id = R.string.stop)
                     else stringResource(id = R.string.start)
                 )
             }

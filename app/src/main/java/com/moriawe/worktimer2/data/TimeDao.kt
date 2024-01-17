@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import com.moriawe.worktimer2.data.entity.TimeItem2
+import dagger.Provides
 import kotlinx.coroutines.flow.Flow
 
 @Dao

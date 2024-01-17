@@ -1,7 +1,9 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id("kotlin-kapt")
+    kotlin("kapt")
+    id("com.google.dagger.hilt.android")
+
 }
 
 android {
@@ -48,6 +50,9 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    kapt {
+        correctErrorTypes = true
+    }
 }
 
 dependencies {
@@ -70,9 +75,14 @@ dependencies {
 
     // Compose
     implementation("androidx.navigation:navigation-compose:2.7.6")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
 
     // Room
     implementation("androidx.room:room-ktx:2.6.1")
     kapt("androidx.room:room-compiler:2.6.1")
+
+    // Dagger / Hilt
+    implementation("com.google.dagger:hilt-android:2.50")
+    kapt("com.google.dagger:hilt-android-compiler:2.50")
+    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
 }

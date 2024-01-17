@@ -4,8 +4,11 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.moriawe.worktimer2.data.TimeDao
+import com.moriawe.worktimer2.data.TimeRepository
 import com.moriawe.worktimer2.data.entity.TimeItem2
 import com.moriawe.worktimer2.domain.model.TimeItem
+import com.moriawe.worktimer2.domain.util.TimeConstant
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
@@ -14,12 +17,16 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.Duration
 import java.time.LocalDateTime
+import javax.inject.Inject
 
-class TimerViewModel(
-    private val dao: TimeDao
+@HiltViewModel
+class TimerViewModel @Inject constructor(
+    private val repo: TimeRepository,
+    //private val timelist: GetTimeItemsByTodayUseCase
 ): ViewModel() {
 
-    private val _timeItems = dao.getTimeItems()
+    //private val _timeItems = GetTimeItemsByTodayUseCase()
+    private val _timeItems = repo.getTimeItems()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
     private val _state = MutableStateFlow(TimerState())
 
@@ -32,23 +39,18 @@ class TimerViewModel(
 
     fun onEvent(event: TimerEvent) {
         when(event) {
-            is TimerEvent.DeleteTime -> {
-                viewModelScope.launch {
-                    dao.deleteTimeItem(event.timeItem2)
-                }
-            }
-            TimerEvent.HideDialog -> {
-                _state.update { it.copy(
-                    isModifyingTimeCard = false
-                ) }
-            }
             TimerEvent.SaveTimeItem -> {
                 val startTime = state.value.startTime
                 val stopTime = state.value.stopTime
                 val description = state.value.description
 
-                // Null Check
-                if (startTime == null || stopTime == null) { return }
+                // Null Check - CHANGE
+                if (
+                    startTime == LocalDateTime.parse(
+                        TimeConstant.TIME_DEFAULT_STRING)
+                    || stopTime == LocalDateTime.parse(
+                        TimeConstant.TIME_DEFAULT_STRING
+                    )) { return }
 
                 // Save time item to database
                 val timeItem = TimeItem2(
@@ -57,13 +59,13 @@ class TimerViewModel(
                     description = description
                 )
                 viewModelScope.launch {
-                    dao.insertTimeItem(timeItem2 = timeItem)
+                    repo.insertTimeItem(timeItem2 = timeItem)
                 }
                 // Reset the state
                 _state.update { it.copy(
                     isModifyingTimeCard = false,
-                    startTime = null,
-                    stopTime = null,
+                    startTime = LocalDateTime.parse(TimeConstant.TIME_DEFAULT_STRING),
+                    stopTime = LocalDateTime.parse(TimeConstant.TIME_DEFAULT_STRING),
                     description = ""
                 )}
 
@@ -83,48 +85,26 @@ class TimerViewModel(
                     stopTime = event.stopTime
                 )  }
             }
+            TimerEvent.StartTimer -> {
+                _state.update { it.copy(
+                    isTimerStarted = true
+                ) }
+            }
+            TimerEvent.StopTimer -> {
+                _state.update { it.copy(
+                    isTimerStarted = false
+                ) }
+            }
             TimerEvent.ShowDialog -> {
                 _state.update { it.copy(
                     isModifyingTimeCard = true
                 ) }
             }
+            TimerEvent.HideDialog -> {
+                _state.update { it.copy(
+                    isModifyingTimeCard = false
+                ) }
+            }
         }
-    }
-
-    // OLD
-
-    val timeList = mutableStateListOf<TimeItem>()
-
-    private var totalTimeInDuration: Duration? = null
-    private var startTime: LocalDateTime? = null
-    private var stopTime: LocalDateTime? = null
-
-    fun startTimer() {
-        startTime = LocalDateTime.now()
-    }
-
-    fun stopTimer() {
-        stopTime = LocalDateTime.now()
-        calculateWorkTime()
-    }
-
-    fun calculateWorkTime() {
-        // Calculating the amount of time between start and stop
-        val totalTime = Duration.between(startTime, stopTime)
-        // Storing duration
-        totalTimeInDuration?.plus(totalTime)
-
-            timeList.add(
-                TimeItem(
-                    startTime = startTime ?: LocalDateTime.of(2023, 1, 1, 1, 1, 1),
-                    stopTime = stopTime ?: LocalDateTime.of(2023, 1, 1, 1, 1, 1),
-                    totalTimeInDuration = totalTime,
-                    description = "")
-            )
-        // Adding item to list
-
-    }
-    fun changeDescription(description: String) {
-        // TODO
     }
 }
