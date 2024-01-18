@@ -25,13 +25,13 @@ import com.moriawe.worktimer2.presentation.components.TimeCard
 
 @Composable
 fun TimerScreen(
-    timerViewModel: TimerViewModel = viewModel(),
+    viewModel: TimerViewModel = viewModel(),
     //state: TimerState = timerViewModel.state,
     //onEvent: (TimerEvent) -> Unit
 ) {
 
-    val state by timerViewModel.state.collectAsState()
-    val onEvent = timerViewModel::onEvent
+    val state by viewModel.state.collectAsState()
+    val onEvent = viewModel::onEvent
 
     // -*- Dialog -*- //
     if (state.isModifyingTimeCard)

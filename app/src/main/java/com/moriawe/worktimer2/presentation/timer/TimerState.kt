@@ -11,7 +11,6 @@ data class TimerState(
     val stopTime: LocalDateTime = LocalDateTime.parse(TimeConstant.TIME_DEFAULT_STRING),
     val isTimerStarted: Boolean = false,
     val description: String = "",
-    val totalTimeInDuration: Duration = Duration.between(startTime,stopTime),
-    val isModifyingTimeCard: Boolean = false,
-    //val sortType: SortType = SortType.DAY
+    //val totalTimeInDuration: Duration = Duration.between(startTime,stopTime),
+    val isModifyingTimeCard: Boolean = false
 )

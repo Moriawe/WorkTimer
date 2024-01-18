@@ -12,21 +12,27 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.moriawe.worktimer2.domain.model.Month
 import com.moriawe.worktimer2.domain.model.TimeCardItem
 
 @Composable
-fun TimeSheetScreen() {
+fun TimeSheetScreen(
+    viewModel: TimeSheetViewModel = viewModel(),
+) {
 
-    val viewModel: TimeSheetViewModel = viewModel()
+    val state by viewModel.state.collectAsState()
+
 
     // -*- Parent column -*- //
     Column(modifier = Modifier.fillMaxSize()) {
-        OverViewListColumn(months = viewModel.overViewList)
+        OverViewListColumn(months = state.months)
     }
 
 }

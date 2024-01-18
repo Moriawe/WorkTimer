@@ -2,6 +2,7 @@ package com.moriawe.worktimer2.di
 
 import com.moriawe.worktimer2.data.TimeRepository
 import com.moriawe.worktimer2.domain.use_case.GetTimeItemsByTodayUseCase
+import com.moriawe.worktimer2.domain.use_case.GetTimeItemsSortedByDateUseCase
 import com.moriawe.worktimer2.presentation.timer.TimerViewModel
 import dagger.Module
 import dagger.Provides
@@ -22,9 +23,9 @@ object ViewModelModule {
         return GetTimeItemsByTodayUseCase(repository)
     }
 
-//    @Provides
-//    @ViewModelScoped
-//    fun provideTimerViewModel(repository: TimeRepository): TimerViewModel {
-//        return TimerViewModel(repository)
-//    }
+    @Provides
+    @ViewModelScoped
+    fun provideGetTimeItemsSortedByDateUseCase(repository: TimeRepository): GetTimeItemsSortedByDateUseCase {
+        return GetTimeItemsSortedByDateUseCase(repository)
+    }
 }
