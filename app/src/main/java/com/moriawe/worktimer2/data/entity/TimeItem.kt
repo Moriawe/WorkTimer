@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 import java.time.LocalDateTime
 
 @Entity
-data class TimeItem2(
+data class TimeItem(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val startTime: LocalDateTime,

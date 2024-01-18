@@ -3,6 +3,8 @@ package com.moriawe.worktimer2.navigation
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -24,7 +26,9 @@ fun NavigationGraph(navController: NavHostController, innerPadding: PaddingValue
     ) {
         composable(route = Screen.Timer.name) {
             val viewModel = hiltViewModel<TimerViewModel>()
-            TimerScreen(viewModel)
+            val state by viewModel.state.collectAsState()
+            val onEvent = viewModel::onEvent
+            TimerScreen(state, onEvent)
         }
         composable(route = Screen.TimeSheet.name) {
             val viewModel = hiltViewModel<TimeSheetViewModel>()

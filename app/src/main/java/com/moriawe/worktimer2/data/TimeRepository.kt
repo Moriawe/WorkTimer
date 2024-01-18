@@ -1,6 +1,6 @@
 package com.moriawe.worktimer2.data
 
-import com.moriawe.worktimer2.data.entity.TimeItem2
+import com.moriawe.worktimer2.data.entity.TimeItem
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -8,19 +8,23 @@ class TimeRepository @Inject constructor(
     private val timeDao: TimeDao
 ) {
 
-    suspend fun insertTimeItem(timeItem2: TimeItem2) {
-        timeDao.insertTimeItem(timeItem2)
+    suspend fun insertTimeItem(timeItem: TimeItem) {
+        timeDao.insertTimeItem(timeItem)
     }
 
-    suspend fun updateTimeItem(timeItem2: TimeItem2) {
-        timeDao.updateTimeItem(timeItem2)
+    suspend fun updateTimeItem(timeItem: TimeItem) {
+        timeDao.updateTimeItem(timeItem)
     }
 
-    suspend fun deleteTimeItem(timeItem2: TimeItem2) {
-        timeDao.deleteTimeItem(timeItem2)
+    suspend fun upsertTimeItem(timeItem: TimeItem) {
+        timeDao.upsertTimeItem(timeItem)
     }
 
-    fun getTimeItems(): Flow<List<TimeItem2>> {
+    suspend fun deleteTimeItem(timeItem: TimeItem) {
+        timeDao.deleteTimeItem(timeItem)
+    }
+
+    fun getTimeItems(): Flow<List<TimeItem>> {
         return timeDao.getTimeItems()
     }
 }

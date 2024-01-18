@@ -1,6 +1,5 @@
 package com.moriawe.worktimer2.presentation.timer
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,27 +10,18 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.moriawe.worktimer2.R
-import com.moriawe.worktimer2.presentation.components.AddDescriptionDialog
-import com.moriawe.worktimer2.presentation.components.TimeCard
 
 
 @Composable
 fun TimerScreen(
-    viewModel: TimerViewModel = viewModel(),
-    //state: TimerState = timerViewModel.state,
-    //onEvent: (TimerEvent) -> Unit
+    state: TimerState,
+    onEvent: (TimerEvent) -> Unit
 ) {
-
-    val state by viewModel.state.collectAsState()
-    val onEvent = viewModel::onEvent
 
     // -*- Dialog -*- //
     if (state.isModifyingTimeCard)
@@ -40,17 +30,16 @@ fun TimerScreen(
     // -*- Parent column -*- //
     Column() {
 
-        // -*- Scrollable column with Time Cards -*- //
+        // -*- Scrollable column with TimeCards -*- //
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .weight(1f),
-            verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             items(state.timeItems) { timeItem ->
                 TimeCard(
                     time = timeItem,
-                    onClick = { onEvent(TimerEvent.ShowDialog) }
+                    onClick = { onEvent(TimerEvent.ShowDialog(timeItem)) }
                 )
             }
         }

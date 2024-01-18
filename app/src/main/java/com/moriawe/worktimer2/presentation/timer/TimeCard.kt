@@ -1,7 +1,6 @@
-package com.moriawe.worktimer2.presentation.components
+package com.moriawe.worktimer2.presentation.timer
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,23 +13,21 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
-import com.moriawe.worktimer2.data.entity.TimeItem2
-import com.moriawe.worktimer2.presentation.timer.TimerState
+import com.moriawe.worktimer2.data.entity.TimeItem
 import java.time.format.DateTimeFormatter
 
 @Composable
-fun TimeCard(time: TimeItem2, onClick: () -> Unit) {
+fun TimeCard(time: TimeItem, onClick: () -> Unit) {
 
     // TODO move out the formatters
     val dateFormatter = DateTimeFormatter.ofPattern("dd MMM")
     val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
 
-    val date = time.startTime?.format(dateFormatter)
-    val startTime = time.startTime?.format(timeFormatter)
-    val endTime = time.stopTime?.format(timeFormatter)
+    val date = time.startTime.format(dateFormatter)
+    val startTime = time.startTime.format(timeFormatter)
+    val endTime = time.stopTime.format(timeFormatter)
     //val hours = time.totalTimeInDuration.toHoursPart()
     //val minutes = time.totalTimeInDuration.toMinutesPart()
     //val totalTimeString = "${hours}h ${minutes}m"
@@ -39,7 +36,9 @@ fun TimeCard(time: TimeItem2, onClick: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .border(1.dp, Color.Black, shape = RectangleShape)
+            .padding(horizontal = 10.dp)
+            .padding(top = 10.dp)
+            .shadow(3.dp)
             .background(MaterialTheme.colorScheme.secondaryContainer)
             .clickable {
                 onClick()

@@ -1,5 +1,6 @@
-package com.moriawe.worktimer2.presentation.components
+package com.moriawe.worktimer2.presentation.timer
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -30,7 +31,7 @@ fun AddDescriptionDialog(
                 Text(text = "Between ${state.startTime} - ${state.stopTime}")
                 OutlinedTextField(
                     value = state.description,
-                    onValueChange = {onEvent(TimerEvent.SetDescription(it))},
+                    onValueChange = { onEvent(TimerEvent.SetDescription(it)) },
                     label = { Text(stringResource(id = R.string.work_description) ) })
             }
         },
@@ -40,7 +41,9 @@ fun AddDescriptionDialog(
         confirmButton = {
             TextButton(
                 onClick = {
-                    onEvent(TimerEvent.SaveTimeItem)
+                    onEvent(TimerEvent.UpdateTimeItem)
+                    Log.d("AddDescriptionDialog", "Save item: ${state.description}")
+                    onEvent(TimerEvent.HideDialog)
                 }
             ) {
                 Text("Save")

@@ -1,6 +1,6 @@
 package com.moriawe.worktimer2.domain.util
 
-import com.moriawe.worktimer2.domain.model.TimeItem
+import com.moriawe.worktimer2.data.entity.TimeItem
 import java.time.Duration
 import java.time.LocalDateTime
 import kotlin.random.Random
@@ -29,7 +29,6 @@ fun generateTimeItemsList(numberOfItems: Int): List<TimeItem> {
             TimeItem(
                 startTime = startTime,
                 stopTime = endTime,
-                totalTimeInDuration = totalTimeInDuration,
                 description = description
             )
         )

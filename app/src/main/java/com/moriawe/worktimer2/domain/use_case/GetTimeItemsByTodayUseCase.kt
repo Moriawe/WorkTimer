@@ -1,7 +1,7 @@
 package com.moriawe.worktimer2.domain.use_case
 
 import com.moriawe.worktimer2.data.TimeRepository
-import com.moriawe.worktimer2.data.entity.TimeItem2
+import com.moriawe.worktimer2.data.entity.TimeItem
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.time.LocalDateTime
@@ -15,7 +15,7 @@ class GetTimeItemsByTodayUseCase @Inject constructor(
     // TODO: Use other class
     val YearMonthDayFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 
-    operator fun invoke(): Flow<List<TimeItem2>> {
+    operator fun invoke(): Flow<List<TimeItem>> {
         val timeItems = repo.getTimeItems()
 
         timeItems.map { list ->

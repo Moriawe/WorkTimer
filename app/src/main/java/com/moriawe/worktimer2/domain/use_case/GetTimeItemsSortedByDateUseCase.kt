@@ -2,7 +2,7 @@ package com.moriawe.worktimer2.domain.use_case
 
 import android.util.Log
 import com.moriawe.worktimer2.data.TimeRepository
-import com.moriawe.worktimer2.data.entity.TimeItem2
+import com.moriawe.worktimer2.data.entity.TimeItem
 import com.moriawe.worktimer2.domain.model.Month
 import com.moriawe.worktimer2.domain.model.TimeCardItem
 import kotlinx.coroutines.flow.Flow
@@ -30,7 +30,7 @@ class GetTimeItemsSortedByDateUseCase @Inject constructor(
     }
 
     // TODO: Refactor into a mapper
-    fun mapTimeItem(timeItem: TimeItem2): TimeCardItem {
+    fun mapTimeItem(timeItem: TimeItem): TimeCardItem {
 
         val dateFormatter = DateTimeFormatter.ofPattern("dd MMM")
         val monthFormatter = DateTimeFormatter.ofPattern("MMM")

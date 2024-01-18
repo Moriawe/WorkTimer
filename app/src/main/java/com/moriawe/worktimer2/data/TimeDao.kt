@@ -5,23 +5,26 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.moriawe.worktimer2.data.entity.TimeItem2
-import dagger.Provides
+import androidx.room.Upsert
+import com.moriawe.worktimer2.data.entity.TimeItem
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TimeDao {
 
     @Insert
-    suspend fun insertTimeItem(timeItem2: TimeItem2)
+    suspend fun insertTimeItem(timeItem: TimeItem)
 
     @Update
-    suspend fun updateTimeItem(timeItem2: TimeItem2)
+    suspend fun updateTimeItem(timeItem: TimeItem)
+
+    @Upsert
+    suspend fun upsertTimeItem(timeItem: TimeItem)
 
     @Delete
-    suspend fun deleteTimeItem(timeItem2: TimeItem2)
+    suspend fun deleteTimeItem(timeItem: TimeItem)
 
-    @Query("SELECT * FROM TimeItem2")
-    fun getTimeItems(): Flow<List<TimeItem2>>
+    @Query("SELECT * FROM TimeItem")
+    fun getTimeItems(): Flow<List<TimeItem>>
 
 }

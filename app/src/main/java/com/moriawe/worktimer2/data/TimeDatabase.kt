@@ -1,15 +1,12 @@
 package com.moriawe.worktimer2.data
 
-import android.content.Context
 import androidx.room.Database
-import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.moriawe.worktimer2.data.entity.TimeItem2
-import dagger.Provides
+import com.moriawe.worktimer2.data.entity.TimeItem
 
 @Database(
-    entities = [TimeItem2::class],
+    entities = [TimeItem::class],
     version = 1
 )
 @TypeConverters(TimeConverter::class)
