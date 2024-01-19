@@ -31,13 +31,14 @@ class TimerViewModel @Inject constructor(
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
     private val _state = MutableStateFlow(TimerState())
 
-    // This updates the state whenever there is a change in either _state or _timeItems
+    // -*- This updates the state whenever there is a change in either _state or _timeItems -*- //
     val state = combine(_state, _timeItems) { state, timeItems ->
         state.copy(
             timeItems = timeItems
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), TimerState())
 
+    // -*- Separate dialog state so user can update an item while still recording time -*- //
     private val _dialogState = MutableStateFlow(DialogState())
     val dialogState: StateFlow<DialogState> = _dialogState.asStateFlow()
 
@@ -123,6 +124,24 @@ class TimerViewModel @Inject constructor(
 
     }
 
+    // -*- Updates the time or description for an item and resets the dialog state -*- //
+    private fun updateTimeItem() {
+        if (dialogState.value.selectedItem != null) {
+            val timeItem = TimeItem(
+                id = dialogState.value.selectedItem!!.id,
+                startTime = dialogState.value.startTime,
+                stopTime = dialogState.value.stopTime,
+                description = dialogState.value.description
+            )
+            viewModelScope.launch {
+                Log.d(TAG, "Sent to Repo $timeItem")
+                repo.updateTimeItem(timeItem = timeItem)
+            }
+        }
+        _dialogState.value = DialogState()
+    }
+
+    // -*- Adds a new item to the database when time is stopped -*- //
     private fun addNewTimeItem() {
         // Null Check
         if (
@@ -148,23 +167,7 @@ class TimerViewModel @Inject constructor(
         resetState()
     }
 
-    private fun updateTimeItem() {
-        if (dialogState.value.selectedItem != null) {
-            val timeItem = TimeItem(
-                id = dialogState.value.selectedItem!!.id,
-                startTime = dialogState.value.startTime,
-                stopTime = dialogState.value.stopTime,
-                description = dialogState.value.description
-            )
-            viewModelScope.launch {
-                Log.d(TAG, "Sent to Repo $timeItem")
-                repo.updateTimeItem(timeItem = timeItem)
-            }
-        }
-        _dialogState.value = DialogState()
-    }
-
-
+    // -*- Resets the state for starting/stopping time -*- //
     private fun resetState() {
         _state.update {
             it.copy(
@@ -172,7 +175,6 @@ class TimerViewModel @Inject constructor(
                 selectedItem = null,
                 startTime = LocalDateTime.parse(TimeConstant.TIME_DEFAULT_STRING),
                 stopTime = LocalDateTime.parse(TimeConstant.TIME_DEFAULT_STRING),
-                description = ""
             )
         }
     }

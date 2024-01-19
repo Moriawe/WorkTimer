@@ -16,7 +16,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.moriawe.worktimer2.R
 
-
 @Composable
 fun TimerScreen(
     state: TimerState,
