@@ -11,8 +11,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.moriawe.worktimer2.navigation.NavigationGraph
 import com.moriawe.worktimer2.navigation.Screen
+import com.moriawe.worktimer2.navigation.NavigationGraph
 import com.moriawe.worktimer2.ui.theme.WorkTimer2Theme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -25,7 +25,7 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
             val backStackEntry by navController.currentBackStackEntryAsState()
             val currentScreen = Screen.valueOf(
-                backStackEntry?.destination?.route ?: Screen.Timer.name )
+                backStackEntry?.destination?.route ?: Screen.Timer.route )
 
             WorkTimer2Theme {
                 // A surface container using the 'background' color from the theme

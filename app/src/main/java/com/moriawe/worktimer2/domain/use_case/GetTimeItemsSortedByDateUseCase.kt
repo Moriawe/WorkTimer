@@ -5,6 +5,9 @@ import com.moriawe.worktimer2.data.TimeRepository
 import com.moriawe.worktimer2.data.entity.TimeItem
 import com.moriawe.worktimer2.domain.model.Month
 import com.moriawe.worktimer2.domain.model.TimeCardItem
+import com.moriawe.worktimer2.domain.util.TimeFormatters.dateFormatter
+import com.moriawe.worktimer2.domain.util.TimeFormatters.monthFormatter
+import com.moriawe.worktimer2.domain.util.TimeFormatters.timeFormatter
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.time.Duration
@@ -31,10 +34,6 @@ class GetTimeItemsSortedByDateUseCase @Inject constructor(
 
     // TODO: Refactor into a mapper
     fun mapTimeItem(timeItem: TimeItem): TimeCardItem {
-
-        val dateFormatter = DateTimeFormatter.ofPattern("dd MMM")
-        val monthFormatter = DateTimeFormatter.ofPattern("MMM")
-        val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
 
         Log.d("TimeSheetViewModel", "$timeItem")
 

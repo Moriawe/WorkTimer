@@ -29,12 +29,10 @@ fun TimeSheetScreen(
 
     val state by viewModel.state.collectAsState()
 
-
     // -*- Parent column -*- //
     Column(modifier = Modifier.fillMaxSize()) {
         OverViewListColumn(months = state.months)
     }
-
 }
 
 @Composable

@@ -16,14 +16,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
 import com.moriawe.worktimer2.data.entity.TimeItem
-import java.time.format.DateTimeFormatter
+import com.moriawe.worktimer2.domain.util.TimeFormatters.dateFormatter
+import com.moriawe.worktimer2.domain.util.TimeFormatters.timeFormatter
 
 @Composable
 fun TimeCard(time: TimeItem, onClick: () -> Unit) {
-
-    // TODO move out the formatters
-    val dateFormatter = DateTimeFormatter.ofPattern("dd MMM")
-    val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
 
     val date = time.startTime.format(dateFormatter)
     val startTime = time.startTime.format(timeFormatter)
