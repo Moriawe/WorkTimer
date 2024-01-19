@@ -27,8 +27,9 @@ fun NavigationGraph(navController: NavHostController, innerPadding: PaddingValue
         composable(route = Screen.Timer.route) {
             val viewModel = hiltViewModel<TimerViewModel>()
             val state by viewModel.state.collectAsState()
+            val dialogState by viewModel.dialogState.collectAsState()
             val onEvent = viewModel::onEvent
-            TimerScreen(state, onEvent)
+            TimerScreen(state, dialogState, onEvent)
         }
         composable(route = Screen.TimeSheet.route) {
             val viewModel = hiltViewModel<TimeSheetViewModel>()

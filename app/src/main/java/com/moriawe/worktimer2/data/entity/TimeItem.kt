@@ -10,5 +10,5 @@ data class TimeItem(
     val id: Int = 0,
     val startTime: LocalDateTime,
     val stopTime: LocalDateTime,
-    var description: String
+    var description: String = ""
 )

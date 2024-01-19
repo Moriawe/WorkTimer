@@ -20,12 +20,13 @@ import com.moriawe.worktimer2.R
 @Composable
 fun TimerScreen(
     state: TimerState,
+    dialogState: DialogState,
     onEvent: (TimerEvent) -> Unit
 ) {
 
     // -*- Dialog -*- //
     if (state.isModifyingTimeCard)
-        AddDescriptionDialog(state = state, onEvent = onEvent)
+        AddDescriptionDialog(state = dialogState, onEvent = onEvent)
 
     // -*- Parent column -*- //
     Column() {

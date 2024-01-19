@@ -16,7 +16,7 @@ import com.moriawe.worktimer2.presentation.timer.TimerState
 
 @Composable
 fun AddDescriptionDialog(
-    state: TimerState,
+    state: DialogState,
     onEvent: (TimerEvent) -> Unit,
     modifier: Modifier = Modifier
 ) {

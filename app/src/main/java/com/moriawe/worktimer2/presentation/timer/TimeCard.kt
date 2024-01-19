@@ -22,6 +22,7 @@ import com.moriawe.worktimer2.domain.util.TimeFormatters.timeFormatter
 @Composable
 fun TimeCard(time: TimeItem, onClick: () -> Unit) {
 
+    // TODO: Should be a mapper
     val date = time.startTime.format(dateFormatter)
     val startTime = time.startTime.format(timeFormatter)
     val endTime = time.stopTime.format(timeFormatter)
