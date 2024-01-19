@@ -1,5 +1,6 @@
 package com.moriawe.worktimer2.domain.util
 
+import java.time.Duration
 import java.time.format.DateTimeFormatter
 
 object TimeFormatters {
@@ -13,4 +14,17 @@ object TimeFormatters {
 
 object TimeConstant {
     const val TIME_DEFAULT_STRING = "2001-01-01T01:01:01"
+}
+
+fun formatDurationInHHToString(duration: Duration): String {
+    val hours = duration.toHoursPart()
+    val totalTimeString = "${hours}h"
+    return totalTimeString
+}
+
+fun formatDurationInHHMMToString(duration: Duration): String {
+    val hours = duration.toHoursPart()
+    val minutes = duration.toMinutesPart()
+    val totalTimeString = "${hours}h ${minutes}m"
+    return totalTimeString
 }

@@ -2,6 +2,7 @@ package com.moriawe.worktimer2.domain.use_case
 
 import com.moriawe.worktimer2.data.TimeRepository
 import com.moriawe.worktimer2.domain.model.Month
+import com.moriawe.worktimer2.domain.util.calculateTotalTime
 import com.moriawe.worktimer2.domain.util.formatDurationInHHToString
 import com.moriawe.worktimer2.domain.util.mapTimeItemToTimeCardItem
 import kotlinx.coroutines.flow.Flow
@@ -29,9 +30,10 @@ class GetTimeItemsSortedByMonthUseCase @Inject constructor(
         // -*- Takes the list in each month and calculates the total worktime -*- //
         return monthList.map { list ->
             list.map { month ->
-                val totalWorkTime = month.items.map {
-                    it.totalTimeInDuration
-                }.reduce(Duration::plus)
+                val totalWorkTime = calculateTotalTime(month.items)
+//                val totalWorkTime = month.items.map {
+//                    it.totalTimeInDuration
+//                }.reduce(Duration::plus)
                 Month(
                     name = month.name,
                     items = month.items,
