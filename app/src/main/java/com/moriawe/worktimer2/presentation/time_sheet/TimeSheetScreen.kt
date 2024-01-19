@@ -1,7 +1,9 @@
 package com.moriawe.worktimer2.presentation.time_sheet
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -37,18 +39,24 @@ fun TimeSheetScreen(
 
 @Composable
 private fun MonthHeader(
-    text: String,
+    title: String,
+    workTime: String,
     modifier: Modifier = Modifier
 ) {
-    Text(
-        text = text,
-        fontSize = 16.sp,
-        fontWeight = FontWeight.Bold,
+    Row(
         modifier = modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.primaryContainer)
-            .padding(16.dp)
-    )
+            .padding(16.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(
+            text = title,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold,
+        )
+        Text(text = workTime)
+    }
 }
 
 @Composable
@@ -60,10 +68,12 @@ private fun OverviewTimeCardItem(
         modifier = modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.background)
-            .padding(16.dp)
+            .padding(16.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(text = timeCardItem.date + " - ")
         Text(text = timeCardItem.startTime)
+        Text(text = timeCardItem.endTime)
     }
 }
 
@@ -78,7 +88,7 @@ private fun OverViewListColumn(
     ) {
         months.forEach { month ->
             stickyHeader {
-                MonthHeader(month.name)
+                MonthHeader(month.name, month.totalWorkTimeInHours)
             }
             items(month.items) { timeCardItem ->
                 OverviewTimeCardItem(timeCardItem)

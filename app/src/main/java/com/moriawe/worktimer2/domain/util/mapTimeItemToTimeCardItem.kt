@@ -11,16 +11,15 @@ fun mapTimeItemToTimeCardItem(timeItem: TimeItem): TimeCardItem {
     val startTime = timeItem.startTime.format(TimeFormatters.timeFormatter)
     val endTime = timeItem.stopTime.format(TimeFormatters.timeFormatter)
     val duration = Duration.between(timeItem.startTime, timeItem.stopTime)
-    val hours = duration.toHoursPart()
-    val minutes = duration.toMinutesPart()
-    val totalTimeString = "${hours}h ${minutes}m"
+    val totalTimeString = formatDurationInHHMMToString(duration)
 
     return TimeCardItem(
         date = date,
         month = month,
         startTime = startTime,
         endTime = endTime,
-        totalTime = totalTimeString,
+        totalTimeInString = totalTimeString,
+        totalTimeInDuration = Duration.between(timeItem.startTime, timeItem.stopTime),
         description = timeItem.description
     )
 }

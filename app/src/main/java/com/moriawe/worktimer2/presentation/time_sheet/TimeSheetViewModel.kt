@@ -2,7 +2,7 @@ package com.moriawe.worktimer2.presentation.time_sheet
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.moriawe.worktimer2.domain.use_case.GetTimeItemsSortedByDateUseCase
+import com.moriawe.worktimer2.domain.use_case.GetTimeItemsSortedByMonthUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -12,11 +12,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TimeSheetViewModel @Inject constructor(
-    private val getTimeItemsSortedByDateUseCase: GetTimeItemsSortedByDateUseCase
+    private val getTimeItemsSortedByMonthUseCase: GetTimeItemsSortedByMonthUseCase
 ) : ViewModel() {
 
-    private val _overViewList = getTimeItemsSortedByDateUseCase()
+    private val _overViewList = getTimeItemsSortedByMonthUseCase()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
+
     private val _state = MutableStateFlow(TimeSheetState())
 
     val state = combine(_state, _overViewList) { state, months ->
@@ -27,7 +28,5 @@ class TimeSheetViewModel @Inject constructor(
 
     // -*- For testing purposes -*- //
     //val timeItemList = generateTimeItemsList(25)
-
-
 
 }

@@ -2,7 +2,7 @@ package com.moriawe.worktimer2.di
 
 import com.moriawe.worktimer2.data.TimeRepository
 import com.moriawe.worktimer2.domain.use_case.GetTimeItemsForSpecificDateUseCase
-import com.moriawe.worktimer2.domain.use_case.GetTimeItemsSortedByDateUseCase
+import com.moriawe.worktimer2.domain.use_case.GetTimeItemsSortedByMonthUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,7 +24,7 @@ object ViewModelModule {
 
     @Provides
     @ViewModelScoped
-    fun provideGetTimeItemsSortedByDateUseCase(repository: TimeRepository): GetTimeItemsSortedByDateUseCase {
-        return GetTimeItemsSortedByDateUseCase(repository)
+    fun provideGetTimeItemsSortedByDateUseCase(repository: TimeRepository): GetTimeItemsSortedByMonthUseCase {
+        return GetTimeItemsSortedByMonthUseCase(repository)
     }
 }
