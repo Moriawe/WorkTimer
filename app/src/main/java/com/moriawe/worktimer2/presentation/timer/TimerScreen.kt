@@ -38,7 +38,7 @@ fun TimerScreen(
         ) {
             items(state.timeItems) { timeItem ->
                 TimeCard(
-                    time = timeItem,
+                    timeItem = timeItem,
                     onClick = { onEvent(TimerEvent.ShowDialog(timeItem)) }
                 )
             }

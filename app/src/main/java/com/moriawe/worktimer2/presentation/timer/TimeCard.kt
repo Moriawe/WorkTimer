@@ -16,69 +16,50 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
 import com.moriawe.worktimer2.data.entity.TimeItem
-import com.moriawe.worktimer2.domain.util.TimeFormatters.dateFormatter
-import com.moriawe.worktimer2.domain.util.TimeFormatters.timeFormatter
+import com.moriawe.worktimer2.domain.util.mapTimeItemToTimeCardItem
 
 @Composable
-fun TimeCard(time: TimeItem, onClick: () -> Unit) {
+fun TimeCard(timeItem: TimeItem, onClick: () -> Unit) {
 
-    // TODO: Should be a mapper
-    val date = time.startTime.format(dateFormatter)
-    val startTime = time.startTime.format(timeFormatter)
-    val endTime = time.stopTime.format(timeFormatter)
-    //val hours = time.totalTimeInDuration.toHoursPart()
-    //val minutes = time.totalTimeInDuration.toMinutesPart()
-    //val totalTimeString = "${hours}h ${minutes}m"
+    val time = mapTimeItemToTimeCardItem(timeItem)
 
     // -*- Time Card -*- //
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 10.dp)
-            .padding(top = 10.dp)
+            .padding(horizontal = 15.dp)
+            .padding(top = 15.dp)
             .shadow(3.dp)
             .background(MaterialTheme.colorScheme.secondaryContainer)
+            .padding(10.dp)
             .clickable {
                 onClick()
             },
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Row(
-            modifier = Modifier
-                .size(75.dp)
-                .padding(5.dp),
-            //.clip(CircleShape)
-            //.background(Color.Red),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text("$date")
-        }
         Column(
-            modifier = Modifier
-                .weight(1f)
-                .padding(5.dp)
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                Text("$startTime - ")
-                Text("$endTime")
-            }
-            Text(time.description)
+            Text(time.startTime)
+            Text(" - ")
+            Text(time.endTime)
         }
-        Row(
-            modifier = Modifier
-                .size(75.dp)
-                .padding(5.dp),
-            //.clip(CircleShape)
-            //.background(Color.Red),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            //Text(totalTimeString)
-        }
+        Text(time.description)
+        Text(time.totalTime)
     }
 }
+
+/*
+Row(
+            modifier = Modifier
+                .size(75.dp)
+                .padding(5.dp),
+            //.clip(CircleShape)
+            //.background(Color.Red),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+        }
+ */
