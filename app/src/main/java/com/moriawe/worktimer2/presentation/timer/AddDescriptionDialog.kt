@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.moriawe.worktimer2.R
+import com.moriawe.worktimer2.domain.util.TimeFormatters.timeFormatter
 import com.moriawe.worktimer2.presentation.timer.TimerEvent
 import com.moriawe.worktimer2.presentation.timer.TimerState
 
@@ -20,15 +21,15 @@ fun AddDescriptionDialog(
     onEvent: (TimerEvent) -> Unit,
     modifier: Modifier = Modifier
 ) {
+
     AlertDialog(
         modifier = modifier,
         title = {
-            Text(text = "Add a work description:")
+            Text(text = "Between ${state.startTime.format(timeFormatter)} - " +
+                    state.stopTime.format(timeFormatter))
         },
         text = {
             Column() {
-                // TODO : Find out how to use String resources here
-                Text(text = "Between ${state.startTime} - ${state.stopTime}")
                 OutlinedTextField(
                     value = state.description,
                     onValueChange = { onEvent(TimerEvent.SetDescription(it)) },

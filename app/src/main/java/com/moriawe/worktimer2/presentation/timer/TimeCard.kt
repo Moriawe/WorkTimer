@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.moriawe.worktimer2.data.entity.TimeItem
 import com.moriawe.worktimer2.domain.util.mapTimeItemToTimeCardItem
@@ -45,7 +46,14 @@ fun TimeCard(timeItem: TimeItem, onClick: () -> Unit) {
             Text(" - ")
             Text(time.endTime)
         }
-        Text(time.description)
+        Text(
+            modifier = Modifier
+                .weight(1f, fill = false)
+                .padding(horizontal = 5.dp),
+            text = time.description,
+            maxLines = 3,
+            overflow = TextOverflow.Ellipsis
+        )
         Text(time.totalTime)
     }
 }

@@ -1,9 +1,8 @@
 package com.moriawe.worktimer2.di
 
 import com.moriawe.worktimer2.data.TimeRepository
-import com.moriawe.worktimer2.domain.use_case.GetTimeItemsByTodayUseCase
+import com.moriawe.worktimer2.domain.use_case.GetTimeItemsForSpecificDateUseCase
 import com.moriawe.worktimer2.domain.use_case.GetTimeItemsSortedByDateUseCase
-import com.moriawe.worktimer2.presentation.timer.TimerViewModel
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,8 +18,8 @@ object ViewModelModule {
     // USE CASE
     @Provides
     @ViewModelScoped
-    fun provideGetTimeItemsByTodayUseCase(repository: TimeRepository): GetTimeItemsByTodayUseCase {
-        return GetTimeItemsByTodayUseCase(repository)
+    fun provideGetTimeItemsByTodayUseCase(repository: TimeRepository): GetTimeItemsForSpecificDateUseCase {
+        return GetTimeItemsForSpecificDateUseCase(repository)
     }
 
     @Provides

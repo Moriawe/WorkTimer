@@ -25,6 +25,7 @@ class TimeSheetViewModel @Inject constructor(
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), TimeSheetState())
 
+    // -*- For testing purposes -*- //
     //val timeItemList = generateTimeItemsList(25)
 
 

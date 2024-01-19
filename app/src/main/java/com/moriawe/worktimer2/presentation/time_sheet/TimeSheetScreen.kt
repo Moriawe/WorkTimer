@@ -52,7 +52,7 @@ private fun MonthHeader(
 }
 
 @Composable
-private fun OverviewTimeItem(
+private fun OverviewTimeCardItem(
     timeCardItem: TimeCardItem,
     modifier: Modifier = Modifier
 ) {
@@ -81,7 +81,7 @@ private fun OverViewListColumn(
                 MonthHeader(month.name)
             }
             items(month.items) { timeCardItem ->
-                OverviewTimeItem(timeCardItem)
+                OverviewTimeCardItem(timeCardItem)
             }
         }
     }

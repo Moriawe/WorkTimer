@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.moriawe.worktimer2.data.TimeRepository
 import com.moriawe.worktimer2.data.entity.TimeItem
-import com.moriawe.worktimer2.domain.use_case.GetTimeItemsByTodayUseCase
+import com.moriawe.worktimer2.domain.use_case.GetTimeItemsForSpecificDateUseCase
 import com.moriawe.worktimer2.domain.util.TimeConstant
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,12 +22,12 @@ import javax.inject.Inject
 @HiltViewModel
 class TimerViewModel @Inject constructor(
     private val repo: TimeRepository,
-    private val getTimeItemsByTodayUseCase: GetTimeItemsByTodayUseCase
+    private val getTimeItemsForSpecificDateUseCase: GetTimeItemsForSpecificDateUseCase
 ) : ViewModel() {
 
     val TAG = "TIMER VIEW MODEL"
 
-    private val _timeItems = getTimeItemsByTodayUseCase()
+    private val _timeItems = getTimeItemsForSpecificDateUseCase(LocalDateTime.now())
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
     private val _state = MutableStateFlow(TimerState())
 

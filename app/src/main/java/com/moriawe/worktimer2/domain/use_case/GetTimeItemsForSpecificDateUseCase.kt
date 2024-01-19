@@ -6,19 +6,18 @@ import com.moriawe.worktimer2.domain.util.TimeFormatters.yearMonthDayFormatter
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
-class GetTimeItemsByTodayUseCase @Inject constructor(
+class GetTimeItemsForSpecificDateUseCase @Inject constructor(
     private val repo: TimeRepository
 ) {
 
-    operator fun invoke(): Flow<List<TimeItem>> {
+    operator fun invoke(date: LocalDateTime): Flow<List<TimeItem>> {
         val timeItems = repo.getTimeItems()
 
         return timeItems.map { list ->
             list.filter { timeItem ->
-                LocalDateTime.now()
+                date
                     .format(yearMonthDayFormatter) == timeItem.startTime
                     .format(yearMonthDayFormatter)
             }
