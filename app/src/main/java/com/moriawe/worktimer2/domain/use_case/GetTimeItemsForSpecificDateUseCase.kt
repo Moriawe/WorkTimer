@@ -14,7 +14,6 @@ class GetTimeItemsForSpecificDateUseCase @Inject constructor(
 
     operator fun invoke(date: LocalDateTime): Flow<List<TimeItem>> {
         val timeItems = repo.getTimeItems()
-
         return timeItems.map { list ->
             list.filter { timeItem ->
                 date

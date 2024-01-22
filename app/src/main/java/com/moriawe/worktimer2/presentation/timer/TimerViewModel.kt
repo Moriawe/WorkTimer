@@ -7,6 +7,7 @@ import com.moriawe.worktimer2.data.TimeRepository
 import com.moriawe.worktimer2.data.entity.TimeItem
 import com.moriawe.worktimer2.domain.use_case.GetTimeItemsForSpecificDateUseCase
 import com.moriawe.worktimer2.domain.util.TimeConstant
+import com.moriawe.worktimer2.domain.util.generateAndInsertMockTimeItemsIntoDatabase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -176,6 +177,13 @@ class TimerViewModel @Inject constructor(
                 startTime = LocalDateTime.parse(TimeConstant.TIME_DEFAULT_STRING),
                 stopTime = LocalDateTime.parse(TimeConstant.TIME_DEFAULT_STRING),
             )
+        }
+    }
+
+    // -*- Run to get mock data to test on -*- //
+    private fun generateAndInsertMockData(itemCount: Int) {
+        viewModelScope.launch {
+            generateAndInsertMockTimeItemsIntoDatabase(repo, itemCount)
         }
     }
 }

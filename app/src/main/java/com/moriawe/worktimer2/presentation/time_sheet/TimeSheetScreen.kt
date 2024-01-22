@@ -20,6 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.moriawe.worktimer2.domain.model.Day
 import com.moriawe.worktimer2.domain.model.Month
 import com.moriawe.worktimer2.domain.model.TimeCardItem
 
@@ -60,7 +61,7 @@ private fun MonthHeader(
 
 @Composable
 private fun OverviewTimeCardItem(
-    timeCardItem: TimeCardItem,
+    day: Day,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -70,9 +71,8 @@ private fun OverviewTimeCardItem(
             .padding(16.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(text = timeCardItem.date + " - ")
-        Text(text = timeCardItem.startTime)
-        Text(text = timeCardItem.endTime)
+        Text(text = day.date)
+        Text(text = day.totalWorkTime)
     }
 }
 
@@ -89,8 +89,8 @@ private fun OverViewListColumn(
             stickyHeader {
                 MonthHeader(month.name, month.totalWorkTimeInHours)
             }
-            items(month.items) { timeCardItem ->
-                OverviewTimeCardItem(timeCardItem)
+            items(month.days) { day ->
+                OverviewTimeCardItem(day)
             }
         }
     }
