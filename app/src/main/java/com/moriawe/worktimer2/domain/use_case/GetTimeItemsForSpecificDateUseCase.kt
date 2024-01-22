@@ -2,7 +2,7 @@ package com.moriawe.worktimer2.domain.use_case
 
 import com.moriawe.worktimer2.data.TimeRepository
 import com.moriawe.worktimer2.data.entity.TimeItem
-import com.moriawe.worktimer2.domain.util.TimeFormatters.yearMonthDayFormatter
+import com.moriawe.worktimer2.domain.util.TimeFormatters
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.time.LocalDateTime
@@ -17,10 +17,9 @@ class GetTimeItemsForSpecificDateUseCase @Inject constructor(
         return timeItems.map { list ->
             list.filter { timeItem ->
                 date
-                    .format(yearMonthDayFormatter) == timeItem.startTime
-                    .format(yearMonthDayFormatter)
+                    .format(TimeFormatters.yearMonthDayFormatter) == timeItem.startTime
+                    .format(TimeFormatters.yearMonthDayFormatter)
             }
         }
     }
-
 }

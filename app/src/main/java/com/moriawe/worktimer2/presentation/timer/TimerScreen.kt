@@ -15,6 +15,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.moriawe.worktimer2.R
+import com.moriawe.worktimer2.domain.mapper.mapTimeItemToTimeCardItem
+import com.moriawe.worktimer2.presentation.component.TimeCard
 
 @Composable
 fun TimerScreen(
@@ -27,7 +29,7 @@ fun TimerScreen(
     if (state.isModifyingTimeCard)
         AddDescriptionDialog(state = dialogState, onEvent = onEvent)
 
-    // -*- Parent column -*- //
+
     Column() {
 
         // -*- Scrollable column with TimeCards -*- //
@@ -38,7 +40,7 @@ fun TimerScreen(
         ) {
             items(state.timeItems) { timeItem ->
                 TimeCard(
-                    timeItem = timeItem,
+                    time = mapTimeItemToTimeCardItem(timeItem),
                     onClick = { onEvent(TimerEvent.ShowDialog(timeItem)) }
                 )
             }

@@ -1,7 +1,9 @@
 package com.moriawe.worktimer2.presentation.time_sheet
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,25 +17,54 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.moriawe.worktimer2.domain.model.Day
-import com.moriawe.worktimer2.domain.model.Month
 import com.moriawe.worktimer2.presentation.MainViewModel
+import com.moriawe.worktimer2.presentation.component.TimeCard
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TimeSheetScreen(
     viewModel: MainViewModel = viewModel(),
 ) {
 
     val state by viewModel.timeSheetState.collectAsState()
+    var isExpanded by remember { mutableStateOf(false)}
 
-    // -*- Parent column -*- //
     Column(modifier = Modifier.fillMaxSize()) {
-        OverViewListColumn(months = state.months)
+
+        // -*- Scrollable Column with all timeItems -*- //
+        LazyColumn(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            state.months.forEach { month ->
+                stickyHeader {
+                    MonthHeader(month.name, month.totalWorkTimeInHours)
+                }
+                items(month.days) { day ->
+                    DayHeader(
+                        title = day.date,
+                        workTime = day.totalWorkTime,
+                        onClick = { isExpanded = !isExpanded})
+                    if (isExpanded) {
+                        Log.d("TIME SHEET SCREEN", "IsExpanded: $isExpanded")
+                        LazyColumn(
+                        ) {
+                            items(day.items) { timeCardItem ->
+                                TimeCard(time = timeCardItem) {
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -52,7 +83,7 @@ private fun MonthHeader(
     ) {
         Text(
             text = title,
-            fontSize = 16.sp,
+            fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
         )
         Text(text = workTime)
@@ -60,38 +91,24 @@ private fun MonthHeader(
 }
 
 @Composable
-private fun OverviewTimeCardItem(
-    day: Day,
+private fun DayHeader(
+    title: String,
+    workTime: String,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.background)
+            .clickable { onClick }
             .padding(16.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(text = day.date)
-        Text(text = day.totalWorkTime)
-    }
-}
-
-@OptIn(ExperimentalFoundationApi::class)
-@Composable
-private fun OverViewListColumn(
-    months: List<Month>,
-    modifier: Modifier = Modifier
-) {
-    LazyColumn(
-        modifier = modifier.fillMaxSize()
-    ) {
-        months.forEach { month ->
-            stickyHeader {
-                MonthHeader(month.name, month.totalWorkTimeInHours)
-            }
-            items(month.days) { day ->
-                OverviewTimeCardItem(day)
-            }
-        }
+        Text(
+            text = title,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold,
+        )
+        Text(text = workTime)
     }
 }

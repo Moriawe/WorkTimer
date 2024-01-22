@@ -1,4 +1,4 @@
-package com.moriawe.worktimer2.presentation.timer
+package com.moriawe.worktimer2.presentation.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -15,13 +15,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.moriawe.worktimer2.data.entity.TimeItem
 import com.moriawe.worktimer2.domain.mapper.mapTimeItemToTimeCardItem
+import com.moriawe.worktimer2.domain.model.TimeCardItem
 
 @Composable
-fun TimeCard(timeItem: TimeItem, onClick: () -> Unit) {
-
-    val time = mapTimeItemToTimeCardItem(timeItem)
+fun TimeCard(time: TimeCardItem, onClick: () -> Unit) {
 
     // -*- Time Card -*- //
     Row(

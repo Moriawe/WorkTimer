@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.moriawe.worktimer2.data.TimeRepository
 import com.moriawe.worktimer2.data.entity.TimeItem
 import com.moriawe.worktimer2.domain.use_case.GetTimeItemsForSpecificDateUseCase
-import com.moriawe.worktimer2.domain.use_case.GetTimeItemsSortedByMonthUseCase
+import com.moriawe.worktimer2.domain.use_case.GetListOfMonthUseCase
 import com.moriawe.worktimer2.domain.util.TimeConstant
 import com.moriawe.worktimer2.domain.util.generateAndInsertMockTimeItemsIntoDatabase
 import com.moriawe.worktimer2.presentation.time_sheet.TimeSheetState
@@ -27,7 +27,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val repo: TimeRepository,
-    private val getTimeItemsSortedByMonthUseCase: GetTimeItemsSortedByMonthUseCase,
+    private val getListOfMonthUseCase: GetListOfMonthUseCase,
     private val getTimeItemsForSpecificDateUseCase: GetTimeItemsForSpecificDateUseCase
 ) : ViewModel() {
 
@@ -50,7 +50,7 @@ class MainViewModel @Inject constructor(
     val dialogState: StateFlow<DialogState> = _dialogState.asStateFlow()
 
     // -*- TIME SHEET STATES -*- //
-    private val _overViewList = getTimeItemsSortedByMonthUseCase()
+    private val _overViewList = getListOfMonthUseCase()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
     private val _timeSheetState = MutableStateFlow(TimeSheetState())
