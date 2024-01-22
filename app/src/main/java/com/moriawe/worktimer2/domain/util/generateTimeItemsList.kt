@@ -9,6 +9,7 @@ import java.time.Duration
 import java.time.LocalDateTime
 import kotlin.random.Random
 
+// -*- FOR MAKING A MOCK LIST TO THE DATABASE -*- //
 fun generateRandomTimeItem(): TimeItem {
     val currentDateTime = LocalDateTime.now()
 
