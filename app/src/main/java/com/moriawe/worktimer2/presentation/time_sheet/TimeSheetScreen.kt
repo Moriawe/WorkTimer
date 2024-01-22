@@ -22,14 +22,14 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.moriawe.worktimer2.domain.model.Day
 import com.moriawe.worktimer2.domain.model.Month
-import com.moriawe.worktimer2.domain.model.TimeCardItem
+import com.moriawe.worktimer2.presentation.MainViewModel
 
 @Composable
 fun TimeSheetScreen(
-    viewModel: TimeSheetViewModel = viewModel(),
+    viewModel: MainViewModel = viewModel(),
 ) {
 
-    val state by viewModel.state.collectAsState()
+    val state by viewModel.timeSheetState.collectAsState()
 
     // -*- Parent column -*- //
     Column(modifier = Modifier.fillMaxSize()) {

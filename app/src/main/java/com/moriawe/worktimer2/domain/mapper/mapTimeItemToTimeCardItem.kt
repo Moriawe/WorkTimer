@@ -1,7 +1,9 @@
-package com.moriawe.worktimer2.domain.util
+package com.moriawe.worktimer2.domain.mapper
 
 import com.moriawe.worktimer2.data.entity.TimeItem
 import com.moriawe.worktimer2.domain.model.TimeCardItem
+import com.moriawe.worktimer2.domain.util.TimeFormatters
+import com.moriawe.worktimer2.domain.util.formatDurationInHHMMToString
 import java.time.Duration
 
 fun mapTimeItemToTimeCardItem(timeItem: TimeItem): TimeCardItem {

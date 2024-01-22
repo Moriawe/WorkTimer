@@ -16,7 +16,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.moriawe.worktimer2.data.entity.TimeItem
-import com.moriawe.worktimer2.domain.util.mapTimeItemToTimeCardItem
+import com.moriawe.worktimer2.domain.mapper.mapTimeItemToTimeCardItem
 
 @Composable
 fun TimeCard(timeItem: TimeItem, onClick: () -> Unit) {

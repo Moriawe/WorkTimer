@@ -10,14 +10,15 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.moriawe.worktimer2.presentation.MainViewModel
 import com.moriawe.worktimer2.presentation.time_sheet.TimeSheetScreen
-import com.moriawe.worktimer2.presentation.time_sheet.TimeSheetViewModel
 import com.moriawe.worktimer2.presentation.timer.TimerScreen
-import com.moriawe.worktimer2.presentation.timer.TimerViewModel
 
 
 @Composable
 fun NavigationGraph(navController: NavHostController, innerPadding: PaddingValues) {
+
+    val viewModel = hiltViewModel<MainViewModel>()
 
     NavHost(
         navController = navController,
@@ -25,14 +26,12 @@ fun NavigationGraph(navController: NavHostController, innerPadding: PaddingValue
         modifier = Modifier.padding(innerPadding)
     ) {
         composable(route = Screen.Timer.route) {
-            val viewModel = hiltViewModel<TimerViewModel>()
-            val state by viewModel.state.collectAsState()
+            val state by viewModel.timerState.collectAsState()
             val dialogState by viewModel.dialogState.collectAsState()
             val onEvent = viewModel::onEvent
             TimerScreen(state, dialogState, onEvent)
         }
         composable(route = Screen.TimeSheet.route) {
-            val viewModel = hiltViewModel<TimeSheetViewModel>()
             TimeSheetScreen(viewModel)
         }
     }

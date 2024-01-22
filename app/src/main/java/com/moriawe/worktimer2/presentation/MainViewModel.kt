@@ -1,13 +1,17 @@
-package com.moriawe.worktimer2.presentation.timer
+package com.moriawe.worktimer2.presentation
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.moriawe.worktimer2.data.TimeRepository
 import com.moriawe.worktimer2.data.entity.TimeItem
 import com.moriawe.worktimer2.domain.use_case.GetTimeItemsForSpecificDateUseCase
+import com.moriawe.worktimer2.domain.use_case.GetTimeItemsSortedByMonthUseCase
 import com.moriawe.worktimer2.domain.util.TimeConstant
 import com.moriawe.worktimer2.domain.util.generateAndInsertMockTimeItemsIntoDatabase
+import com.moriawe.worktimer2.presentation.time_sheet.TimeSheetState
+import com.moriawe.worktimer2.presentation.timer.DialogState
+import com.moriawe.worktimer2.presentation.timer.TimerEvent
+import com.moriawe.worktimer2.presentation.timer.TimerState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -21,19 +25,21 @@ import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
-class TimerViewModel @Inject constructor(
+class MainViewModel @Inject constructor(
     private val repo: TimeRepository,
+    private val getTimeItemsSortedByMonthUseCase: GetTimeItemsSortedByMonthUseCase,
     private val getTimeItemsForSpecificDateUseCase: GetTimeItemsForSpecificDateUseCase
 ) : ViewModel() {
 
     val TAG = "TIMER VIEW MODEL"
 
+    // -*- TIMER STATES -*- //
     private val _timeItems = getTimeItemsForSpecificDateUseCase(LocalDateTime.now())
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
-    private val _state = MutableStateFlow(TimerState())
+    private val _timerState = MutableStateFlow(TimerState())
 
     // -*- This updates the state whenever there is a change in either _state or _timeItems -*- //
-    val state = combine(_state, _timeItems) { state, timeItems ->
+    val timerState = combine(_timerState, _timeItems) { state, timeItems ->
         state.copy(
             timeItems = timeItems
         )
@@ -42,6 +48,18 @@ class TimerViewModel @Inject constructor(
     // -*- Separate dialog state so user can update an item while still recording time -*- //
     private val _dialogState = MutableStateFlow(DialogState())
     val dialogState: StateFlow<DialogState> = _dialogState.asStateFlow()
+
+    // -*- TIME SHEET STATES -*- //
+    private val _overViewList = getTimeItemsSortedByMonthUseCase()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
+
+    private val _timeSheetState = MutableStateFlow(TimeSheetState())
+
+    val timeSheetState = combine(_timeSheetState, _overViewList) { state, months ->
+        state.copy(
+            months = months
+        )
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), TimeSheetState())
 
 
     fun onEvent(event: TimerEvent) {
@@ -75,25 +93,25 @@ class TimerViewModel @Inject constructor(
             }
 
             TimerEvent.StartTimer -> {
-                _state.update {
+                _timerState.update {
                     it.copy(
                         startTime = LocalDateTime.now(),
                         isTimerStarted = true
                     )
                 }
-                Log.d(TAG, "Starttime is updated to: ${state.value.startTime} and " +
-                        "the timer is started?: ${state.value.isTimerStarted}")
+//                Log.d(TAG, "Starttime is updated to: ${state.value.startTime} and " +
+//                        "the timer is started?: ${state.value.isTimerStarted}")
             }
 
             TimerEvent.StopTimer -> {
-                _state.update {
+                _timerState.update {
                     it.copy(
                         stopTime = LocalDateTime.now(),
                         isTimerStarted = false,
                     )
                 }
-                Log.d(TAG, "StopTime is updated to: ${state.value.stopTime} and " +
-                        "the timer is started?: ${state.value.isTimerStarted}")
+//                Log.d(TAG, "StopTime is updated to: ${state.value.stopTime} and " +
+//                        "the timer is started?: ${state.value.isTimerStarted}")
                 addNewTimeItem()
             }
 
@@ -106,7 +124,7 @@ class TimerViewModel @Inject constructor(
                         description = event.timeItem.description,
                     )
                 }
-                _state.update {
+                _timerState.update {
                     it.copy(
                         isModifyingTimeCard = true
                     )
@@ -114,7 +132,7 @@ class TimerViewModel @Inject constructor(
             }
 
             TimerEvent.HideDialog -> {
-                _state.update {
+                _timerState.update {
                     it.copy(
                         isModifyingTimeCard = false
                     )
@@ -135,7 +153,7 @@ class TimerViewModel @Inject constructor(
                 description = dialogState.value.description
             )
             viewModelScope.launch {
-                Log.d(TAG, "Sent to Repo $timeItem")
+//                Log.d(TAG, "Update item: $timeItem")
                 repo.updateTimeItem(timeItem = timeItem)
             }
         }
@@ -146,10 +164,10 @@ class TimerViewModel @Inject constructor(
     private fun addNewTimeItem() {
         // Null Check
         if (
-            state.value.startTime == LocalDateTime.parse(
+            timerState.value.startTime == LocalDateTime.parse(
                 TimeConstant.TIME_DEFAULT_STRING
             )
-            || state.value.stopTime == LocalDateTime.parse(
+            || timerState.value.stopTime == LocalDateTime.parse(
                 TimeConstant.TIME_DEFAULT_STRING
             )
         ) {
@@ -157,12 +175,12 @@ class TimerViewModel @Inject constructor(
         }
 
         val timeItem = TimeItem(
-            startTime = state.value.startTime,
-            stopTime = state.value.stopTime
+            startTime = timerState.value.startTime,
+            stopTime = timerState.value.stopTime
         )
 
         viewModelScope.launch {
-            Log.d(TAG, "Sent to Repo $timeItem")
+//            Log.d(TAG, "Insert item: $timeItem")
             repo.insertTimeItem(timeItem = timeItem)
         }
         resetState()
@@ -170,7 +188,7 @@ class TimerViewModel @Inject constructor(
 
     // -*- Resets the state for starting/stopping time -*- //
     private fun resetState() {
-        _state.update {
+        _timerState.update {
             it.copy(
                 isModifyingTimeCard = false,
                 selectedItem = null,
