@@ -9,9 +9,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,6 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.moriawe.worktimer2.domain.model.TimeCardItem
 import com.moriawe.worktimer2.presentation.MainViewModel
 import com.moriawe.worktimer2.presentation.component.TimeCard
 
@@ -35,7 +38,10 @@ fun TimeSheetScreen(
 ) {
 
     val state by viewModel.timeSheetState.collectAsState()
-    var isExpanded by remember { mutableStateOf(false)}
+
+    // -*- state to check if a day is expanded or not -*- //
+    var expandedStates by remember { mutableStateOf(mapOf<String, Boolean>()) }
+
 
     Column(modifier = Modifier.fillMaxSize()) {
 
@@ -48,16 +54,29 @@ fun TimeSheetScreen(
                     MonthHeader(month.name, month.totalWorkTimeInHours)
                 }
                 items(month.days) { day ->
-                    DayHeader(
-                        title = day.date,
-                        workTime = day.totalWorkTime,
-                        onClick = { isExpanded = !isExpanded})
+                    val isExpanded = expandedStates[day.date] ?: false
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                expandedStates = expandedStates.toMutableMap().apply {
+                                    this[day.date] = !isExpanded }
+                            }
+                            .padding(16.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            text = day.date,
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold,
+                        )
+                        Text(text = day.totalWorkTime)
+                    }
                     if (isExpanded) {
-                        Log.d("TIME SHEET SCREEN", "IsExpanded: $isExpanded")
-                        LazyColumn(
-                        ) {
-                            items(day.items) { timeCardItem ->
+                        Column() {
+                            day.items.forEach { timeCardItem ->
                                 TimeCard(time = timeCardItem) {
+
                                 }
                             }
                         }
@@ -84,29 +103,6 @@ private fun MonthHeader(
         Text(
             text = title,
             fontSize = 20.sp,
-            fontWeight = FontWeight.Bold,
-        )
-        Text(text = workTime)
-    }
-}
-
-@Composable
-private fun DayHeader(
-    title: String,
-    workTime: String,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .clickable { onClick }
-            .padding(16.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Text(
-            text = title,
-            fontSize = 16.sp,
             fontWeight = FontWeight.Bold,
         )
         Text(text = workTime)
