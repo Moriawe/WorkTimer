@@ -11,6 +11,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.moriawe.worktimer2.presentation.MainViewModel
+import com.moriawe.worktimer2.presentation.modifier.ModifierScreen
 import com.moriawe.worktimer2.presentation.time_sheet.TimeSheetScreen
 import com.moriawe.worktimer2.presentation.timer.TimerScreen
 
@@ -29,10 +30,16 @@ fun NavigationGraph(navController: NavHostController, innerPadding: PaddingValue
             val state by viewModel.timerState.collectAsState()
             val dialogState by viewModel.dialogState.collectAsState()
             val onEvent = viewModel::onEvent
-            TimerScreen(state, dialogState, onEvent)
+            TimerScreen(viewModel, state, dialogState, onEvent)
         }
         composable(route = Screen.TimeSheet.route) {
-            TimeSheetScreen(viewModel)
+            val state by viewModel.timeSheetState.collectAsState()
+            TimeSheetScreen(state)
+        }
+        composable(route = Screen.Modifier.route) {
+            val dialogState by viewModel.dialogState.collectAsState()
+            val onEvent = viewModel::onEvent
+            ModifierScreen(dialogState, onEvent)
         }
     }
 }

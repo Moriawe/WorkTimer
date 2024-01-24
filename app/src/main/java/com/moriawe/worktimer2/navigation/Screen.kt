@@ -12,6 +12,7 @@ enum class Screen(
 ) {
     Timer("Timer", LocalDateTime.now().format(dayFormatter), R.drawable.timer),
     TimeSheet("TimeSheet", "Overview", R.drawable.calendar),
-    Settings("Settings", "Settings", R.drawable.settings)
+    Settings("Settings", "Settings", R.drawable.settings),
+    Modifier("Modifier", "Modify Time Card", R.drawable.edit)
 }
 

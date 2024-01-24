@@ -18,13 +18,11 @@ object TimeConstant {
 
 fun formatDurationInHHToString(duration: Duration): String {
     val hours = duration.toHoursPart()
-    val totalTimeString = "${hours}h"
-    return totalTimeString
+    return "${hours}h"
 }
 
 fun formatDurationInHHMMToString(duration: Duration): String {
     val hours = duration.toHoursPart()
     val minutes = duration.toMinutesPart()
-    val totalTimeString = "${hours}h ${minutes}m"
-    return totalTimeString
+    return "${hours}h ${minutes}m"
 }

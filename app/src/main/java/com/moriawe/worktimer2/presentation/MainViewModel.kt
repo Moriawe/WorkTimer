@@ -1,27 +1,36 @@
 package com.moriawe.worktimer2.presentation
 
+import android.util.Log
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.moriawe.worktimer2.R
 import com.moriawe.worktimer2.data.TimeRepository
 import com.moriawe.worktimer2.data.entity.TimeItem
 import com.moriawe.worktimer2.domain.use_case.GetTimeItemsForSpecificDateUseCase
 import com.moriawe.worktimer2.domain.use_case.GetListOfMonthUseCase
 import com.moriawe.worktimer2.domain.util.TimeConstant
+import com.moriawe.worktimer2.domain.util.TimeFormatters
+import com.moriawe.worktimer2.domain.util.TimeFormatters.timeFormatter
 import com.moriawe.worktimer2.domain.util.generateAndInsertMockTimeItemsIntoDatabase
 import com.moriawe.worktimer2.presentation.time_sheet.TimeSheetState
 import com.moriawe.worktimer2.presentation.timer.DialogState
 import com.moriawe.worktimer2.presentation.timer.TimerEvent
 import com.moriawe.worktimer2.presentation.timer.TimerState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.LocalTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -45,6 +54,7 @@ class MainViewModel @Inject constructor(
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), TimerState())
 
+    // -*- DIALOG STATE -*- //
     // -*- Separate dialog state so user can update an item while still recording time -*- //
     private val _dialogState = MutableStateFlow(DialogState())
     val dialogState: StateFlow<DialogState> = _dialogState.asStateFlow()
@@ -61,6 +71,9 @@ class MainViewModel @Inject constructor(
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), TimeSheetState())
 
+    // -*- UI EVENT FLOW -*- //
+    private val _eventFlow = MutableSharedFlow<UiEvent>()
+    val eventFlow = _eventFlow.asSharedFlow()
 
     fun onEvent(event: TimerEvent) {
         when (event) {
@@ -73,6 +86,7 @@ class MainViewModel @Inject constructor(
             }
 
             is TimerEvent.SetStartTime -> {
+
                 _dialogState.update {
                     it.copy(
                         startTime = event.startTime
@@ -90,6 +104,10 @@ class MainViewModel @Inject constructor(
 
             is TimerEvent.UpdateTimeItem -> {
                 updateTimeItem()
+            }
+
+            is TimerEvent.DeleteTimeItem -> {
+
             }
 
             TimerEvent.StartTimer -> {
@@ -119,8 +137,8 @@ class MainViewModel @Inject constructor(
                 _dialogState.update {
                     it.copy(
                         selectedItem = event.timeItem,
-                        startTime = event.timeItem.startTime,
-                        stopTime = event.timeItem.stopTime,
+                        startTime = event.timeItem.startTime.format(timeFormatter),
+                        stopTime = event.timeItem.stopTime.format(timeFormatter),
                         description = event.timeItem.description,
                     )
                 }
@@ -139,30 +157,16 @@ class MainViewModel @Inject constructor(
                 }
                 _dialogState.value = DialogState()
             }
-        }
-
-    }
-
-    // -*- Updates the time or description for an item and resets the dialog state -*- //
-    private fun updateTimeItem() {
-        if (dialogState.value.selectedItem != null) {
-            val timeItem = TimeItem(
-                id = dialogState.value.selectedItem!!.id,
-                startTime = dialogState.value.startTime,
-                stopTime = dialogState.value.stopTime,
-                description = dialogState.value.description
-            )
-            viewModelScope.launch {
-//                Log.d(TAG, "Update item: $timeItem")
-                repo.updateTimeItem(timeItem = timeItem)
+            TimerEvent.ShowError -> {
+                // TODO: Show snackbar
             }
         }
-        _dialogState.value = DialogState()
+
     }
 
     // -*- Adds a new item to the database when time is stopped -*- //
     private fun addNewTimeItem() {
-        // Null Check
+        // Check if there is an actualy change in time
         if (
             timerState.value.startTime == LocalDateTime.parse(
                 TimeConstant.TIME_DEFAULT_STRING
@@ -196,6 +200,57 @@ class MainViewModel @Inject constructor(
                 stopTime = LocalDateTime.parse(TimeConstant.TIME_DEFAULT_STRING),
             )
         }
+    }
+
+    // -*- Updates the time or description for an item and resets the dialog state -*- //
+    private fun updateTimeItem() {
+        // Check that we have a proper TimeItem to update
+        if (dialogState.value.selectedItem != null) {
+
+            // Check that it is the proper format to parse it
+            viewModelScope.launch {
+                if (isValidTimeStampFormat(dialogState.value.startTime)
+                    && isValidTimeStampFormat(dialogState.value.stopTime)) {
+                    Log.d(TAG, "Both start and Stop are valid timestamps, updating")
+                    val timeItem = TimeItem(
+                        id = dialogState.value.selectedItem!!.id,
+                        startTime = parseTimeStamp(dialogState.value.startTime),
+                        stopTime = parseTimeStamp(dialogState.value.stopTime),
+                        description = dialogState.value.description
+                    )
+                    // Update database
+                    // TODO: Refactor to UseCase
+                    Log.d(TAG, "Updating timeItem $timeItem")
+                    repo.updateTimeItem(timeItem = timeItem)
+                } else {
+                    Log.d(TAG, "ERROR Something went wrong when updating timeItem")
+                    // Notify user if there is an error in the time format
+                    _eventFlow.emit(
+                        UiEvent.ShowSnackbar(
+                            message = R.string.time_format_error
+                        )
+                    )
+                }
+            }
+        }
+        _dialogState.value = DialogState()
+    }
+
+    // -*- Checks if time is in the right format -*- //
+    private fun isValidTimeStampFormat(timeStamp: String): Boolean {
+        return try {
+            Log.d(TAG, "Try $timeStamp")
+            LocalTime.parse(timeStamp, timeFormatter)
+            true
+        } catch (e: Exception) {
+            Log.d(TAG, "ERROR Not a valid timestamp")
+            false
+        }
+    }
+
+    private fun parseTimeStamp(timeStamp: String): LocalDateTime {
+        val time = LocalTime.parse(timeStamp, timeFormatter)
+        return LocalDateTime.of(LocalDate.now(), time)
     }
 
     // -*- Run to get mock data to test on -*- //

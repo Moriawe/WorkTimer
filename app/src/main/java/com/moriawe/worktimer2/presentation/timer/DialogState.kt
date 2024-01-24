@@ -6,7 +6,9 @@ import java.time.LocalDateTime
 
 data class DialogState(
     val selectedItem: TimeItem? = null,
-    val startTime: LocalDateTime = LocalDateTime.parse(TimeConstant.TIME_DEFAULT_STRING),
-    val stopTime: LocalDateTime = LocalDateTime.parse(TimeConstant.TIME_DEFAULT_STRING),
+    val startTime: String = "",
+    val stopTime: String = "",
+    //val startTime: LocalDateTime = LocalDateTime.parse(TimeConstant.TIME_DEFAULT_STRING),
+    //val stopTime: LocalDateTime = LocalDateTime.parse(TimeConstant.TIME_DEFAULT_STRING),
     val description: String = "",
 )

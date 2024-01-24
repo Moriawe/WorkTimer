@@ -1,6 +1,5 @@
 package com.moriawe.worktimer2.presentation.time_sheet
 
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -9,11 +8,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,17 +24,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.moriawe.worktimer2.domain.model.TimeCardItem
 import com.moriawe.worktimer2.presentation.MainViewModel
 import com.moriawe.worktimer2.presentation.component.TimeCard
+import com.moriawe.worktimer2.presentation.timer.TimerState
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TimeSheetScreen(
-    viewModel: MainViewModel = viewModel(),
+    state: TimeSheetState,
 ) {
-
-    val state by viewModel.timeSheetState.collectAsState()
 
     // -*- state to check if a day is expanded or not -*- //
     var expandedStates by remember { mutableStateOf(mapOf<String, Boolean>()) }

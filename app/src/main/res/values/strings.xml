@@ -10,6 +10,11 @@
     <string name="stop">Stop</string>
     <string name="done">Done</string>
 
-    <!-- labels -->
+    <!-- Labels -->
+    <string name="start_time">Start</string>
+    <string name="end_time">End</string>
     <string name="work_description">Work Description</string>
+
+    <!-- Snackbar -->
+    <string name="time_format_error">You need to type in time in format HH:MM</string>
 </resources>
