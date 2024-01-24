@@ -37,6 +37,14 @@ fun TimerScreen(
             onEvent = onEvent)
 
     Column() {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            Text(
+                text = "Total worktime for today: ${state.totalWorkTime}"
+            )
+        }
 
         // -*- Scrollable column with TimeCards -*- //
         LazyColumn(

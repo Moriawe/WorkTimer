@@ -10,6 +10,8 @@ import com.moriawe.worktimer2.domain.use_case.GetTimeItemsForSpecificDateUseCase
 import com.moriawe.worktimer2.domain.use_case.GetListOfMonthUseCase
 import com.moriawe.worktimer2.domain.util.TimeConstant
 import com.moriawe.worktimer2.domain.util.TimeFormatters.timeFormatter
+import com.moriawe.worktimer2.domain.util.calculateTotalTime
+import com.moriawe.worktimer2.domain.util.formatDurationInHHMMToString
 import com.moriawe.worktimer2.domain.util.generateAndInsertMockTimeItemsIntoDatabase
 import com.moriawe.worktimer2.presentation.time_sheet.TimeSheetState
 import com.moriawe.worktimer2.presentation.dialog.DialogState
@@ -48,7 +50,8 @@ class MainViewModel @Inject constructor(
     // -*- This updates the state whenever there is a change in either _state or _timeItems -*- //
     val timerState = combine(_timerState, _timeItems) { state, timeItems ->
         state.copy(
-            timeItems = timeItems
+            timeItems = timeItems,
+            totalWorkTime = calculateTotalTime(timeItems)
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), TimerState())
 
