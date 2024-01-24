@@ -84,7 +84,6 @@ class MainViewModel @Inject constructor(
             }
 
             is TimerEvent.SetStartTime -> {
-
                 _dialogState.update {
                     it.copy(
                         startTime = event.startTime
@@ -102,6 +101,7 @@ class MainViewModel @Inject constructor(
 
             is TimerEvent.UpdateTimeItem -> {
                 updateTimeItem()
+                event.onSuccess(false)
             }
 
             is TimerEvent.DeleteTimeItem -> {
@@ -115,7 +115,7 @@ class MainViewModel @Inject constructor(
                         isTimerStarted = true
                     )
                 }
-//                Log.d(TAG, "Starttime is updated to: ${state.value.startTime} and " +
+//                Log.d(TAG, "Start time is updated to: ${state.value.startTime} and " +
 //                        "the timer is started?: ${state.value.isTimerStarted}")
             }
 
@@ -154,9 +154,6 @@ class MainViewModel @Inject constructor(
                     )
                 }
                 _dialogState.value = DialogState()
-            }
-            TimerEvent.ShowError -> {
-                // TODO: Show snackbar
             }
         }
 
@@ -214,6 +211,7 @@ class MainViewModel @Inject constructor(
                     val startTime = parseTimeStamp(dialogState.value.startTime)
                     val stopTime = parseTimeStamp(dialogState.value.stopTime)
 
+                    // Check if start time is before stop time
                     if (isStopTimeAfterStartTime(startTime, stopTime)) {
                         val timeItem = TimeItem(
                             id = dialogState.value.selectedItem!!.id,
@@ -221,6 +219,7 @@ class MainViewModel @Inject constructor(
                             stopTime = stopTime,
                             description = dialogState.value.description
                         )
+                        // TODO: INSERT EVENT - HIDE DIALOG HERE -
                         // Update database
                         // TODO: Refactor to UseCase
                         Log.d(TAG, "Updating timeItem $timeItem")
@@ -236,7 +235,6 @@ class MainViewModel @Inject constructor(
 
                 } else {
                     Log.d(TAG, "ERROR the time format is wrong")
-                    // Notify user if there is an error in the time format
                     _eventFlow.emit(
                         UiEvent.ShowSnackbar(
                             message = R.string.time_format_error

@@ -64,9 +64,12 @@ fun ModifyTimeItemDialog(
         confirmButton = {
             TextButton(
                 onClick = {
-                    onEvent(TimerEvent.UpdateTimeItem)
-                    Log.d("AddDescriptionDialog", "Save item: ${state.description}")
-                    onEvent(TimerEvent.HideDialog)
+                    onEvent(TimerEvent.UpdateTimeItem { success ->
+                     if (success) {
+                         Log.d("AddDescriptionDialog", "Save item: ${state.description}")
+                         onEvent(TimerEvent.HideDialog)
+                     }
+                    })
                 }
             ) {
                 Text("Save")

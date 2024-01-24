@@ -9,14 +9,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.moriawe.worktimer2.presentation.MainViewModel
 import com.moriawe.worktimer2.presentation.UiEvent
-import com.moriawe.worktimer2.presentation.modifier.ModifierScreen
+import com.moriawe.worktimer2.presentation.dialog.ModifyTimeItemDialog
 import com.moriawe.worktimer2.presentation.time_sheet.TimeSheetScreen
 import com.moriawe.worktimer2.presentation.timer.TimerScreen
 import kotlinx.coroutines.flow.collectLatest
@@ -58,10 +57,10 @@ fun NavigationGraph(
             val state by viewModel.timeSheetState.collectAsState()
             TimeSheetScreen(state)
         }
-        composable(route = Screen.Modifier.route) {
+        composable(route = Screen.Dialog.route) {
             val dialogState by viewModel.dialogState.collectAsState()
             val onEvent = viewModel::onEvent
-            ModifierScreen(dialogState, onEvent)
+            ModifyTimeItemDialog(dialogState, onEvent)
         }
     }
 }

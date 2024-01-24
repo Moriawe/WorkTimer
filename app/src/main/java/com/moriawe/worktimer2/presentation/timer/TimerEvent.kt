@@ -8,10 +8,9 @@ sealed interface TimerEvent {
     data class SetStopTime(val stopTime: String): TimerEvent
     data class SetDescription(val description: String): TimerEvent
     data class DeleteTimeItem(val item: TimeItem): TimerEvent
-    data object UpdateTimeItem: TimerEvent
+    data class UpdateTimeItem(val onSuccess: (Boolean) -> Unit): TimerEvent
     data object StartTimer: TimerEvent
     data object StopTimer: TimerEvent
     data class ShowDialog(val timeItem: TimeItem): TimerEvent
     data object HideDialog: TimerEvent
-    data object ShowError: TimerEvent
 }

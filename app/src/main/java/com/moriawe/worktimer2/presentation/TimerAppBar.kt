@@ -30,7 +30,7 @@ fun TimerAppBar(
                 Screen.Timer -> Text(LocalDateTime.now().format(dayFormatter))
                 Screen.TimeSheet -> Text(currentScreen.title)
                 Screen.Settings -> Text(currentScreen.title)
-                Screen.Modifier -> Text(currentScreen.title)
+                Screen.Dialog -> Text(currentScreen.title)
             }
              },
         colors = TopAppBarDefaults.mediumTopAppBarColors(
