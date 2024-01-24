@@ -100,8 +100,7 @@ class MainViewModel @Inject constructor(
             }
 
             is TimerEvent.UpdateTimeItem -> {
-                updateTimeItem()
-                event.onSuccess(false)
+                event.onSuccess(updateTimeItem())
             }
 
             is TimerEvent.DeleteTimeItem -> {
@@ -198,7 +197,8 @@ class MainViewModel @Inject constructor(
     }
 
     // -*- Updates the time or description for an item and resets the dialog state -*- //
-    private fun updateTimeItem() {
+    private fun updateTimeItem(): Boolean {
+        var isSuccess = false
         // Check that we have a proper TimeItem to update
         if (dialogState.value.selectedItem != null) {
 
@@ -219,11 +219,12 @@ class MainViewModel @Inject constructor(
                             stopTime = stopTime,
                             description = dialogState.value.description
                         )
-                        // TODO: INSERT EVENT - HIDE DIALOG HERE -
                         // Update database
                         // TODO: Refactor to UseCase
+                        isSuccess = true
                         Log.d(TAG, "Updating timeItem $timeItem")
                         repo.updateTimeItem(timeItem = timeItem)
+                        _dialogState.value = DialogState()
                     } else {
                         Log.d(TAG, "ERROR start-end time incorrect order")
                         _eventFlow.emit(
@@ -243,7 +244,7 @@ class MainViewModel @Inject constructor(
                 }
             }
         }
-        _dialogState.value = DialogState()
+        return isSuccess
     }
 
     // -*- Checks if time is in the right format -*- //

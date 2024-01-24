@@ -4,27 +4,29 @@ import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.moriawe.worktimer2.R
-import com.moriawe.worktimer2.presentation.MainViewModel
-import com.moriawe.worktimer2.presentation.UiEvent
 import com.moriawe.worktimer2.presentation.timer.TimerEvent
-import kotlinx.coroutines.flow.collectLatest
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ModifyTimeItemDialog(
     state: DialogState,
     onEvent: (TimerEvent) -> Unit,
     modifier: Modifier = Modifier
 ) {
+
     AlertDialog(
         modifier = modifier,
         title = {
@@ -34,7 +36,8 @@ fun ModifyTimeItemDialog(
             Column(
             ) {
                 Row(
-                    horizontalArrangement = Arrangement.SpaceEvenly
+                    modifier = Modifier
+                        .padding(vertical = 10.dp),
                 ) {
                     OutlinedTextField(
                         modifier = Modifier
@@ -68,6 +71,8 @@ fun ModifyTimeItemDialog(
                      if (success) {
                          Log.d("AddDescriptionDialog", "Save item: ${state.description}")
                          onEvent(TimerEvent.HideDialog)
+                     } else {
+                         Log.d("AddDescriptionDialog", "Hide keyboard")
                      }
                     })
                 }
