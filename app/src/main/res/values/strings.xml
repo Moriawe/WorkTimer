@@ -17,4 +17,5 @@
 
     <!-- Snackbar -->
     <string name="time_format_error">You need to type in time in format HH:MM</string>
+    <string name="start_end_time_incorrect">Your start time needs to be BEFORE your end time</string>
 </resources>

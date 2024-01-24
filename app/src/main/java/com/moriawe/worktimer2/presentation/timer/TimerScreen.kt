@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -17,20 +18,23 @@ import androidx.compose.ui.unit.sp
 import com.moriawe.worktimer2.R
 import com.moriawe.worktimer2.domain.mapper.mapTimeItemToTimeCardItem
 import com.moriawe.worktimer2.presentation.MainViewModel
-import com.moriawe.worktimer2.presentation.component.ModifyTimeItemDialog
+import com.moriawe.worktimer2.presentation.dialog.ModifyTimeItemDialog
 import com.moriawe.worktimer2.presentation.component.TimeCard
+import com.moriawe.worktimer2.presentation.dialog.DialogState
 
 @Composable
 fun TimerScreen(
-    viewModel: MainViewModel,
     state: TimerState,
     dialogState: DialogState,
     onEvent: (TimerEvent) -> Unit
 ) {
 
     // -*- Dialog -*- //
+    // TODO: Use Nav instead to avoid sending states?
     if (state.isModifyingTimeCard)
-        ModifyTimeItemDialog(viewModel = viewModel, state = dialogState, onEvent = onEvent)
+        ModifyTimeItemDialog(
+            state = dialogState,
+            onEvent = onEvent)
 
     Column() {
 

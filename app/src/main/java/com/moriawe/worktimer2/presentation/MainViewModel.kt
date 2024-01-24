@@ -1,7 +1,6 @@
 package com.moriawe.worktimer2.presentation
 
 import android.util.Log
-import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.moriawe.worktimer2.R
@@ -10,11 +9,10 @@ import com.moriawe.worktimer2.data.entity.TimeItem
 import com.moriawe.worktimer2.domain.use_case.GetTimeItemsForSpecificDateUseCase
 import com.moriawe.worktimer2.domain.use_case.GetListOfMonthUseCase
 import com.moriawe.worktimer2.domain.util.TimeConstant
-import com.moriawe.worktimer2.domain.util.TimeFormatters
 import com.moriawe.worktimer2.domain.util.TimeFormatters.timeFormatter
 import com.moriawe.worktimer2.domain.util.generateAndInsertMockTimeItemsIntoDatabase
 import com.moriawe.worktimer2.presentation.time_sheet.TimeSheetState
-import com.moriawe.worktimer2.presentation.timer.DialogState
+import com.moriawe.worktimer2.presentation.dialog.DialogState
 import com.moriawe.worktimer2.presentation.timer.TimerEvent
 import com.moriawe.worktimer2.presentation.timer.TimerState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -211,19 +209,33 @@ class MainViewModel @Inject constructor(
             viewModelScope.launch {
                 if (isValidTimeStampFormat(dialogState.value.startTime)
                     && isValidTimeStampFormat(dialogState.value.stopTime)) {
-                    Log.d(TAG, "Both start and Stop are valid timestamps, updating")
-                    val timeItem = TimeItem(
-                        id = dialogState.value.selectedItem!!.id,
-                        startTime = parseTimeStamp(dialogState.value.startTime),
-                        stopTime = parseTimeStamp(dialogState.value.stopTime),
-                        description = dialogState.value.description
-                    )
-                    // Update database
-                    // TODO: Refactor to UseCase
-                    Log.d(TAG, "Updating timeItem $timeItem")
-                    repo.updateTimeItem(timeItem = timeItem)
+                    Log.d(TAG, "Both start and Stop are valid timestamps")
+
+                    val startTime = parseTimeStamp(dialogState.value.startTime)
+                    val stopTime = parseTimeStamp(dialogState.value.stopTime)
+
+                    if (isStopTimeAfterStartTime(startTime, stopTime)) {
+                        val timeItem = TimeItem(
+                            id = dialogState.value.selectedItem!!.id,
+                            startTime = startTime,
+                            stopTime = stopTime,
+                            description = dialogState.value.description
+                        )
+                        // Update database
+                        // TODO: Refactor to UseCase
+                        Log.d(TAG, "Updating timeItem $timeItem")
+                        repo.updateTimeItem(timeItem = timeItem)
+                    } else {
+                        Log.d(TAG, "ERROR start-end time incorrect order")
+                        _eventFlow.emit(
+                            UiEvent.ShowSnackbar(
+                                message = R.string.start_end_time_incorrect
+                            )
+                        )
+                    }
+
                 } else {
-                    Log.d(TAG, "ERROR Something went wrong when updating timeItem")
+                    Log.d(TAG, "ERROR the time format is wrong")
                     // Notify user if there is an error in the time format
                     _eventFlow.emit(
                         UiEvent.ShowSnackbar(
@@ -246,6 +258,10 @@ class MainViewModel @Inject constructor(
             Log.d(TAG, "ERROR Not a valid timestamp")
             false
         }
+    }
+
+    private fun isStopTimeAfterStartTime(startTime: LocalDateTime, stopTime: LocalDateTime): Boolean {
+        return startTime.isBefore(stopTime)
     }
 
     private fun parseTimeStamp(timeStamp: String): LocalDateTime {

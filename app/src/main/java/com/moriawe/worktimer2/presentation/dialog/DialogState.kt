@@ -1,4 +1,4 @@
-package com.moriawe.worktimer2.presentation.timer
+package com.moriawe.worktimer2.presentation.dialog
 
 import com.moriawe.worktimer2.data.entity.TimeItem
 import com.moriawe.worktimer2.domain.util.TimeConstant
@@ -8,7 +8,5 @@ data class DialogState(
     val selectedItem: TimeItem? = null,
     val startTime: String = "",
     val stopTime: String = "",
-    //val startTime: LocalDateTime = LocalDateTime.parse(TimeConstant.TIME_DEFAULT_STRING),
-    //val stopTime: LocalDateTime = LocalDateTime.parse(TimeConstant.TIME_DEFAULT_STRING),
-    val description: String = "",
+    val description: String = ""
 )

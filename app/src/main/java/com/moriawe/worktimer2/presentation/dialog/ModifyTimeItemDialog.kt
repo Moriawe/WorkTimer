@@ -1,4 +1,4 @@
-package com.moriawe.worktimer2.presentation.component
+package com.moriawe.worktimer2.presentation.dialog
 
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
@@ -6,45 +6,25 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.moriawe.worktimer2.R
 import com.moriawe.worktimer2.presentation.MainViewModel
 import com.moriawe.worktimer2.presentation.UiEvent
-import com.moriawe.worktimer2.presentation.timer.DialogState
 import com.moriawe.worktimer2.presentation.timer.TimerEvent
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun ModifyTimeItemDialog(
-    viewModel: MainViewModel,
     state: DialogState,
     onEvent: (TimerEvent) -> Unit,
     modifier: Modifier = Modifier
 ) {
-
-    val snackbarHostState = remember { SnackbarHostState() }
-
-    LaunchedEffect(key1 = true) {
-        viewModel.eventFlow.collectLatest { event ->
-            when(event) {
-                is UiEvent.ShowSnackbar -> {
-                    snackbarHostState.showSnackbar(
-                        message = "Hoppsan, nått gick fel"
-                            //stringResource(id = event.message)
-                    )
-                }
-            }
-        }
-    }
-
     AlertDialog(
         modifier = modifier,
         title = {

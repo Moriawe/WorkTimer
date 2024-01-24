@@ -6,8 +6,11 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -26,6 +29,7 @@ class MainActivity : ComponentActivity() {
             val backStackEntry by navController.currentBackStackEntryAsState()
             val currentScreen = Screen.valueOf(
                 backStackEntry?.destination?.route ?: Screen.Timer.route )
+            val snackbarHostState = remember { SnackbarHostState() }
 
             WorkTimer2Theme {
                 // A surface container using the 'background' color from the theme
@@ -40,9 +44,12 @@ class MainActivity : ComponentActivity() {
                                 canNavigateBack = navController.previousBackStackEntry != null,
                                 navController = navController,
                                 navigateUp = { navController.navigateUp() })
+                        },
+                        snackbarHost = {
+                            SnackbarHost(hostState = snackbarHostState)
                         }
                     ) { innerPadding ->
-                        NavigationGraph(navController, innerPadding)
+                        NavigationGraph(navController, snackbarHostState, innerPadding)
                     }
                 }
             }
