@@ -1,6 +1,9 @@
 package com.moriawe.worktimer2.domain.util
 
 import java.time.Duration
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
 object TimeFormatters {
@@ -25,4 +28,9 @@ fun formatDurationInHHMMToString(duration: Duration): String {
     val hours = duration.toHoursPart()
     val minutes = duration.toMinutesPart()
     return "${hours}h ${minutes}m"
+}
+
+fun parseTimeStamp(timeStamp: String): LocalDateTime {
+    val time = LocalTime.parse(timeStamp, TimeFormatters.timeFormatter)
+    return LocalDateTime.of(LocalDate.now(), time)
 }

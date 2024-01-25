@@ -4,8 +4,12 @@ import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -37,23 +41,33 @@ fun ModifyTimeItemDialog(
             ) {
                 Row(
                     modifier = Modifier
+                        .fillMaxWidth()
                         .padding(vertical = 10.dp),
                 ) {
-                    OutlinedTextField(
-                        modifier = Modifier
-                            .weight(1f),
-                        value = state.startTime,
-                        onValueChange = { onEvent(TimerEvent.SetStartTime(it)) },
-                        label = { Text(stringResource(id = R.string.start_time) ) }
-                    )
-                    OutlinedTextField(
-                        modifier = Modifier
-                            .weight(1f),
-                        value = state.stopTime,
-                        onValueChange = { onEvent(TimerEvent.SetStopTime(it)) },
-                        label = { Text(stringResource(id = R.string.end_time) ) }
+                        OutlinedTextField(
+                            modifier = Modifier
+                                .weight(1f),
+                            value = state.startTime,
+                            onValueChange = { onEvent(TimerEvent.SetStartTime(it)) },
+                            label = { Text(stringResource(id = R.string.start_time) ) },
+                            isError = state.startTimeError != null
+                        )
+                        OutlinedTextField(
+                            modifier = Modifier
+                                .weight(1f),
+                            value = state.stopTime,
+                            onValueChange = { onEvent(TimerEvent.SetStopTime(it)) },
+                            label = { Text(stringResource(id = R.string.end_time) ) },
+                            isError = state.stopTimeError != null
+                        )
+                }
+                if(state.stopTimeError != null) {
+                    Text(
+                        text = stringResource(id = state.stopTimeError),
+                        color = MaterialTheme.colorScheme.error
                     )
                 }
+                Spacer(modifier = Modifier.width(5.dp))
                 OutlinedTextField(
                     value = state.description,
                     onValueChange = { onEvent(TimerEvent.SetDescription(it)) },

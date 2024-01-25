@@ -6,15 +6,17 @@ import androidx.lifecycle.viewModelScope
 import com.moriawe.worktimer2.R
 import com.moriawe.worktimer2.data.TimeRepository
 import com.moriawe.worktimer2.data.entity.TimeItem
-import com.moriawe.worktimer2.domain.use_case.GetTimeItemsForSpecificDateUseCase
 import com.moriawe.worktimer2.domain.use_case.GetListOfMonthUseCase
+import com.moriawe.worktimer2.domain.use_case.GetTimeItemsForSpecificDateUseCase
+import com.moriawe.worktimer2.domain.use_case.ValidateStartTimeUseCase
+import com.moriawe.worktimer2.domain.use_case.ValidateStopTimeUseCase
 import com.moriawe.worktimer2.domain.util.TimeConstant
 import com.moriawe.worktimer2.domain.util.TimeFormatters.timeFormatter
 import com.moriawe.worktimer2.domain.util.calculateTotalTime
-import com.moriawe.worktimer2.domain.util.formatDurationInHHMMToString
 import com.moriawe.worktimer2.domain.util.generateAndInsertMockTimeItemsIntoDatabase
-import com.moriawe.worktimer2.presentation.time_sheet.TimeSheetState
+import com.moriawe.worktimer2.domain.util.parseTimeStamp
 import com.moriawe.worktimer2.presentation.dialog.DialogState
+import com.moriawe.worktimer2.presentation.time_sheet.TimeSheetState
 import com.moriawe.worktimer2.presentation.timer.TimerEvent
 import com.moriawe.worktimer2.presentation.timer.TimerState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -36,6 +38,8 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val repo: TimeRepository,
+    private val validateStopTimeUseCase: ValidateStopTimeUseCase,
+    private val validateStartTimeUseCase: ValidateStartTimeUseCase,
     private val getListOfMonthUseCase: GetListOfMonthUseCase,
     private val getTimeItemsForSpecificDateUseCase: GetTimeItemsForSpecificDateUseCase
 ) : ViewModel() {
@@ -103,7 +107,8 @@ class MainViewModel @Inject constructor(
             }
 
             is TimerEvent.UpdateTimeItem -> {
-                event.onSuccess(updateTimeItem())
+                //event.onSuccess(updateTimeItem())
+                event.onSuccess(updateTime())
             }
 
             is TimerEvent.DeleteTimeItem -> {
@@ -199,76 +204,45 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    // -*- Updates the time or description for an item and resets the dialog state -*- //
-    private fun updateTimeItem(): Boolean {
+    private fun updateTime(): Boolean {
         var isSuccess = false
-        // Check that we have a proper TimeItem to update
-        if (dialogState.value.selectedItem != null) {
 
-            // Check that it is the proper format to parse it
-            viewModelScope.launch {
-                if (isValidTimeStampFormat(dialogState.value.startTime)
-                    && isValidTimeStampFormat(dialogState.value.stopTime)) {
-                    Log.d(TAG, "Both start and Stop are valid timestamps")
+        val startTimeResult = validateStartTimeUseCase.execute(
+            startTime = dialogState.value.startTime
+        )
+        val stopTimeResult = validateStopTimeUseCase.execute(
+            startTime = dialogState.value.startTime,
+            stopTime = dialogState.value.stopTime
+        )
+        val hasError = listOf(
+            startTimeResult,
+            stopTimeResult
+        ).any { !it.successful }
 
-                    val startTime = parseTimeStamp(dialogState.value.startTime)
-                    val stopTime = parseTimeStamp(dialogState.value.stopTime)
-
-                    // Check if start time is before stop time
-                    if (isStopTimeAfterStartTime(startTime, stopTime)) {
-                        val timeItem = TimeItem(
-                            id = dialogState.value.selectedItem!!.id,
-                            startTime = startTime,
-                            stopTime = stopTime,
-                            description = dialogState.value.description
-                        )
-                        // Update database
-                        // TODO: Refactor to UseCase
-                        isSuccess = true
-                        Log.d(TAG, "Updating timeItem $timeItem")
-                        repo.updateTimeItem(timeItem = timeItem)
-                        _dialogState.value = DialogState()
-                    } else {
-                        Log.d(TAG, "ERROR start-end time incorrect order")
-                        _eventFlow.emit(
-                            UiEvent.ShowSnackbar(
-                                message = R.string.start_end_time_incorrect
-                            )
-                        )
-                    }
-
-                } else {
-                    Log.d(TAG, "ERROR the time format is wrong")
-                    _eventFlow.emit(
-                        UiEvent.ShowSnackbar(
-                            message = R.string.time_format_error
-                        )
-                    )
-                }
+        if (hasError) {
+            _dialogState.update {
+                it.copy(
+                    startTimeError = startTimeResult.errorMessage,
+                    stopTimeError = stopTimeResult.errorMessage
+                )
             }
+            return isSuccess
+        }
+
+        val timeItem = TimeItem(
+            id = dialogState.value.selectedItem!!.id,
+            startTime = parseTimeStamp(dialogState.value.startTime),
+            stopTime = parseTimeStamp(dialogState.value.stopTime),
+            description = dialogState.value.description
+        )
+        isSuccess = true
+        viewModelScope.launch {
+            Log.d(TAG, "Updating timeItem $timeItem")
+            repo.updateTimeItem(timeItem = timeItem)
+            _dialogState.value = DialogState()
         }
         return isSuccess
-    }
 
-    // -*- Checks if time is in the right format -*- //
-    private fun isValidTimeStampFormat(timeStamp: String): Boolean {
-        return try {
-            Log.d(TAG, "Try $timeStamp")
-            LocalTime.parse(timeStamp, timeFormatter)
-            true
-        } catch (e: Exception) {
-            Log.d(TAG, "ERROR Not a valid timestamp")
-            false
-        }
-    }
-
-    private fun isStopTimeAfterStartTime(startTime: LocalDateTime, stopTime: LocalDateTime): Boolean {
-        return startTime.isBefore(stopTime)
-    }
-
-    private fun parseTimeStamp(timeStamp: String): LocalDateTime {
-        val time = LocalTime.parse(timeStamp, timeFormatter)
-        return LocalDateTime.of(LocalDate.now(), time)
     }
 
     // -*- Run to get mock data to test on -*- //
@@ -278,3 +252,12 @@ class MainViewModel @Inject constructor(
         }
     }
 }
+
+/*
+
+                    _eventFlow.emit(
+                        UiEvent.ShowSnackbar(
+                            message = R.string.time_format_error
+                        )
+                    )
+ */
