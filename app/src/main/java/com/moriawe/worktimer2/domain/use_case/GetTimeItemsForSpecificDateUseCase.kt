@@ -1,6 +1,6 @@
 package com.moriawe.worktimer2.domain.use_case
 
-import com.moriawe.worktimer2.data.TimeRepository
+import com.moriawe.worktimer2.data.TimeRepositoryImpl
 import com.moriawe.worktimer2.data.entity.TimeItem
 import com.moriawe.worktimer2.domain.util.TimeFormatters
 import kotlinx.coroutines.flow.Flow
@@ -9,7 +9,7 @@ import java.time.LocalDateTime
 import javax.inject.Inject
 
 class GetTimeItemsForSpecificDateUseCase @Inject constructor(
-    private val repo: TimeRepository
+    private val repo: TimeRepositoryImpl
 ) {
 
     operator fun invoke(date: LocalDateTime): Flow<List<TimeItem>> {

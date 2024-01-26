@@ -15,23 +15,4 @@ abstract class TimeDatabase: RoomDatabase() {
 
     abstract val dao: TimeDao
 
-//    companion object {
-//
-//        @Volatile
-//        private var INSTANCE: TimeDatabase? = null
-//
-//        fun getInstance(context: Context): TimeDatabase {
-//            synchronized(this) {
-//                return INSTANCE ?: Room.databaseBuilder(
-//                    context.applicationContext,
-//                    TimeDatabase::class.java,
-//                    "CatShow_db"
-//                )
-//                    .build().also {
-//                        INSTANCE = it
-//                    }
-//            }
-//        }
-//    }
-
 }

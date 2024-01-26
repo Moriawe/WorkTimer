@@ -30,6 +30,7 @@ fun formatDurationInHHMMToString(duration: Duration): String {
     return "${hours}h ${minutes}m"
 }
 
+// TODO: TimeConverter (use)
 fun parseTimeStamp(timeStamp: String): LocalDateTime {
     val time = LocalTime.parse(timeStamp, TimeFormatters.timeFormatter)
     return LocalDateTime.of(LocalDate.now(), time)

@@ -3,7 +3,7 @@ package com.moriawe.worktimer2.presentation
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.moriawe.worktimer2.data.TimeRepository
+import com.moriawe.worktimer2.data.TimeRepositoryImpl
 import com.moriawe.worktimer2.data.entity.TimeItem
 import com.moriawe.worktimer2.domain.use_case.GetListOfMonthUseCase
 import com.moriawe.worktimer2.domain.use_case.GetTimeItemsForSpecificDateUseCase
@@ -34,7 +34,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val repo: TimeRepository,
+    private val repo: TimeRepositoryImpl,
     private val validateStopTimeUseCase: ValidateStopTimeUseCase,
     private val validateStartTimeUseCase: ValidateStartTimeUseCase,
     private val getListOfMonthUseCase: GetListOfMonthUseCase,

@@ -2,9 +2,8 @@ package com.moriawe.worktimer2.di
 
 import android.app.Application
 import androidx.room.Room
-import com.moriawe.worktimer2.data.TimeDao
 import com.moriawe.worktimer2.data.TimeDatabase
-import com.moriawe.worktimer2.data.TimeRepository
+import com.moriawe.worktimer2.data.TimeRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -30,7 +29,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideTimerRepository(db: TimeDatabase): TimeRepository {
-        return TimeRepository(db.dao)
+    fun provideTimerRepository(db: TimeDatabase): TimeRepositoryImpl {
+        return TimeRepositoryImpl(db.dao)
     }
 }
