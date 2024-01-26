@@ -13,9 +13,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.dialog
 import com.moriawe.worktimer2.presentation.MainViewModel
 import com.moriawe.worktimer2.presentation.UiEvent
 import com.moriawe.worktimer2.presentation.dialog.ModifyTimeItemDialog
+import com.moriawe.worktimer2.presentation.dialog.TimeItemDialog
 import com.moriawe.worktimer2.presentation.time_sheet.TimeSheetScreen
 import com.moriawe.worktimer2.presentation.timer.TimerScreen
 import kotlinx.coroutines.flow.collectLatest
@@ -49,18 +51,21 @@ fun NavigationGraph(
     ) {
         composable(route = Screen.Timer.route) {
             val state by viewModel.timerState.collectAsState()
-            val dialogState by viewModel.dialogState.collectAsState()
+            //val dialogState by viewModel.dialogState.collectAsState()
             val onEvent = viewModel::onEvent
-            TimerScreen(state, dialogState, onEvent)
+            TimerScreen(state, onEvent, onOpenDialog = {
+                navController.navigate(Screen.Dialog.route)
+            })
         }
         composable(route = Screen.TimeSheet.route) {
             val state by viewModel.timeSheetState.collectAsState()
             TimeSheetScreen(state)
         }
-        composable(route = Screen.Dialog.route) {
-            val dialogState by viewModel.dialogState.collectAsState()
-            val onEvent = viewModel::onEvent
-            ModifyTimeItemDialog(dialogState, onEvent)
+        dialog(route = Screen.Dialog.route) {
+            //val dialogState by viewModel.dialogState.collectAsState()
+            //val onEvent = viewModel::onEvent
+            TimeItemDialog(viewModel)
+            //ModifyTimeItemDialog(dialogState, onEvent)
         }
     }
 }

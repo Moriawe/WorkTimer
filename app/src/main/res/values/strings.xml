@@ -9,6 +9,8 @@
     <string name="start">Start</string>
     <string name="stop">Stop</string>
     <string name="done">Done</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
 
     <!-- Labels -->
     <string name="start_time">Start</string>

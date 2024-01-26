@@ -1,7 +1,6 @@
 package com.moriawe.worktimer2.presentation.dialog
 
 import android.util.Log
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -16,14 +15,11 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.moriawe.worktimer2.R
 import com.moriawe.worktimer2.presentation.timer.TimerEvent
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ModifyTimeItemDialog(
     state: DialogState,

@@ -3,7 +3,6 @@ package com.moriawe.worktimer2.presentation
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.moriawe.worktimer2.R
 import com.moriawe.worktimer2.data.TimeRepository
 import com.moriawe.worktimer2.data.entity.TimeItem
 import com.moriawe.worktimer2.domain.use_case.GetListOfMonthUseCase
@@ -30,9 +29,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.LocalTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -139,6 +136,7 @@ class MainViewModel @Inject constructor(
             }
 
             is TimerEvent.ShowDialog -> {
+                Log.d(TAG, "Updating Dialogstate with data")
                 _dialogState.update {
                     it.copy(
                         selectedItem = event.timeItem,
@@ -147,6 +145,7 @@ class MainViewModel @Inject constructor(
                         description = event.timeItem.description,
                     )
                 }
+                Log.d(TAG, "Show Dialog")
                 _timerState.update {
                     it.copy(
                         isModifyingTimeCard = true
@@ -160,6 +159,7 @@ class MainViewModel @Inject constructor(
                         isModifyingTimeCard = false
                     )
                 }
+                Log.d(TAG, "Hide Dialog and reset DialogState")
                 _dialogState.value = DialogState()
             }
         }
@@ -205,8 +205,6 @@ class MainViewModel @Inject constructor(
     }
 
     private fun updateTime(): Boolean {
-        var isSuccess = false
-
         val startTimeResult = validateStartTimeUseCase.execute(
             startTime = dialogState.value.startTime
         )
@@ -226,7 +224,7 @@ class MainViewModel @Inject constructor(
                     stopTimeError = stopTimeResult.errorMessage
                 )
             }
-            return isSuccess
+            return false
         }
 
         val timeItem = TimeItem(
@@ -235,13 +233,12 @@ class MainViewModel @Inject constructor(
             stopTime = parseTimeStamp(dialogState.value.stopTime),
             description = dialogState.value.description
         )
-        isSuccess = true
         viewModelScope.launch {
             Log.d(TAG, "Updating timeItem $timeItem")
             repo.updateTimeItem(timeItem = timeItem)
             _dialogState.value = DialogState()
         }
-        return isSuccess
+        return true
 
     }
 

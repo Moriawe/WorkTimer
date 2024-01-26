@@ -24,16 +24,10 @@ import com.moriawe.worktimer2.presentation.dialog.ModifyTimeItemDialog
 @Composable
 fun TimerScreen(
     state: TimerState,
-    dialogState: DialogState,
-    onEvent: (TimerEvent) -> Unit
+    //dialogState: DialogState,
+    onEvent: (TimerEvent) -> Unit,
+    onOpenDialog: () -> Unit
 ) {
-
-    // -*- Dialog -*- //
-    // TODO: Use Nav instead to avoid sending states?
-    if (state.isModifyingTimeCard)
-        ModifyTimeItemDialog(
-            state = dialogState,
-            onEvent = onEvent)
 
     Column() {
         Row(
@@ -56,7 +50,7 @@ fun TimerScreen(
             items(state.timeItems) { timeItem ->
                 TimeCard(
                     time = mapTimeItemToTimeCardItem(timeItem),
-                    onClick = { onEvent(TimerEvent.ShowDialog(timeItem)) }
+                    onClick = { onOpenDialog() }
                 )
             }
         }
