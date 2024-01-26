@@ -1,20 +1,20 @@
 package com.moriawe.worktimer2.domain.use_case
 
 import android.util.Log
-import com.moriawe.worktimer2.data.TimeRepositoryImpl
+import com.moriawe.worktimer2.domain.mapper.mapTimeItemToTimeCardItem
 import com.moriawe.worktimer2.domain.model.Day
 import com.moriawe.worktimer2.domain.model.Month
+import com.moriawe.worktimer2.domain.repository.TimeRepository
 import com.moriawe.worktimer2.domain.util.calculateTotalTime
 import com.moriawe.worktimer2.domain.util.formatDurationInHHMMToString
 import com.moriawe.worktimer2.domain.util.formatDurationInHHToString
-import com.moriawe.worktimer2.domain.mapper.mapTimeItemToTimeCardItem
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 class GetListOfMonthUseCase @Inject constructor(
-    private val repo: TimeRepositoryImpl
+    private val repo: TimeRepository
 ) {
 
     operator fun invoke(): Flow<List<Month>> {

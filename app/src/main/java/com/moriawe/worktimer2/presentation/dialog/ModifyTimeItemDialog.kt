@@ -23,7 +23,7 @@ import com.moriawe.worktimer2.presentation.timer.TimerEvent
 @Composable
 fun ModifyTimeItemDialog(
     state: DialogState,
-    onEvent: (TimerEvent) -> Unit,
+    onEvent: (DialogEvent) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -44,7 +44,7 @@ fun ModifyTimeItemDialog(
                             modifier = Modifier
                                 .weight(1f),
                             value = state.startTime,
-                            onValueChange = { onEvent(TimerEvent.SetStartTime(it)) },
+                            onValueChange = { onEvent(DialogEvent.SetStartTime(it)) },
                             label = { Text(stringResource(id = R.string.start_time) ) },
                             isError = state.startTimeError != null
                         )
@@ -52,7 +52,7 @@ fun ModifyTimeItemDialog(
                             modifier = Modifier
                                 .weight(1f),
                             value = state.stopTime,
-                            onValueChange = { onEvent(TimerEvent.SetStopTime(it)) },
+                            onValueChange = { onEvent(DialogEvent.SetStopTime(it)) },
                             label = { Text(stringResource(id = R.string.end_time) ) },
                             isError = state.stopTimeError != null
                         )
@@ -66,21 +66,21 @@ fun ModifyTimeItemDialog(
                 Spacer(modifier = Modifier.width(5.dp))
                 OutlinedTextField(
                     value = state.description,
-                    onValueChange = { onEvent(TimerEvent.SetDescription(it)) },
+                    onValueChange = { onEvent(DialogEvent.SetDescription(it)) },
                     label = { Text(stringResource(id = R.string.work_description) ) }
                 )
             }
         },
         onDismissRequest = {
-            onEvent(TimerEvent.HideDialog)
+            onEvent(DialogEvent.HideDialog)
         },
         confirmButton = {
             TextButton(
                 onClick = {
-                    onEvent(TimerEvent.UpdateTimeItem { success ->
+                    onEvent(DialogEvent.UpdateTimeItem { success ->
                      if (success) {
                          Log.d("AddDescriptionDialog", "Save item: ${state.description}")
-                         onEvent(TimerEvent.HideDialog)
+                         onEvent(DialogEvent.HideDialog)
                      } else {
                          Log.d("AddDescriptionDialog", "Hide keyboard")
                      }
@@ -93,7 +93,7 @@ fun ModifyTimeItemDialog(
         dismissButton = {
             TextButton(
                 onClick = {
-                    onEvent(TimerEvent.HideDialog)
+                    onEvent(DialogEvent.HideDialog)
                 }
             ) {
                 Text("Cancel")

@@ -1,6 +1,6 @@
 package com.moriawe.worktimer2.di
 
-import com.moriawe.worktimer2.data.TimeRepositoryImpl
+import com.moriawe.worktimer2.domain.repository.TimeRepository
 import com.moriawe.worktimer2.domain.use_case.GetListOfMonthUseCase
 import com.moriawe.worktimer2.domain.use_case.GetTimeItemsForSpecificDateUseCase
 import com.moriawe.worktimer2.domain.use_case.ValidateStartTimeUseCase
@@ -20,13 +20,13 @@ object ViewModelModule {
     // USE CASE
     @Provides
     @ViewModelScoped
-    fun provideGetTimeItemsByTodayUseCase(repository: TimeRepositoryImpl): GetTimeItemsForSpecificDateUseCase {
+    fun provideGetTimeItemsByTodayUseCase(repository: TimeRepository): GetTimeItemsForSpecificDateUseCase {
         return GetTimeItemsForSpecificDateUseCase(repository)
     }
 
     @Provides
     @ViewModelScoped
-    fun provideGetTimeItemsSortedByDateUseCase(repository: TimeRepositoryImpl): GetListOfMonthUseCase {
+    fun provideGetTimeItemsSortedByDateUseCase(repository: TimeRepository): GetListOfMonthUseCase {
         return GetListOfMonthUseCase(repository)
     }
 

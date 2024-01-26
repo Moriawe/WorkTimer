@@ -10,14 +10,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavArgument
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.dialog
 import androidx.navigation.navArgument
-import com.moriawe.worktimer2.presentation.MainViewModel
 import com.moriawe.worktimer2.presentation.UiEvent
 import com.moriawe.worktimer2.presentation.dialog.DialogViewModel
 import com.moriawe.worktimer2.presentation.dialog.TimeItemDialog
@@ -35,11 +33,11 @@ fun NavigationGraph(
     innerPadding: PaddingValues) {
 
     // -*- To send snackbars -*- //
-    val viewModel = hiltViewModel<TimerViewModel>()
+    val mainViewModel = hiltViewModel<TimerViewModel>()
     val context = LocalContext.current
 
     LaunchedEffect(key1 = true) {
-        viewModel.eventFlow.collectLatest { event ->
+        mainViewModel.eventFlow.collectLatest { event ->
             when(event) {
                 is UiEvent.ShowSnackbar -> {
                     snackbarHostState.showSnackbar(
