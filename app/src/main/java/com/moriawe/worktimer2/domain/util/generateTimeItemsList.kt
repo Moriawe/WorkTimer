@@ -1,8 +1,8 @@
 package com.moriawe.worktimer2.domain.util
 
 import android.util.Log
-import com.moriawe.worktimer2.data.TimeRepositoryImpl
 import com.moriawe.worktimer2.data.entity.TimeItem
+import com.moriawe.worktimer2.domain.repository.TimeRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.time.LocalDateTime
@@ -32,7 +32,7 @@ fun generateRandomTimeItem(): TimeItem {
     )
 }
 
-suspend fun generateAndInsertMockTimeItemsIntoDatabase(repo: TimeRepositoryImpl, itemCount: Int) {
+suspend fun generateAndInsertMockTimeItemsIntoDatabase(repo: TimeRepository, itemCount: Int) {
     withContext(Dispatchers.Default) {
         repeat(itemCount) {
             val timeItems = generateRandomTimeItem()

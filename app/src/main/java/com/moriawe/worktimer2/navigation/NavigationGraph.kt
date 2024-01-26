@@ -19,9 +19,12 @@ import androidx.navigation.compose.dialog
 import androidx.navigation.navArgument
 import com.moriawe.worktimer2.presentation.MainViewModel
 import com.moriawe.worktimer2.presentation.UiEvent
+import com.moriawe.worktimer2.presentation.dialog.DialogViewModel
 import com.moriawe.worktimer2.presentation.dialog.TimeItemDialog
 import com.moriawe.worktimer2.presentation.time_sheet.TimeSheetScreen
+import com.moriawe.worktimer2.presentation.time_sheet.TimeSheetViewModel
 import com.moriawe.worktimer2.presentation.timer.TimerScreen
+import com.moriawe.worktimer2.presentation.timer.TimerViewModel
 import kotlinx.coroutines.flow.collectLatest
 
 
@@ -31,7 +34,8 @@ fun NavigationGraph(
     snackbarHostState: SnackbarHostState,
     innerPadding: PaddingValues) {
 
-    val viewModel = hiltViewModel<MainViewModel>()
+    // -*- To send snackbars -*- //
+    val viewModel = hiltViewModel<TimerViewModel>()
     val context = LocalContext.current
 
     LaunchedEffect(key1 = true) {
@@ -46,20 +50,22 @@ fun NavigationGraph(
         }
     }
 
+    // -*- NAVIGATION -*- //
     NavHost(
         navController = navController,
         startDestination = Screen.TimerScreen.route,
         modifier = Modifier.padding(innerPadding)
     ) {
         composable(route = Screen.TimerScreen.route) {
+            val viewModel = hiltViewModel<TimerViewModel>()
             val state by viewModel.timerState.collectAsState()
-            //val dialogState by viewModel.dialogState.collectAsState()
             val onEvent = viewModel::onEvent
             TimerScreen(state, onEvent, onOpenDialog = {
                 navController.navigate(Screen.DialogScreen.withArgs(it))
             })
         }
         composable(route = Screen.TimeSheetScreen.route) {
+            val viewModel = hiltViewModel<TimeSheetViewModel>()
             val state by viewModel.timeSheetState.collectAsState()
             TimeSheetScreen(state)
         }
@@ -73,12 +79,12 @@ fun NavigationGraph(
                 }
             )
         ) { entry ->
-            //val dialogState by viewModel.dialogState.collectAsState()
-            //val onEvent = viewModel::onEvent
+            val viewModel = hiltViewModel<DialogViewModel>()
+            val dialogState by viewModel.dialogState.collectAsState()
+            val onEvent = viewModel::onEvent
             TimeItemDialog(
                 timeItemId = entry.arguments?.getInt("timeItemId"),
                 viewModel)
-            //ModifyTimeItemDialog(dialogState, onEvent)
         }
     }
 }
