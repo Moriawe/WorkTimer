@@ -27,8 +27,10 @@ class MainActivity : ComponentActivity() {
 
             val navController = rememberNavController()
             val backStackEntry by navController.currentBackStackEntryAsState()
-            val currentScreen = Screen.valueOf(
-                backStackEntry?.destination?.route ?: Screen.Timer.route )
+            val currentScreen = Screen.fromRouteString(backStackEntry?.destination?.route)
+//            When using enum class
+//            val currentScreen = Screen.valueOf(
+//                backStackEntry?.destination?.route ?: Screen.Timer.route )
             val snackbarHostState = remember { SnackbarHostState() }
 
             WorkTimer2Theme {

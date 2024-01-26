@@ -27,10 +27,10 @@ fun TimerAppBar(
     TopAppBar(
         title = {
             when (currentScreen) {
-                Screen.Timer -> Text(LocalDateTime.now().format(dayFormatter))
-                Screen.TimeSheet -> Text(currentScreen.title)
-                Screen.Settings -> Text(currentScreen.title)
-                Screen.Dialog -> Text(currentScreen.title)
+                Screen.TimerScreen -> Text(LocalDateTime.now().format(dayFormatter))
+                Screen.TimeSheetScreen -> Text(currentScreen.title)
+                Screen.SettingsScreen -> Text(currentScreen.title)
+                Screen.DialogScreen -> Text(currentScreen.title)
             }
              },
         colors = TopAppBarDefaults.mediumTopAppBarColors(
@@ -39,18 +39,18 @@ fun TimerAppBar(
         modifier = modifier,
         actions = {
             IconButton(
-                onClick = { navController.navigate(Screen.Timer.route) }
+                onClick = { navController.navigate(Screen.TimerScreen.route) }
             ) {
                 Icon(
-                    painter = painterResource(id = Screen.Timer.icon),
+                    painter = painterResource(id = Screen.TimerScreen.icon),
                     contentDescription = "Daily Time Card"
                 )
             }
             IconButton(
-                onClick = { navController.navigate(Screen.TimeSheet.route) }
+                onClick = { navController.navigate(Screen.TimeSheetScreen.route) }
             ) {
                 Icon(
-                    painter = painterResource(id = Screen.TimeSheet.icon),
+                    painter = painterResource(id = Screen.TimeSheetScreen.icon),
                     contentDescription = "Worktime overview"
                 )
             }

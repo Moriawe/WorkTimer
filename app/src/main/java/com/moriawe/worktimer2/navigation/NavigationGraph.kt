@@ -10,13 +10,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavArgument
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.dialog
+import androidx.navigation.navArgument
 import com.moriawe.worktimer2.presentation.MainViewModel
 import com.moriawe.worktimer2.presentation.UiEvent
-import com.moriawe.worktimer2.presentation.dialog.ModifyTimeItemDialog
 import com.moriawe.worktimer2.presentation.dialog.TimeItemDialog
 import com.moriawe.worktimer2.presentation.time_sheet.TimeSheetScreen
 import com.moriawe.worktimer2.presentation.timer.TimerScreen
@@ -46,25 +48,36 @@ fun NavigationGraph(
 
     NavHost(
         navController = navController,
-        startDestination = Screen.Timer.route,
+        startDestination = Screen.TimerScreen.route,
         modifier = Modifier.padding(innerPadding)
     ) {
-        composable(route = Screen.Timer.route) {
+        composable(route = Screen.TimerScreen.route) {
             val state by viewModel.timerState.collectAsState()
             //val dialogState by viewModel.dialogState.collectAsState()
             val onEvent = viewModel::onEvent
             TimerScreen(state, onEvent, onOpenDialog = {
-                navController.navigate(Screen.Dialog.route)
+                navController.navigate(Screen.DialogScreen.withArgs(it))
             })
         }
-        composable(route = Screen.TimeSheet.route) {
+        composable(route = Screen.TimeSheetScreen.route) {
             val state by viewModel.timeSheetState.collectAsState()
             TimeSheetScreen(state)
         }
-        dialog(route = Screen.Dialog.route) {
+        // -*- Calling dialog from NavGraph with argument for timeItemId -*- //
+        // -*- It is strongly advised not to pass around complex data objects when navigating -*- //
+        dialog(
+            route = Screen.DialogScreen.route + "/{timeItemId}",
+            arguments = listOf(
+                navArgument("timeItemId") {
+                    type = NavType.IntType
+                }
+            )
+        ) { entry ->
             //val dialogState by viewModel.dialogState.collectAsState()
             //val onEvent = viewModel::onEvent
-            TimeItemDialog(viewModel)
+            TimeItemDialog(
+                timeItemId = entry.arguments?.getInt("timeItemId"),
+                viewModel)
             //ModifyTimeItemDialog(dialogState, onEvent)
         }
     }

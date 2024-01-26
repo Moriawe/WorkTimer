@@ -26,7 +26,7 @@ fun TimerScreen(
     state: TimerState,
     //dialogState: DialogState,
     onEvent: (TimerEvent) -> Unit,
-    onOpenDialog: () -> Unit
+    onOpenDialog: (Int) -> Unit
 ) {
 
     Column() {
@@ -50,7 +50,7 @@ fun TimerScreen(
             items(state.timeItems) { timeItem ->
                 TimeCard(
                     time = mapTimeItemToTimeCardItem(timeItem),
-                    onClick = { onOpenDialog() }
+                    onClick = { onOpenDialog(timeItem.id) }
                 )
             }
         }
