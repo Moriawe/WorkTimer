@@ -26,8 +26,13 @@ interface TimeDao {
     @Delete
     suspend fun deleteTimeItem(timeItem: TimeItem)
 
+    @Query("DELETE FROM TimeItem WHERE id=:id")
+    fun deleteTimeItemWithId(id: Int)
+
     @Query("SELECT * FROM TimeItem")
     fun getTimeItems(): Flow<List<TimeItem>>
 
+    @Query("SELECT * FROM TimeItem WHERE id=:id")
+    fun getItemById(id: Int): TimeItem
 
 }

@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.moriawe.worktimer2.data.entity.TimeItem
 import com.moriawe.worktimer2.domain.repository.TimeRepository
+import com.moriawe.worktimer2.domain.use_case.UpdateTimeItemInDatabaseUseCase
 import com.moriawe.worktimer2.domain.use_case.ValidateStartTimeUseCase
 import com.moriawe.worktimer2.domain.use_case.ValidateStopTimeUseCase
 import com.moriawe.worktimer2.domain.util.parseTimeStamp
@@ -18,7 +19,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DialogViewModel  @Inject constructor(
-    private val repo: TimeRepository,
+    //private val repo: TimeRepository,
+    private val updateTimeItemInDatabaseUseCase: UpdateTimeItemInDatabaseUseCase,
     private val validateStopTimeUseCase: ValidateStopTimeUseCase,
     private val validateStartTimeUseCase: ValidateStartTimeUseCase,
 ) : ViewModel() {
@@ -92,8 +94,9 @@ class DialogViewModel  @Inject constructor(
             description = dialogState.value.description
         )
         viewModelScope.launch {
+            updateTimeItemInDatabaseUseCase(timeItem)
             Log.d(TAG, "Updating timeItem $timeItem")
-            repo.updateTimeItem(timeItem = timeItem)
+            //repo.updateTimeItem(timeItem = timeItem)
             _dialogState.value = DialogState()
         }
         return true

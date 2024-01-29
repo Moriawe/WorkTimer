@@ -1,18 +1,21 @@
 package com.moriawe.worktimer2.domain.use_case
 
-import com.moriawe.worktimer2.domain.mapper.mapTimeCardItemToTimeItem
-import com.moriawe.worktimer2.domain.model.TimeCardItem
+import com.moriawe.worktimer2.R
+import com.moriawe.worktimer2.data.entity.TimeItem
 import com.moriawe.worktimer2.domain.repository.TimeRepository
 
 class UpdateTimeItemInDatabaseUseCase(
     private val repo: TimeRepository
     ) {
 
-    suspend operator fun invoke(timeCardItem: TimeCardItem) {
+    suspend operator fun invoke(timeItem: TimeItem): RepositoryResults {
 
-            repo.updateTimeItem(
-                mapTimeCardItemToTimeItem(timeCardItem)
-            )
+        val response = try {
+            repo.updateTimeItem(timeItem)
+            RepositoryResults.Success(timeItem)
+        } catch (exception: Exception) {
+            RepositoryResults.Error(R.string.error_update)
         }
-
+            return response
+        }
     }

@@ -26,8 +26,16 @@ class TimeRepositoryImpl @Inject constructor(
         timeDao.deleteTimeItem(timeItem)
     }
 
+    override fun deleteTimeItemWithId(id: Int) {
+        timeDao.deleteTimeItemWithId(id)
+    }
+
     override fun getTimeItems(): Flow<List<TimeItem>> {
         return timeDao.getTimeItems()
+    }
+
+    override fun getItemById(id: Int): TimeItem {
+        return timeDao.getItemById(id)
     }
 
 }
