@@ -89,4 +89,7 @@ dependencies {
     // For sealed class iteration
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.9.22")
     implementation(kotlin("reflect"))
+
+    // Datastore
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
 }

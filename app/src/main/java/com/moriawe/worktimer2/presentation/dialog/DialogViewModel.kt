@@ -26,7 +26,6 @@ class DialogViewModel  @Inject constructor(
     val TAG = "DIALOG VIEW MODEL"
 
     // -*- DIALOG STATE -*- //
-    // -*- Separate dialog state so user can update an item while still recording time -*- //
     private val _dialogState = MutableStateFlow(DialogState())
     val dialogState: StateFlow<DialogState> = _dialogState.asStateFlow()
 

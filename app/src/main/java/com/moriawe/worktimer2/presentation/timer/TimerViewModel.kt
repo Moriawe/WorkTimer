@@ -4,10 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.moriawe.worktimer2.data.entity.TimeItem
 import com.moriawe.worktimer2.domain.repository.TimeRepository
-import com.moriawe.worktimer2.domain.use_case.GetListOfMonthUseCase
 import com.moriawe.worktimer2.domain.use_case.GetTimeItemsForSpecificDateUseCase
-import com.moriawe.worktimer2.domain.use_case.ValidateStartTimeUseCase
-import com.moriawe.worktimer2.domain.use_case.ValidateStopTimeUseCase
 import com.moriawe.worktimer2.domain.util.TimeConstant
 import com.moriawe.worktimer2.domain.util.calculateTotalTime
 import com.moriawe.worktimer2.domain.util.generateAndInsertMockTimeItemsIntoDatabase
@@ -27,10 +24,7 @@ import javax.inject.Inject
 @HiltViewModel
 class TimerViewModel  @Inject constructor(
     private val repo: TimeRepository,
-    private val validateStopTimeUseCase: ValidateStopTimeUseCase,
-    private val validateStartTimeUseCase: ValidateStartTimeUseCase,
-    private val getListOfMonthUseCase: GetListOfMonthUseCase,
-    private val getTimeItemsForSpecificDateUseCase: GetTimeItemsForSpecificDateUseCase
+    getTimeItemsForSpecificDateUseCase: GetTimeItemsForSpecificDateUseCase
 ) : ViewModel() {
 
     val TAG = "TIMER VIEW MODEL"
@@ -87,7 +81,7 @@ class TimerViewModel  @Inject constructor(
 
     // -*- Adds a new item to the database when time is stopped -*- //
     private fun addNewTimeItem() {
-        // Check if there is an actualy change in time
+        // Check if there is an actual change in time
         if (
             timerState.value.startTime == LocalDateTime.parse(
                 TimeConstant.TIME_DEFAULT_STRING
@@ -123,6 +117,15 @@ class TimerViewModel  @Inject constructor(
         }
     }
 
+    private suspend fun showSnackbar(message: Int) {
+        _eventFlow.emit(
+            UiEvent.ShowSnackbar(
+                message = message
+                //message = R.string.time_format_error
+            )
+        )
+    }
+
     // -*- Run to get mock data to test on -*- //
     private fun generateAndInsertMockData(itemCount: Int) {
         viewModelScope.launch {
@@ -130,13 +133,4 @@ class TimerViewModel  @Inject constructor(
         }
     }
 }
-
-/*
-
-                    _eventFlow.emit(
-                        UiEvent.ShowSnackbar(
-                            message = R.string.time_format_error
-                        )
-                    )
- */
 
