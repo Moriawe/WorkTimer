@@ -34,7 +34,7 @@ class TimeRepositoryImpl @Inject constructor(
         return timeDao.getTimeItems()
     }
 
-    override fun getItemById(id: Int): TimeItem {
+    override suspend fun getItemById(id: Int): TimeItem {
         return timeDao.getItemById(id)
     }
 

@@ -77,11 +77,14 @@ fun NavigationGraph(
                 }
             )
         ) { entry ->
-            val viewModel = hiltViewModel<DialogViewModel>()
+            //val viewModel = hiltViewModel<DialogViewModel>()
+            val viewModel = hiltViewModel<DialogViewModel, DialogViewModel.DialogViewModelFactory> { factory ->
+                factory.create(entry.arguments?.getInt("timeItemId"))
+            }
             val dialogState by viewModel.dialogState.collectAsState()
             val onEvent = viewModel::onEvent
             TimeItemDialog(
-                timeItemId = entry.arguments?.getInt("timeItemId"),
+                //timeItemId = entry.arguments?.getInt("timeItemId"),
                 viewModel)
         }
     }

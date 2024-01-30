@@ -4,22 +4,27 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.moriawe.worktimer2.data.entity.TimeItem
-import com.moriawe.worktimer2.domain.repository.TimeRepository
+import com.moriawe.worktimer2.domain.use_case.GetTimeItemByIdUseCase
+import com.moriawe.worktimer2.domain.use_case.RepositoryResults
 import com.moriawe.worktimer2.domain.use_case.UpdateTimeItemInDatabaseUseCase
 import com.moriawe.worktimer2.domain.use_case.ValidateStartTimeUseCase
 import com.moriawe.worktimer2.domain.use_case.ValidateStopTimeUseCase
+import com.moriawe.worktimer2.domain.util.TimeFormatters.timeFormatter
 import com.moriawe.worktimer2.domain.util.parseTimeStamp
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@HiltViewModel
-class DialogViewModel  @Inject constructor(
-    //private val repo: TimeRepository,
+@HiltViewModel(assistedFactory = DialogViewModel.DialogViewModelFactory::class)
+class DialogViewModel  @AssistedInject constructor(
+    @Assisted val id: Int?,
+    private val getTimeItemByIdUseCase: GetTimeItemByIdUseCase,
     private val updateTimeItemInDatabaseUseCase: UpdateTimeItemInDatabaseUseCase,
     private val validateStopTimeUseCase: ValidateStopTimeUseCase,
     private val validateStartTimeUseCase: ValidateStartTimeUseCase,
@@ -27,10 +32,22 @@ class DialogViewModel  @Inject constructor(
 
     val TAG = "DIALOG VIEW MODEL"
 
+    // -*- Hilt ViewModelFactory to receive the timeItem id sent from navigation -*- //
+    @AssistedFactory
+    interface DialogViewModelFactory {
+        fun create(id: Int?): DialogViewModel
+    }
+
+    init {
+        // Try to update the dialog with the correct values
+        id?.let { fetchTimeItem(it) }
+    }
+
     // -*- DIALOG STATE -*- //
     private val _dialogState = MutableStateFlow(DialogState())
     val dialogState: StateFlow<DialogState> = _dialogState.asStateFlow()
 
+    // -*- ON EVENT -*- //
     fun onEvent(event: DialogEvent) {
         when (event) {
             DialogEvent.HideDialog -> {
@@ -64,7 +81,34 @@ class DialogViewModel  @Inject constructor(
         }
     }
 
+    // -*- HELPER FUNCTIONS -*- //
+    private fun fetchTimeItem(id: Int) {
+        viewModelScope.launch {
+            // Try to get the timeItem from the database
+            val result = getTimeItemByIdUseCase(id)
+            when (result) {
+                is RepositoryResults.Success -> {
+                    // If successful, update dialogstate with the correct values
+                    val timeItem = result.timeItem
+                    _dialogState.update {
+                        it.copy(
+                            selectedItem = result.timeItem,
+                            startTime = result.timeItem.startTime.format(timeFormatter),
+                            stopTime = result.timeItem.stopTime.format(timeFormatter),
+                            description = result.timeItem.description
+                        )
+                    }
+                }
+                is RepositoryResults.Error -> {
+                    // if not successful, display the error
+                    Log.e(TAG, "Error fetching time item: ${result.message}")
+                }
+            }
+        }
+    }
+
     private fun updateTime(): Boolean {
+        // TODO: Find a way to validate start and stop-time and show correct error to user
         val startTimeResult = validateStartTimeUseCase.execute(
             startTime = dialogState.value.startTime
         )
@@ -72,11 +116,13 @@ class DialogViewModel  @Inject constructor(
             startTime = dialogState.value.startTime,
             stopTime = dialogState.value.stopTime
         )
+        // Check if there was any errors, if not - it was successful!
         val hasError = listOf(
             startTimeResult,
             stopTimeResult
         ).any { !it.successful }
 
+        // If error - display error to user
         if (hasError) {
             _dialogState.update {
                 it.copy(
@@ -87,16 +133,19 @@ class DialogViewModel  @Inject constructor(
             return false
         }
 
+        // TODO: Should this be done somewhere else?
+        // Update the timeItem from the dialogstate
         val timeItem = TimeItem(
             id = dialogState.value.selectedItem!!.id,
             startTime = parseTimeStamp(dialogState.value.startTime),
             stopTime = parseTimeStamp(dialogState.value.stopTime),
             description = dialogState.value.description
         )
+        // Try to update the item in the database
+        // TODO: Should check if it worked, if not, handle error
         viewModelScope.launch {
             updateTimeItemInDatabaseUseCase(timeItem)
             Log.d(TAG, "Updating timeItem $timeItem")
-            //repo.updateTimeItem(timeItem = timeItem)
             _dialogState.value = DialogState()
         }
         return true

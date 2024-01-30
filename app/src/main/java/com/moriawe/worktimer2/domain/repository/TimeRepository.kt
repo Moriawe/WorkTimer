@@ -19,6 +19,6 @@ interface TimeRepository {
 
     fun getTimeItems(): Flow<List<TimeItem>>
 
-    fun getItemById(id: Int): TimeItem
+    suspend fun getItemById(id: Int): TimeItem
 
 }

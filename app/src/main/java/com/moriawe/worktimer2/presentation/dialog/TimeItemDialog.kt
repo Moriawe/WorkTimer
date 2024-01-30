@@ -25,7 +25,7 @@ import com.moriawe.worktimer2.R
 
 @Composable
 fun TimeItemDialog(
-    timeItemId: Int? = null,
+    //timeItemId: Int? = null,
     viewModel: DialogViewModel
 ) {
 
@@ -48,7 +48,8 @@ fun TimeItemDialog(
                 OutlinedTextField(
                     modifier = Modifier
                         .weight(1f),
-                    value = timeItemId.toString(),
+                    //value = timeItemId.toString(),
+                    value = state.startTime,
                     onValueChange = { onEvent(DialogEvent.SetStartTime(it)) },
                     label = { Text(stringResource(id = R.string.start_time) ) },
                     isError = state.startTimeError != null

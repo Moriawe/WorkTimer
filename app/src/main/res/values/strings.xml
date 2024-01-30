@@ -28,5 +28,6 @@
     <string name="error_delete">Sorry, we couldn\'t delete the item.</string>
     <string name="error_add">Sorry, time wasn\'t added to database.</string>
     <string name="error_update">Sorry, we couldn\'t update the item.</string>
+    <string name="error_get_item">Error - item couldn\'t be fetched.</string>
 
 </resources>

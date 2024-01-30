@@ -7,5 +7,5 @@ sealed class RepositoryResults {
     data class Success(val timeItem: TimeItem): RepositoryResults()
     //data object Success(): RepositoryResults()
     data class Error(@StringRes val message: Int): RepositoryResults()
-    data object Loading: RepositoryResults()
+    //data object Loading: RepositoryResults()
 }

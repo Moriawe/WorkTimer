@@ -4,8 +4,9 @@ import com.moriawe.worktimer2.R
 import com.moriawe.worktimer2.domain.mapper.mapTimeCardItemToTimeItem
 import com.moriawe.worktimer2.domain.model.TimeCardItem
 import com.moriawe.worktimer2.domain.repository.TimeRepository
+import javax.inject.Inject
 
-class SaveTimeItemToDatabaseUseCase(
+class SaveTimeItemToDatabaseUseCase @Inject constructor(
     private val repo: TimeRepository
 ) {
 

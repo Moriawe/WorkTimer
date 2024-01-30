@@ -33,6 +33,6 @@ interface TimeDao {
     fun getTimeItems(): Flow<List<TimeItem>>
 
     @Query("SELECT * FROM TimeItem WHERE id=:id")
-    fun getItemById(id: Int): TimeItem
+    suspend fun getItemById(id: Int): TimeItem
 
 }
