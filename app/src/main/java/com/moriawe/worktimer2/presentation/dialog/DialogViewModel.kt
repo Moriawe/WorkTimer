@@ -39,7 +39,7 @@ class DialogViewModel  @AssistedInject constructor(
     }
 
     init {
-        // Try to update the dialog with the correct values
+        // Try to update the dialog with the correct values.
         id?.let { fetchTimeItem(it) }
     }
 
@@ -52,6 +52,7 @@ class DialogViewModel  @AssistedInject constructor(
         when (event) {
             DialogEvent.HideDialog -> {
                 Log.d(TAG, "Hide Dialog and reset DialogState")
+
                 _dialogState.value = DialogState()
             }
             is DialogEvent.SetDescription -> {

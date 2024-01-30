@@ -25,10 +25,12 @@ import com.moriawe.worktimer2.R
 
 @Composable
 fun TimeItemDialog(
-    //timeItemId: Int? = null,
-    viewModel: DialogViewModel
+    viewModel: DialogViewModel,
+    onHideDialog: () -> Unit
 ) {
 
+    // Init state and onEvent inside the compose
+    // Can also be done in the NavGraph instead, like TimerScreen
     val state by viewModel.dialogState.collectAsState()
     val onEvent = viewModel::onEvent
 
@@ -48,7 +50,6 @@ fun TimeItemDialog(
                 OutlinedTextField(
                     modifier = Modifier
                         .weight(1f),
-                    //value = timeItemId.toString(),
                     value = state.startTime,
                     onValueChange = { onEvent(DialogEvent.SetStartTime(it)) },
                     label = { Text(stringResource(id = R.string.start_time) ) },
@@ -76,14 +77,14 @@ fun TimeItemDialog(
                 label = { Text(stringResource(id = R.string.work_description) ) }
             )
             Row() {
-                Button(onClick = { onEvent(DialogEvent.HideDialog) }) {
+                Button(onClick = { onHideDialog() }) {
                     Text(text = stringResource(id = R.string.cancel))
                 }
                 Button(onClick = {
                     onEvent(DialogEvent.UpdateTimeItem { success ->
                         if (success) {
                             Log.d("AddDescriptionDialog", "Save item: ${state.description}")
-                            onEvent(DialogEvent.HideDialog)
+                            onHideDialog()
                         } else {
                             Log.d("AddDescriptionDialog", "Hide keyboard")
                         }

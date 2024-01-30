@@ -18,13 +18,10 @@ import androidx.compose.ui.unit.sp
 import com.moriawe.worktimer2.R
 import com.moriawe.worktimer2.domain.mapper.mapTimeItemToTimeCardItem
 import com.moriawe.worktimer2.presentation.component.TimeCard
-import com.moriawe.worktimer2.presentation.dialog.DialogState
-import com.moriawe.worktimer2.presentation.dialog.ModifyTimeItemDialog
 
 @Composable
 fun TimerScreen(
     state: TimerState,
-    //dialogState: DialogState,
     onEvent: (TimerEvent) -> Unit,
     onOpenDialog: (Int) -> Unit
 ) {

@@ -32,7 +32,7 @@ fun NavigationGraph(
     snackbarHostState: SnackbarHostState,
     innerPadding: PaddingValues) {
 
-    // -*- To send snackbars -*- //
+    // -*- SNACKBAR CONFIG -*- //
     val mainViewModel = hiltViewModel<TimerViewModel>()
     val context = LocalContext.current
 
@@ -77,15 +77,16 @@ fun NavigationGraph(
                 }
             )
         ) { entry ->
-            //val viewModel = hiltViewModel<DialogViewModel>()
-            val viewModel = hiltViewModel<DialogViewModel, DialogViewModel.DialogViewModelFactory> { factory ->
+            // To receive the navargs in the viewModel you need to use the hilt viewModel factory this way
+            val viewModel =
+                hiltViewModel<DialogViewModel, DialogViewModel.DialogViewModelFactory> { factory ->
                 factory.create(entry.arguments?.getInt("timeItemId"))
             }
-            val dialogState by viewModel.dialogState.collectAsState()
-            val onEvent = viewModel::onEvent
-            TimeItemDialog(
+            TimeItemDialog(viewModel, onHideDialog = {
+                navController.popBackStack()
+            })
+                // If you want to receive the navargs in the compose ->
                 //timeItemId = entry.arguments?.getInt("timeItemId"),
-                viewModel)
         }
     }
 }
