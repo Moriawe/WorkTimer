@@ -1,10 +1,14 @@
 package com.moriawe.worktimer2.presentation.timer
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.moriawe.worktimer2.R
 import com.moriawe.worktimer2.data.entity.TimeItem
 import com.moriawe.worktimer2.domain.repository.TimeRepository
 import com.moriawe.worktimer2.domain.use_case.GetTimeItemsForSpecificDateUseCase
+import com.moriawe.worktimer2.domain.use_case.RepositoryResults
+import com.moriawe.worktimer2.domain.use_case.SaveTimeItemToDatabaseUseCase
 import com.moriawe.worktimer2.domain.util.TimeConstant
 import com.moriawe.worktimer2.domain.util.calculateTotalTime
 import com.moriawe.worktimer2.domain.util.generateAndInsertMockTimeItemsIntoDatabase
@@ -23,7 +27,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TimerViewModel  @Inject constructor(
-    private val repo: TimeRepository,
+    private val saveTimeItemToDatabaseUseCase: SaveTimeItemToDatabaseUseCase,
     getTimeItemsForSpecificDateUseCase: GetTimeItemsForSpecificDateUseCase
 ) : ViewModel() {
 
@@ -99,8 +103,17 @@ class TimerViewModel  @Inject constructor(
         )
 
         viewModelScope.launch {
-//            Log.d(TAG, "Insert item: $timeItem")
-            repo.insertTimeItem(timeItem = timeItem)
+            when (saveTimeItemToDatabaseUseCase(timeItem)) {
+                // When successful display log message
+                is RepositoryResults.Success -> {
+                    Log.d(TAG, "Time was saved")
+                }
+                // When unsuccessful, display error message to user
+                is RepositoryResults.Error -> {
+                    showSnackbar(R.string.error_add)
+                    Log.e(TAG, "ERROR - Time wasn't saved")
+                }
+            }
         }
         resetState()
     }
@@ -121,16 +134,16 @@ class TimerViewModel  @Inject constructor(
         _eventFlow.emit(
             UiEvent.ShowSnackbar(
                 message = message
-                //message = R.string.time_format_error
             )
         )
     }
 
     // -*- Run to get mock data to test on -*- //
-    private fun generateAndInsertMockData(itemCount: Int) {
-        viewModelScope.launch {
-            generateAndInsertMockTimeItemsIntoDatabase(repo, itemCount)
-        }
-    }
+    // Need to import repository in ViewModel to work
+//    private fun generateAndInsertMockData(itemCount: Int) {
+//        viewModelScope.launch {
+//            generateAndInsertMockTimeItemsIntoDatabase(repo, itemCount)
+//        }
+//    }
 }
 
