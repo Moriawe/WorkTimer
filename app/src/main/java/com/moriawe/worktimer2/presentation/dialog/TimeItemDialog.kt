@@ -2,6 +2,7 @@ package com.moriawe.worktimer2.presentation.dialog
 
 import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -20,6 +22,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import com.moriawe.worktimer2.R
 
@@ -37,8 +40,8 @@ fun TimeItemDialog(
     Box(
         modifier = Modifier
             .background(MaterialTheme.colorScheme.background)
-            .padding(10.dp)
-            .clip(RoundedCornerShape(5.dp))
+            .clip(RoundedCornerShape(15.dp))
+            .padding(20.dp)
     ) {
         Column(
         ) {
@@ -52,19 +55,20 @@ fun TimeItemDialog(
                         .weight(1f),
                     value = state.startTime,
                     onValueChange = { onEvent(DialogEvent.SetStartTime(it)) },
-                    label = { Text(stringResource(id = R.string.start_time) ) },
+                    label = { Text(stringResource(id = R.string.start_time)) },
                     isError = state.startTimeError != null
                 )
+                Spacer(modifier = Modifier.width(15.dp))
                 OutlinedTextField(
                     modifier = Modifier
                         .weight(1f),
                     value = state.stopTime,
                     onValueChange = { onEvent(DialogEvent.SetStopTime(it)) },
-                    label = { Text(stringResource(id = R.string.end_time) ) },
+                    label = { Text(stringResource(id = R.string.end_time)) },
                     isError = state.stopTimeError != null
                 )
             }
-            if(state.stopTimeError != null) {
+            if (state.stopTimeError != null) {
                 Text(
                     text = stringResource(id = state.stopTimeError!!),
                     color = MaterialTheme.colorScheme.error
@@ -74,28 +78,34 @@ fun TimeItemDialog(
             OutlinedTextField(
                 value = state.description,
                 onValueChange = { onEvent(DialogEvent.SetDescription(it)) },
-                label = { Text(stringResource(id = R.string.work_description) ) }
+                label = { Text(stringResource(id = R.string.work_description)) }
             )
-            Row() {
-                Button(onClick = { onHideDialog() }) {
-                    Text(text = stringResource(id = R.string.cancel))
-                }
-                Button(onClick = {
-                    onEvent(DialogEvent.UpdateTimeItem { success ->
-                        if (success) {
-                            Log.d("AddDescriptionDialog", "Save item: ${state.description}")
-                            onHideDialog()
-                        } else {
-                            Log.d("AddDescriptionDialog", "Hide keyboard")
-                        }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 20.dp),
+                horizontalArrangement = Arrangement.End
+            ) {
+                ClickableText(
+                    text = AnnotatedString(stringResource(id = R.string.cancel)),
+                    onClick = { onHideDialog() })
+                Spacer(modifier = Modifier.width(20.dp))
+                ClickableText(
+                    text = AnnotatedString(stringResource(id = R.string.save)),
+                    onClick = {
+                        onEvent(DialogEvent.UpdateTimeItem { success ->
+                            if (success) {
+                                Log.d("AddDescriptionDialog", "Save item: ${state.description}")
+                                onHideDialog()
+                            } else {
+                                Log.d("AddDescriptionDialog", "Hide keyboard")
+                            }
+                        })
                     })
-                }) {
-                    Text(text = stringResource(id = R.string.save))
-                }
             }
         }
-    }
 
+    }
 }
 
 
