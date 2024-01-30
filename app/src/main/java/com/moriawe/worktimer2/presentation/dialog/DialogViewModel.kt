@@ -4,11 +4,11 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.moriawe.worktimer2.data.entity.TimeItem
-import com.moriawe.worktimer2.domain.use_case.GetTimeItemByIdUseCase
+import com.moriawe.worktimer2.domain.use_case.GetTimeItemById
 import com.moriawe.worktimer2.domain.use_case.RepositoryResults
-import com.moriawe.worktimer2.domain.use_case.UpdateTimeItemInDatabaseUseCase
-import com.moriawe.worktimer2.domain.use_case.ValidateStartTimeUseCase
-import com.moriawe.worktimer2.domain.use_case.ValidateStopTimeUseCase
+import com.moriawe.worktimer2.domain.use_case.UpdateTimeItemInDatabase
+import com.moriawe.worktimer2.domain.use_case.validations.ValidateStartTimeUseCase
+import com.moriawe.worktimer2.domain.use_case.validations.ValidateStopTimeUseCase
 import com.moriawe.worktimer2.domain.util.TimeFormatters.timeFormatter
 import com.moriawe.worktimer2.domain.util.parseTimeStamp
 import dagger.assisted.Assisted
@@ -24,8 +24,8 @@ import kotlinx.coroutines.launch
 @HiltViewModel(assistedFactory = DialogViewModel.DialogViewModelFactory::class)
 class DialogViewModel  @AssistedInject constructor(
     @Assisted val id: Int?,
-    private val getTimeItemByIdUseCase: GetTimeItemByIdUseCase,
-    private val updateTimeItemInDatabaseUseCase: UpdateTimeItemInDatabaseUseCase,
+    private val getTimeItemById: GetTimeItemById,
+    private val updateTimeItemInDatabase: UpdateTimeItemInDatabase,
     private val validateStopTimeUseCase: ValidateStopTimeUseCase,
     private val validateStartTimeUseCase: ValidateStartTimeUseCase,
 ) : ViewModel() {
@@ -86,7 +86,7 @@ class DialogViewModel  @AssistedInject constructor(
     private fun fetchTimeItem(id: Int) {
         viewModelScope.launch {
             // Try to get the timeItem from the database
-            val result = getTimeItemByIdUseCase(id)
+            val result = getTimeItemById(id)
             when (result) {
                 is RepositoryResults.Success -> {
                     // If successful, update dialogstate with the correct values
@@ -145,7 +145,7 @@ class DialogViewModel  @AssistedInject constructor(
         // Try to update the item in the database
         // TODO: Should check if it worked, if not, handle error
         viewModelScope.launch {
-            updateTimeItemInDatabaseUseCase(timeItem)
+            updateTimeItemInDatabase(timeItem)
             Log.d(TAG, "Updating timeItem $timeItem")
             _dialogState.value = DialogState()
         }

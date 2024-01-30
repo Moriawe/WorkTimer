@@ -1,6 +1,5 @@
-package com.moriawe.worktimer2.domain.use_case
+package com.moriawe.worktimer2.domain.use_case.validations
 
-import android.util.Log
 import com.moriawe.worktimer2.R
 import com.moriawe.worktimer2.domain.util.TimeFormatters
 import com.moriawe.worktimer2.domain.util.parseTimeStamp

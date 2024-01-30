@@ -5,18 +5,21 @@ import com.moriawe.worktimer2.data.entity.TimeItem
 import com.moriawe.worktimer2.domain.repository.TimeRepository
 import javax.inject.Inject
 
-class UpdateTimeItemInDatabaseUseCase @Inject constructor(
+class DeleteTimeItemFromDatabase @Inject constructor(
     private val repo: TimeRepository
-    ) {
+) {
 
     suspend operator fun invoke(timeItem: TimeItem): RepositoryResults {
 
         val response = try {
-            repo.updateTimeItem(timeItem)
+            repo.deleteTimeItem(timeItem)
             RepositoryResults.Success(timeItem)
         } catch (exception: Exception) {
-            RepositoryResults.Error(R.string.error_update)
+            RepositoryResults.Error(message = R.string.error_delete)
         }
-            return response
-        }
+
+        return response
+
     }
+
+}

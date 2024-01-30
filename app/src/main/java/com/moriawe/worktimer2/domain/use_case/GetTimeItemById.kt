@@ -5,7 +5,7 @@ import com.moriawe.worktimer2.R
 import com.moriawe.worktimer2.domain.repository.TimeRepository
 import javax.inject.Inject
 
-class GetTimeItemByIdUseCase @Inject constructor(
+class GetTimeItemById @Inject constructor(
     private val repo: TimeRepository
 ) {
     suspend operator fun invoke(id: Int): RepositoryResults {

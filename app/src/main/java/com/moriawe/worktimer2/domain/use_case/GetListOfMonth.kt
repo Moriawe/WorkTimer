@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
-class GetListOfMonthUseCase @Inject constructor(
+class GetListOfMonth @Inject constructor(
     private val repo: TimeRepository
 ) {
 

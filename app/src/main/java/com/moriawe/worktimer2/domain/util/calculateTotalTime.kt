@@ -4,6 +4,7 @@ import com.moriawe.worktimer2.data.entity.TimeItem
 import com.moriawe.worktimer2.domain.model.TimeCardItem
 import java.time.Duration
 
+// TODO: Can this be a use case instead?
 fun calculateTotalTime(timeItems: List<TimeCardItem>): Duration {
 
     var totalTime: Duration = Duration.ZERO

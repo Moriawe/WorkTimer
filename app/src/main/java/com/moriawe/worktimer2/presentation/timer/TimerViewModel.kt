@@ -5,13 +5,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.moriawe.worktimer2.R
 import com.moriawe.worktimer2.data.entity.TimeItem
-import com.moriawe.worktimer2.domain.repository.TimeRepository
-import com.moriawe.worktimer2.domain.use_case.GetTimeItemsForSpecificDateUseCase
+import com.moriawe.worktimer2.domain.use_case.GetTimeItemsForSpecificDate
 import com.moriawe.worktimer2.domain.use_case.RepositoryResults
-import com.moriawe.worktimer2.domain.use_case.SaveTimeItemToDatabaseUseCase
+import com.moriawe.worktimer2.domain.use_case.SaveTimeItemToDatabase
 import com.moriawe.worktimer2.domain.util.TimeConstant
 import com.moriawe.worktimer2.domain.util.calculateTotalTime
-import com.moriawe.worktimer2.domain.util.generateAndInsertMockTimeItemsIntoDatabase
 import com.moriawe.worktimer2.presentation.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -27,14 +25,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TimerViewModel  @Inject constructor(
-    private val saveTimeItemToDatabaseUseCase: SaveTimeItemToDatabaseUseCase,
-    getTimeItemsForSpecificDateUseCase: GetTimeItemsForSpecificDateUseCase
+    private val saveTimeItemToDatabase: SaveTimeItemToDatabase,
+    getTimeItemsForSpecificDate: GetTimeItemsForSpecificDate
 ) : ViewModel() {
 
     val TAG = "TIMER VIEW MODEL"
 
     // -*- TIMER STATES -*- //
-    private val _timeItems = getTimeItemsForSpecificDateUseCase(LocalDateTime.now())
+    private val _timeItems = getTimeItemsForSpecificDate(LocalDateTime.now())
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
     private val _timerState = MutableStateFlow(TimerState())
 
@@ -103,7 +101,7 @@ class TimerViewModel  @Inject constructor(
         )
 
         viewModelScope.launch {
-            when (saveTimeItemToDatabaseUseCase(timeItem)) {
+            when (saveTimeItemToDatabase(timeItem)) {
                 // When successful display log message
                 is RepositoryResults.Success -> {
                     Log.d(TAG, "Time was saved")

@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.map
 import java.time.LocalDateTime
 import javax.inject.Inject
 
-class GetTimeItemsForSpecificDateUseCase @Inject constructor(
+class GetTimeItemsForSpecificDate @Inject constructor(
     private val repo: TimeRepository
 ) {
     operator fun invoke(date: LocalDateTime): Flow<List<TimeItem>> {

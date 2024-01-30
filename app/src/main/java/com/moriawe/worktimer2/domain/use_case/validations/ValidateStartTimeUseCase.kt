@@ -1,4 +1,4 @@
-package com.moriawe.worktimer2.domain.use_case
+package com.moriawe.worktimer2.domain.use_case.validations
 
 import com.moriawe.worktimer2.R
 import com.moriawe.worktimer2.domain.util.parseTimeStamp
