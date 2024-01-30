@@ -3,6 +3,7 @@ package com.moriawe.worktimer2.domain.model
 import java.time.Duration
 
 data class TimeCardItem(
+    val id: Int,
     val date: String,
     val month: String,
     val startTime: String,

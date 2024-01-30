@@ -17,7 +17,7 @@ class ValidateStopTimeUseCase {
         }
     }
 
-    private fun isStopTimeAfterStartTime(startTime: LocalDateTime, stopTime: LocalDateTime): Boolean {
+    private fun isStopTimeAfterStartTime(startTime: LocalTime, stopTime: LocalTime): Boolean {
         return startTime.isBefore(stopTime)
     }
 

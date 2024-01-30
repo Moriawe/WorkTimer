@@ -16,6 +16,7 @@ fun mapTimeItemToTimeCardItem(timeItem: TimeItem): TimeCardItem {
     val totalTimeString = formatDurationInHHMMToString(duration)
 
     return TimeCardItem(
+        id = timeItem.id,
         date = date,
         month = month,
         startTime = startTime,

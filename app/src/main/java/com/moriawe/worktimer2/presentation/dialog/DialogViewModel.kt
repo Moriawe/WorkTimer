@@ -20,6 +20,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.LocalDateTime
 
 @HiltViewModel(assistedFactory = DialogViewModel.DialogViewModelFactory::class)
 class DialogViewModel  @AssistedInject constructor(
@@ -136,10 +138,11 @@ class DialogViewModel  @AssistedInject constructor(
 
         // TODO: Should this be done somewhere else?
         // Update the timeItem from the dialogstate
+
         val timeItem = TimeItem(
             id = dialogState.value.selectedItem!!.id,
-            startTime = parseTimeStamp(dialogState.value.startTime),
-            stopTime = parseTimeStamp(dialogState.value.stopTime),
+            startTime = turnStringIntoLocalDateTime(dialogState.value.startTime),
+            stopTime = turnStringIntoLocalDateTime(dialogState.value.stopTime),
             description = dialogState.value.description
         )
         // Try to update the item in the database
@@ -150,7 +153,13 @@ class DialogViewModel  @AssistedInject constructor(
             _dialogState.value = DialogState()
         }
         return true
+    }
 
+    private fun turnStringIntoLocalDateTime(time: String): LocalDateTime {
+        return LocalDateTime.of(
+            dialogState.value.selectedItem?.startTime?.toLocalDate(),
+            parseTimeStamp(time)
+        )
     }
 
 }

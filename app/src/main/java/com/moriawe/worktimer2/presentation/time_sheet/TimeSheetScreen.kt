@@ -28,6 +28,7 @@ import com.moriawe.worktimer2.presentation.component.TimeCard
 @Composable
 fun TimeSheetScreen(
     state: TimeSheetState,
+    onOpenDialog: (Int) -> Unit
 ) {
 
     // -*- state to check if a day is expanded or not -*- //
@@ -66,9 +67,10 @@ fun TimeSheetScreen(
                     if (isExpanded) {
                         Column() {
                             day.items.forEach { timeCardItem ->
-                                TimeCard(time = timeCardItem) {
-
-                                }
+                                TimeCard(
+                                    time = timeCardItem,
+                                    onClick = { onOpenDialog(timeCardItem.id) }
+                                )
                             }
                         }
                     }

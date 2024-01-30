@@ -65,7 +65,9 @@ fun NavigationGraph(
         composable(route = Screen.TimeSheetScreen.route) {
             val viewModel = hiltViewModel<TimeSheetViewModel>()
             val state by viewModel.timeSheetState.collectAsState()
-            TimeSheetScreen(state)
+            TimeSheetScreen(state, onOpenDialog = {
+                navController.navigate(Screen.DialogScreen.withArgs(it))
+            })
         }
         // -*- Calling dialog from NavGraph with argument for timeItemId -*- //
         // -*- It is strongly advised not to pass around complex data objects when navigating -*- //

@@ -31,7 +31,7 @@ fun formatDurationInHHMMToString(duration: Duration): String {
 }
 
 // TODO: TimeConverter (use)
-fun parseTimeStamp(timeStamp: String): LocalDateTime {
-    val time = LocalTime.parse(timeStamp, TimeFormatters.timeFormatter)
-    return LocalDateTime.of(LocalDate.now(), time)
+fun parseTimeStamp(timeStamp: String): LocalTime {
+    return LocalTime.parse(timeStamp, TimeFormatters.timeFormatter)
+
 }
