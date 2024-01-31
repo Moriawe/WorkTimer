@@ -25,8 +25,8 @@ fun TimeCard(time: TimeCardItem, onClick: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 15.dp)
-            .padding(top = 15.dp)
+//            .padding(horizontal = 15.dp)
+//            .padding(top = 15.dp)
             .shadow(3.dp)
             .background(MaterialTheme.colorScheme.secondaryContainer)
             .padding(10.dp)

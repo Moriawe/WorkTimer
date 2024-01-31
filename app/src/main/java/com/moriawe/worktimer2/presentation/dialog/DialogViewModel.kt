@@ -92,7 +92,6 @@ class DialogViewModel  @AssistedInject constructor(
             when (result) {
                 is RepositoryResults.Success -> {
                     // If successful, update dialogstate with the correct values
-                    val timeItem = result.timeItem
                     _dialogState.update {
                         it.copy(
                             selectedItem = result.timeItem,

@@ -75,7 +75,7 @@ class TimerViewModel  @Inject constructor(
             }
 
             is TimerEvent.DeleteTimeItem -> {
-                TODO()
+                Log.d(TAG, "Delete item!")
             }
         }
 
