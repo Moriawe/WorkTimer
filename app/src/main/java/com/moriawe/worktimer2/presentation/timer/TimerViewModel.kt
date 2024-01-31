@@ -51,6 +51,7 @@ class TimerViewModel  @Inject constructor(
     private val _eventFlow = MutableSharedFlow<UiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
 
+    // -*- ON EVENT -*- //
     fun onEvent(event: TimerEvent) {
         when (event) {
             TimerEvent.StartTimer -> {
@@ -83,6 +84,8 @@ class TimerViewModel  @Inject constructor(
         }
 
     }
+
+    // -*- HELPER FUNCTIONS -*- //
 
     // -*- Adds a new item to the database when time is stopped -*- //
     private fun addNewTimeItem() {
@@ -119,6 +122,7 @@ class TimerViewModel  @Inject constructor(
         resetState()
     }
 
+    // -*- Delete item from database and error handling -*- //
     private fun deleteTimeItem(id: Int) {
         viewModelScope.launch {
             when (deleteTimeItemFromDatabase(id)) {

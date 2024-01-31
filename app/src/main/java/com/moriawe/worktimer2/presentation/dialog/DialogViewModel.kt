@@ -3,6 +3,7 @@ package com.moriawe.worktimer2.presentation.dialog
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.moriawe.worktimer2.R
 import com.moriawe.worktimer2.data.entity.TimeItem
 import com.moriawe.worktimer2.domain.use_case.GetTimeItemById
 import com.moriawe.worktimer2.domain.use_case.RepositoryResults
@@ -11,12 +12,15 @@ import com.moriawe.worktimer2.domain.use_case.validations.ValidateStartTimeUseCa
 import com.moriawe.worktimer2.domain.use_case.validations.ValidateStopTimeUseCase
 import com.moriawe.worktimer2.domain.util.TimeFormatters.dialogFormatter
 import com.moriawe.worktimer2.domain.util.parseDialogTimeStamp
+import com.moriawe.worktimer2.presentation.UiEvent
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -47,6 +51,10 @@ class DialogViewModel  @AssistedInject constructor(
     // -*- DIALOG STATE -*- //
     private val _dialogState = MutableStateFlow(DialogState())
     val dialogState: StateFlow<DialogState> = _dialogState.asStateFlow()
+
+    // -*- UI EVENT FLOW -*- //
+    private val _eventFlow = MutableSharedFlow<UiEvent>()
+    val eventFlow = _eventFlow.asSharedFlow()
 
     // -*- ON EVENT -*- //
     fun onEvent(event: DialogEvent) {
@@ -144,10 +152,22 @@ class DialogViewModel  @AssistedInject constructor(
             description = dialogState.value.description
         )
         // Try to update the item in the database
-        // TODO: Should check if it worked, if not, handle error
         viewModelScope.launch {
-            updateTimeItemInDatabase(timeItem)
             Log.d(TAG, "Updating timeItem $timeItem")
+
+            when (updateTimeItemInDatabase(timeItem)) {
+                // When successful display log message
+                is RepositoryResults.Success -> {
+                    Log.d(TAG, "SUCCESS - Item was updated")
+                }
+                // When unsuccessful, display error message to user
+                is RepositoryResults.Error -> {
+                    showSnackbar(R.string.error_update)
+                    Log.e(TAG, "ERROR - Item wasn't updated")
+                }
+            }
+            // TODO: SHould state be reset if there was an error?
+            // Reset dialog state
             _dialogState.value = DialogState()
         }
         return true
@@ -157,6 +177,14 @@ class DialogViewModel  @AssistedInject constructor(
         return LocalDateTime.of(
             dialogState.value.selectedItem?.startTime?.toLocalDate(),
             parseDialogTimeStamp(time)
+        )
+    }
+
+    private suspend fun showSnackbar(message: Int) {
+        _eventFlow.emit(
+            UiEvent.ShowSnackbar(
+                message = message
+            )
         )
     }
 
