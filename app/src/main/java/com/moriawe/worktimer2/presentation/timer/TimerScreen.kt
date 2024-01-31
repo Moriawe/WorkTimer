@@ -47,10 +47,13 @@ fun TimerScreen(
 ) {
 
     Column() {
+
+        // -*- Total work time Row -*- //
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 10.dp),
+                //.weight(1f),
             horizontalArrangement = Arrangement.Center
         ) {
             Text(
@@ -62,20 +65,25 @@ fun TimerScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .weight(1f),
-            //state = lazyListState
+                .weight(1f)
         ) {
             items(
                 items = state.timeItems,
                 key = { item -> item.id },
             ) { item ->
+                // makes sure the correct item is dismissed, key
                 val currentItem by rememberUpdatedState(newValue = item.id)
                 val dismissState = rememberDismissState(
+                    // What will happen when item is dismissed
                     confirmValueChange = {
                         if (it == DismissValue.DismissedToStart) {
                             onEvent(TimerEvent.DeleteTimeItem(currentItem))
                         }
                         true
+                    },
+                    // Decides how far the user has to swipe to dismiss item
+                    positionalThreshold = { totalDistance ->
+                        totalDistance * 0.60f
                     }
                 )
                 SwipeToDismiss(
@@ -97,28 +105,29 @@ fun TimerScreen(
                 )
             }
         }
-    }
 
-    // -*- Bottom row start/stop button -*- //
-    Row(
-        modifier = Modifier
-            .fillMaxWidth(),
-        verticalAlignment = Alignment.Bottom
-    ) {
-        Button(
+        // -*- Bottom row start/stop button -*- //
+        Row(
             modifier = Modifier
-                .padding(10.dp)
                 .fillMaxWidth(),
-            onClick = {
-                if (state.isTimerStarted) onEvent(TimerEvent.StopTimer)
-                else onEvent(TimerEvent.StartTimer)
-            }
+                //.weight(1f),
+            verticalAlignment = Alignment.Bottom
         ) {
-            Text(
-                fontSize = 20.sp,
-                text = if (state.isTimerStarted) stringResource(id = R.string.stop)
-                else stringResource(id = R.string.start)
-            )
+            Button(
+                modifier = Modifier
+                    .padding(10.dp)
+                    .fillMaxWidth(),
+                onClick = {
+                    if (state.isTimerStarted) onEvent(TimerEvent.StopTimer)
+                    else onEvent(TimerEvent.StartTimer)
+                }
+            ) {
+                Text(
+                    fontSize = 20.sp,
+                    text = if (state.isTimerStarted) stringResource(id = R.string.stop)
+                    else stringResource(id = R.string.start)
+                )
+            }
         }
     }
 }
@@ -129,11 +138,9 @@ fun TimerScreen(
 fun SwipeBackground(dismissState: DismissState) {
 
     val color by animateColorAsState(
-        when (dismissState.targetValue) {
-            DismissValue.Default -> Color.LightGray
-            DismissValue.DismissedToEnd -> Color.Green
-            DismissValue.DismissedToStart -> Color.Red
-        }, label = ""
+        if (dismissState.targetValue == DismissValue.DismissedToStart) Color.Red
+        else Color.LightGray,
+        label = ""
     )
     val scale by animateFloatAsState(
         if (dismissState.targetValue == DismissValue.Default) 0.75f else 1f,
@@ -154,6 +161,3 @@ fun SwipeBackground(dismissState: DismissState) {
         )
     }
 }
-/*
-
- */
