@@ -14,8 +14,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.moriawe.worktimer2.navigation.Screen
 import com.moriawe.worktimer2.navigation.NavigationGraph
+import com.moriawe.worktimer2.navigation.Screen
 import com.moriawe.worktimer2.ui.theme.WorkTimer2Theme
 import dagger.hilt.android.AndroidEntryPoint
 

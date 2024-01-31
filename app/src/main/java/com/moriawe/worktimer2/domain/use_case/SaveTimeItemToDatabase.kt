@@ -20,6 +20,3 @@ class SaveTimeItemToDatabase @Inject constructor(
         return response
     }
 }
-
-// TODO: Add / save / insert
-// TODO: End or stop time/item
