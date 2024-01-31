@@ -1,6 +1,5 @@
 package com.moriawe.worktimer2.presentation.dialog
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,6 +11,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -22,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.moriawe.worktimer2.R
 
@@ -36,14 +38,16 @@ fun TimeItemDialog(
     val state by viewModel.dialogState.collectAsState()
     val onEvent = viewModel::onEvent
 
+    // -*- PARENT BOX -*- //
     Box(
         modifier = Modifier
-            .background(MaterialTheme.colorScheme.background)
-            .clip(RoundedCornerShape(15.dp))
+            .clip(RoundedCornerShape(20.dp))
+            .background(AlertDialogDefaults.containerColor)
             .padding(20.dp)
     ) {
         Column(
         ) {
+            // -*- START - STOP TIME -*- //
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -52,6 +56,7 @@ fun TimeItemDialog(
                 OutlinedTextField(
                     modifier = Modifier
                         .weight(1f),
+                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
                     value = state.startTime,
                     onValueChange = { onEvent(DialogEvent.SetStartTime(it)) },
                     label = { Text(stringResource(id = R.string.start_time)) },
@@ -61,12 +66,14 @@ fun TimeItemDialog(
                 OutlinedTextField(
                     modifier = Modifier
                         .weight(1f),
+                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
                     value = state.stopTime,
                     onValueChange = { onEvent(DialogEvent.SetStopTime(it)) },
                     label = { Text(stringResource(id = R.string.end_time)) },
                     isError = state.stopTimeError != null
                 )
             }
+            // If there is an error - show user what is wrong
             if (state.stopTimeError != null) {
                 Text(
                     text = stringResource(id = state.stopTimeError!!),
@@ -74,11 +81,14 @@ fun TimeItemDialog(
                 )
             }
             Spacer(modifier = Modifier.width(5.dp))
+
+            // -*- WORK DESCRIPTION -*- //
             OutlinedTextField(
                 value = state.description,
                 onValueChange = { onEvent(DialogEvent.SetDescription(it)) },
                 label = { Text(stringResource(id = R.string.work_description)) }
             )
+            // -*- CANCEL & SAVE -*- //
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -92,12 +102,11 @@ fun TimeItemDialog(
                 ClickableText(
                     text = AnnotatedString(stringResource(id = R.string.save)),
                     onClick = {
+                        // If the item can be updated successful we pop the dialog from backstack
                         onEvent(DialogEvent.UpdateTimeItem { success ->
                             if (success) {
-                                Log.d("AddDescriptionDialog", "Save item: ${state.description}")
+                                //Log.d("AddDescriptionDialog", "Save item: ${state.description}")
                                 onHideDialog()
-                            } else {
-                                Log.d("AddDescriptionDialog", "Hide keyboard")
                             }
                         })
                     })

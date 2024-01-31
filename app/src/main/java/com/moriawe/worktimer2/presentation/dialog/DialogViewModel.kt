@@ -9,8 +9,8 @@ import com.moriawe.worktimer2.domain.use_case.RepositoryResults
 import com.moriawe.worktimer2.domain.use_case.UpdateTimeItemInDatabase
 import com.moriawe.worktimer2.domain.use_case.validations.ValidateStartTimeUseCase
 import com.moriawe.worktimer2.domain.use_case.validations.ValidateStopTimeUseCase
-import com.moriawe.worktimer2.domain.util.TimeFormatters.timeFormatter
-import com.moriawe.worktimer2.domain.util.parseTimeStamp
+import com.moriawe.worktimer2.domain.util.TimeFormatters.dialogFormatter
+import com.moriawe.worktimer2.domain.util.parseDialogTimeStamp
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -94,8 +94,8 @@ class DialogViewModel  @AssistedInject constructor(
                     _dialogState.update {
                         it.copy(
                             selectedItem = result.data,
-                            startTime = result.data.startTime.format(timeFormatter),
-                            stopTime = result.data.stopTime.format(timeFormatter),
+                            startTime = result.data.startTime.format(dialogFormatter),
+                            stopTime = result.data.stopTime.format(dialogFormatter),
                             description = result.data.description
                         )
                     }
@@ -156,7 +156,7 @@ class DialogViewModel  @AssistedInject constructor(
     private fun turnStringIntoLocalDateTime(time: String): LocalDateTime {
         return LocalDateTime.of(
             dialogState.value.selectedItem?.startTime?.toLocalDate(),
-            parseTimeStamp(time)
+            parseDialogTimeStamp(time)
         )
     }
 

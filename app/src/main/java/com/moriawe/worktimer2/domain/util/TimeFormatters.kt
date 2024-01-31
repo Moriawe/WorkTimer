@@ -11,6 +11,7 @@ object TimeFormatters {
     val monthFormatter = DateTimeFormatter.ofPattern("MMMM")
     val dayFormatter = DateTimeFormatter.ofPattern("EEEE dd MMM")
     val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
+    val dialogFormatter = DateTimeFormatter.ofPattern("HH.mm")
 }
 
 object TimeConstant {
@@ -31,5 +32,8 @@ fun formatDurationInHHMMToString(duration: Duration): String {
 // TODO: TimeConverter (use)
 fun parseTimeStamp(timeStamp: String): LocalTime {
     return LocalTime.parse(timeStamp, TimeFormatters.timeFormatter)
+}
 
+fun parseDialogTimeStamp(timeStamp: String): LocalTime {
+    return LocalTime.parse(timeStamp, TimeFormatters.dialogFormatter)
 }

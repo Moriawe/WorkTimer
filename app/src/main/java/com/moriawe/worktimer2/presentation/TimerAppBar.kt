@@ -19,8 +19,8 @@ import java.time.LocalDateTime
 @Composable
 fun TimerAppBar(
     currentScreen: Screen,
-    //canNavigateBack: Boolean,
-    //navigateUp: () -> Unit,
+    canNavigateBack: Boolean,
+    navigateUp: () -> Unit,
     navController: NavController,
     modifier: Modifier = Modifier
 ) {
