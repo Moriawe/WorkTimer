@@ -15,7 +15,7 @@ interface TimeRepository {
 
     suspend fun deleteTimeItem(timeItem: TimeItem)
 
-    fun deleteTimeItemWithId(id: Int)
+    suspend fun deleteTimeItemWithId(id: Int)
 
     fun getTimeItems(): Flow<List<TimeItem>>
 

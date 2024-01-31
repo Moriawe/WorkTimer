@@ -1,5 +1,6 @@
 package com.moriawe.worktimer2.domain.use_case
 
+import android.util.Log
 import com.moriawe.worktimer2.R
 import com.moriawe.worktimer2.data.entity.TimeItem
 import com.moriawe.worktimer2.domain.repository.TimeRepository
@@ -9,12 +10,14 @@ class DeleteTimeItemFromDatabase @Inject constructor(
     private val repo: TimeRepository
 ) {
 
-    suspend operator fun invoke(timeItem: TimeItem): RepositoryResults {
+    suspend operator fun invoke(timeId: Int): RepositoryResults<Int> {
 
         val response = try {
-            repo.deleteTimeItem(timeItem)
-            RepositoryResults.Success(timeItem)
+            Log.d("DELETE", "Try to delete time item")
+            repo.deleteTimeItemWithId(timeId)
+            RepositoryResults.Success(timeId)
         } catch (exception: Exception) {
+            Log.e("DELETE", "Error - could not delete item")
             RepositoryResults.Error(message = R.string.error_delete)
         }
 

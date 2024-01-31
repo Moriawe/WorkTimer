@@ -90,18 +90,18 @@ class DialogViewModel  @AssistedInject constructor(
             // Try to get the timeItem from the database
             val result = getTimeItemById(id)
             when (result) {
-                is RepositoryResults.Success -> {
+                is RepositoryResults.Success<TimeItem> -> {
                     // If successful, update dialogstate with the correct values
                     _dialogState.update {
                         it.copy(
-                            selectedItem = result.timeItem,
-                            startTime = result.timeItem.startTime.format(timeFormatter),
-                            stopTime = result.timeItem.stopTime.format(timeFormatter),
-                            description = result.timeItem.description
+                            selectedItem = result.data,
+                            startTime = result.data.startTime.format(timeFormatter),
+                            stopTime = result.data.stopTime.format(timeFormatter),
+                            description = result.data.description
                         )
                     }
                 }
-                is RepositoryResults.Error -> {
+                is RepositoryResults.Error<TimeItem> -> {
                     // if not successful, display the error
                     Log.e(TAG, "Error fetching time item: ${result.message}")
                 }

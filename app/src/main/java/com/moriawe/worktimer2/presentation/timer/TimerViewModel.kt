@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.moriawe.worktimer2.R
 import com.moriawe.worktimer2.data.entity.TimeItem
+import com.moriawe.worktimer2.domain.use_case.DeleteTimeItemFromDatabase
 import com.moriawe.worktimer2.domain.use_case.GetTimeItemsForSpecificDate
 import com.moriawe.worktimer2.domain.use_case.RepositoryResults
 import com.moriawe.worktimer2.domain.use_case.SaveTimeItemToDatabase
@@ -25,6 +26,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TimerViewModel  @Inject constructor(
+    private val deleteTimeItemFromDatabase: DeleteTimeItemFromDatabase,
     private val saveTimeItemToDatabase: SaveTimeItemToDatabase,
     getTimeItemsForSpecificDate: GetTimeItemsForSpecificDate
 ) : ViewModel() {
@@ -75,6 +77,7 @@ class TimerViewModel  @Inject constructor(
             }
 
             is TimerEvent.DeleteTimeItem -> {
+                deleteTimeItem(event.itemId)
                 Log.d(TAG, "Delete item!")
             }
         }
@@ -104,7 +107,7 @@ class TimerViewModel  @Inject constructor(
             when (saveTimeItemToDatabase(timeItem)) {
                 // When successful display log message
                 is RepositoryResults.Success -> {
-                    Log.d(TAG, "Time was saved")
+                    Log.d(TAG, "SUCCESS - Time was saved")
                 }
                 // When unsuccessful, display error message to user
                 is RepositoryResults.Error -> {
@@ -114,6 +117,22 @@ class TimerViewModel  @Inject constructor(
             }
         }
         resetState()
+    }
+
+    private fun deleteTimeItem(id: Int) {
+        viewModelScope.launch {
+            when (deleteTimeItemFromDatabase(id)) {
+                // When successful display log message
+                is RepositoryResults.Success -> {
+                    Log.d(TAG, "SUCCESS - Item was removed")
+                }
+                // When unsuccessful, display error message to user
+                is RepositoryResults.Error -> {
+                    showSnackbar(R.string.error_delete)
+                    Log.e(TAG, "ERROR - Time wasn't deleted")
+                }
+            }
+        }
     }
 
     // -*- Resets the state for starting/stopping time -*- //

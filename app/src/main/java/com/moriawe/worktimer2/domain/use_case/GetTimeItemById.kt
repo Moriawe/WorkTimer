@@ -2,13 +2,14 @@ package com.moriawe.worktimer2.domain.use_case
 
 import android.util.Log
 import com.moriawe.worktimer2.R
+import com.moriawe.worktimer2.data.entity.TimeItem
 import com.moriawe.worktimer2.domain.repository.TimeRepository
 import javax.inject.Inject
 
 class GetTimeItemById @Inject constructor(
     private val repo: TimeRepository
 ) {
-    suspend operator fun invoke(id: Int): RepositoryResults {
+    suspend operator fun invoke(id: Int): RepositoryResults<TimeItem> {
         Log.d("GET ITEM", "Fetching id: $id")
 
         return try {

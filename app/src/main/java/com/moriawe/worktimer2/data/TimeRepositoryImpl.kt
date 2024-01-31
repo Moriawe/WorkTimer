@@ -26,7 +26,7 @@ class TimeRepositoryImpl @Inject constructor(
         timeDao.deleteTimeItem(timeItem)
     }
 
-    override fun deleteTimeItemWithId(id: Int) {
+    override suspend fun deleteTimeItemWithId(id: Int) {
         timeDao.deleteTimeItemWithId(id)
     }
 

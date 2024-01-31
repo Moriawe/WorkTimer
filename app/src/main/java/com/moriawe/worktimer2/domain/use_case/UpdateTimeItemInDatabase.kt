@@ -9,7 +9,7 @@ class UpdateTimeItemInDatabase @Inject constructor(
     private val repo: TimeRepository
     ) {
 
-    suspend operator fun invoke(timeItem: TimeItem): RepositoryResults {
+    suspend operator fun invoke(timeItem: TimeItem): RepositoryResults<TimeItem> {
 
         val response = try {
             repo.updateTimeItem(timeItem)
