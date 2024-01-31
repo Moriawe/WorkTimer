@@ -3,7 +3,6 @@ package com.moriawe.worktimer2.domain.use_case.validations
 import com.moriawe.worktimer2.R
 import com.moriawe.worktimer2.domain.util.TimeFormatters
 import com.moriawe.worktimer2.domain.util.parseTimeStamp
-import java.time.LocalDateTime
 import java.time.LocalTime
 
 class ValidateStopTimeUseCase {

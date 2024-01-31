@@ -2,7 +2,6 @@ package com.moriawe.worktimer2.domain.use_case
 
 import android.util.Log
 import com.moriawe.worktimer2.R
-import com.moriawe.worktimer2.data.entity.TimeItem
 import com.moriawe.worktimer2.domain.repository.TimeRepository
 import javax.inject.Inject
 

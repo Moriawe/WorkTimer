@@ -1,7 +1,5 @@
 package com.moriawe.worktimer2.domain.repository
 
-import androidx.room.Query
-import com.moriawe.worktimer2.data.entity.CurrentStartTime
 import com.moriawe.worktimer2.data.entity.TimeItem
 import kotlinx.coroutines.flow.Flow
 
