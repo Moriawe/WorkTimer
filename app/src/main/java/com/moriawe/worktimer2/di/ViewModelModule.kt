@@ -2,8 +2,11 @@ package com.moriawe.worktimer2.di
 
 import com.moriawe.worktimer2.domain.repository.TimeRepository
 import com.moriawe.worktimer2.domain.use_case.DeleteTimeItemFromDatabase
+import com.moriawe.worktimer2.domain.use_case.GetCurrentStartTime
 import com.moriawe.worktimer2.domain.use_case.GetListOfMonth
+import com.moriawe.worktimer2.domain.use_case.GetTimeItemById
 import com.moriawe.worktimer2.domain.use_case.GetTimeItemsForSpecificDate
+import com.moriawe.worktimer2.domain.use_case.SaveCurrentStartTime
 import com.moriawe.worktimer2.domain.use_case.SaveTimeItemToDatabase
 import com.moriawe.worktimer2.domain.use_case.UpdateTimeItemInDatabase
 import com.moriawe.worktimer2.domain.use_case.validations.ValidateStartTimeUseCase
@@ -23,32 +26,49 @@ object ViewModelModule {
     // USE CASE
     @Provides
     @ViewModelScoped
-    fun provideGetTimeItemsByTodayUseCase(repository: TimeRepository): GetTimeItemsForSpecificDate {
-        return GetTimeItemsForSpecificDate(repository)
-    }
-
-    @Provides
-    @ViewModelScoped
-    fun provideGetTimeItemsSortedByDateUseCase(repository: TimeRepository): GetListOfMonth {
-        return GetListOfMonth(repository)
-    }
-
-    @Provides
-    @ViewModelScoped
-    fun provideDeleteTimeItemFromDatabaseUseCase(repository: TimeRepository): DeleteTimeItemFromDatabase {
+    fun provideDeleteTimeItemFromDatabase(repository: TimeRepository): DeleteTimeItemFromDatabase {
         return DeleteTimeItemFromDatabase(repository)
     }
 
     @Provides
     @ViewModelScoped
-    fun provideUpdateTimeItemInDatabaseUseCase(repository: TimeRepository): UpdateTimeItemInDatabase {
-        return UpdateTimeItemInDatabase(repository)
+    fun provideGetCurrentStartTime(repository: TimeRepository): GetCurrentStartTime {
+        return GetCurrentStartTime(repository)
     }
 
     @Provides
     @ViewModelScoped
-    fun provideSaveTimeItemToDatabaseUseCase(repository: TimeRepository): SaveTimeItemToDatabase {
+    fun provideGetListOfMonth(repository: TimeRepository): GetListOfMonth {
+        return GetListOfMonth(repository)
+    }
+
+    @Provides
+    @ViewModelScoped
+    fun provideGetTimeItemById(repository: TimeRepository): GetTimeItemById {
+        return GetTimeItemById(repository)
+    }
+    @Provides
+    @ViewModelScoped
+    fun provideGetTimeItemsForSpecificDate(repository: TimeRepository): GetTimeItemsForSpecificDate {
+        return GetTimeItemsForSpecificDate(repository)
+    }
+
+    @Provides
+    @ViewModelScoped
+    fun provideSaveCurrentStartTime(repository: TimeRepository): SaveCurrentStartTime {
+        return SaveCurrentStartTime(repository)
+    }
+
+    @Provides
+    @ViewModelScoped
+    fun provideSaveTimeItemToDatabase(repository: TimeRepository): SaveTimeItemToDatabase {
         return SaveTimeItemToDatabase(repository)
+    }
+
+    @Provides
+    @ViewModelScoped
+    fun provideUpdateTimeItemInDatabase(repository: TimeRepository): UpdateTimeItemInDatabase {
+        return UpdateTimeItemInDatabase(repository)
     }
 
     @Provides
