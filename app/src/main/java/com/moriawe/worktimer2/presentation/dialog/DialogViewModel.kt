@@ -102,8 +102,8 @@ class DialogViewModel  @AssistedInject constructor(
                     _dialogState.update {
                         it.copy(
                             selectedItem = result.data,
-                            startTime = result.data.startTime.format(dialogFormatter),
-                            stopTime = result.data.stopTime.format(dialogFormatter),
+                            startTime = result.data!!.startTime.format(dialogFormatter),
+                            stopTime = result.data!!.stopTime.format(dialogFormatter),
                             description = result.data.description
                         )
                     }

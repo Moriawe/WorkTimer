@@ -4,13 +4,17 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.moriawe.worktimer2.R
+import com.moriawe.worktimer2.data.entity.CurrentStartTime
 import com.moriawe.worktimer2.data.entity.TimeItem
 import com.moriawe.worktimer2.domain.use_case.DeleteTimeItemFromDatabase
+import com.moriawe.worktimer2.domain.use_case.GetCurrentStartTime
 import com.moriawe.worktimer2.domain.use_case.GetTimeItemsForSpecificDate
 import com.moriawe.worktimer2.domain.use_case.RepositoryResults
+import com.moriawe.worktimer2.domain.use_case.SaveCurrentStartTime
 import com.moriawe.worktimer2.domain.use_case.SaveTimeItemToDatabase
 import com.moriawe.worktimer2.domain.util.TimeConstant
 import com.moriawe.worktimer2.domain.util.calculateTotalTime
+import com.moriawe.worktimer2.domain.util.generateMockList
 import com.moriawe.worktimer2.presentation.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -28,21 +32,32 @@ import javax.inject.Inject
 class TimerViewModel  @Inject constructor(
     private val deleteTimeItemFromDatabase: DeleteTimeItemFromDatabase,
     private val saveTimeItemToDatabase: SaveTimeItemToDatabase,
-    getTimeItemsForSpecificDate: GetTimeItemsForSpecificDate
+    private val saveCurrentStartTime: SaveCurrentStartTime,
+    getCurrentStartTime: GetCurrentStartTime,
+    getTimeItemsForSpecificDate: GetTimeItemsForSpecificDate,
+    private val generateMockList: generateMockList
 ) : ViewModel() {
 
     val TAG = "TIMER VIEW MODEL"
 
     // -*- TIMER STATES -*- //
+    // Keeps track of if the timer is started even if app is terminated
+    private val _currentStartTime = getCurrentStartTime()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+
+    // fetches the time for today from database
     private val _timeItems = getTimeItemsForSpecificDate(LocalDateTime.now())
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
+    // state for this screen
     private val _timerState = MutableStateFlow(TimerState())
 
     // -*- This updates the state whenever there is a change in either _state or _timeItems -*- //
-    val timerState = combine(_timerState, _timeItems) { state, timeItems ->
+    val timerState = combine(_timerState, _timeItems, _currentStartTime) { state, timeItems, startTime ->
         state.copy(
             timeItems = timeItems,
-            totalWorkTime = calculateTotalTime(timeItems)
+            startTime = startTime?.currentStartTime ?: LocalDateTime.parse(TimeConstant.TIME_DEFAULT_STRING),
+            isTimerStarted = startTime?.isTimerStarted ?: false,
+            totalWorkTime = calculateTotalTime(timeItems),
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), TimerState())
 
@@ -55,25 +70,19 @@ class TimerViewModel  @Inject constructor(
     fun onEvent(event: TimerEvent) {
         when (event) {
             TimerEvent.StartTimer -> {
-                _timerState.update {
-                    it.copy(
-                        startTime = LocalDateTime.now(),
-                        isTimerStarted = true
-                    )
-                }
-//                Log.d(TAG, "Start time is updated to: ${state.value.startTime} and " +
-//                        "the timer is started?: ${state.value.isTimerStarted}")
+                startTimer()
+               Log.d(TAG, "Start time is updated to: ${timerState.value.startTime} and " +
+                        "the timer is started?: ${timerState.value.isTimerStarted}")
             }
 
             TimerEvent.StopTimer -> {
                 _timerState.update {
                     it.copy(
                         stopTime = LocalDateTime.now(),
-                        isTimerStarted = false,
                     )
                 }
-//                Log.d(TAG, "StopTime is updated to: ${state.value.stopTime} and " +
-//                        "the timer is started?: ${state.value.isTimerStarted}")
+                Log.d(TAG, "StopTime is updated to: ${timerState.value.stopTime} and " +
+                        "the timer is started?: ${timerState.value.isTimerStarted}")
                 addNewTimeItem()
             }
 
@@ -86,6 +95,30 @@ class TimerViewModel  @Inject constructor(
     }
 
     // -*- HELPER FUNCTIONS -*- //
+
+    private fun startTimer() {
+        viewModelScope.launch {
+            // Uncomment to generate 50 objects to the database
+            //generateMockList(50)
+            saveCurrentStartTime(
+                CurrentStartTime(
+                    currentStartTime = LocalDateTime.now(),
+                    isTimerStarted = true
+                )
+            )
+        }
+    }
+
+    private fun stopTimer() {
+        viewModelScope.launch {
+            saveCurrentStartTime(
+                CurrentStartTime(
+                    currentStartTime = null,
+                    isTimerStarted = false
+                )
+            )
+        }
+    }
 
     // -*- Adds a new item to the database when time is stopped -*- //
     private fun addNewTimeItem() {
@@ -111,6 +144,7 @@ class TimerViewModel  @Inject constructor(
                 // When successful display log message
                 is RepositoryResults.Success -> {
                     Log.d(TAG, "SUCCESS - Time was saved")
+                    stopTimer()
                 }
                 // When unsuccessful, display error message to user
                 is RepositoryResults.Error -> {
@@ -143,7 +177,6 @@ class TimerViewModel  @Inject constructor(
     private fun resetState() {
         _timerState.update {
             it.copy(
-                isModifyingTimeCard = false,
                 selectedItem = null,
                 startTime = LocalDateTime.parse(TimeConstant.TIME_DEFAULT_STRING),
                 stopTime = LocalDateTime.parse(TimeConstant.TIME_DEFAULT_STRING),
@@ -159,12 +192,5 @@ class TimerViewModel  @Inject constructor(
         )
     }
 
-    // -*- Run to get mock data to test on -*- //
-    // Need to import repository in ViewModel to work
-//    private fun generateAndInsertMockData(itemCount: Int) {
-//        viewModelScope.launch {
-//            generateAndInsertMockTimeItemsIntoDatabase(repo, itemCount)
-//        }
-//    }
 }
 

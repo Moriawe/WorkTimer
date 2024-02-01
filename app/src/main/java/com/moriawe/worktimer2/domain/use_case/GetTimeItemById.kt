@@ -16,7 +16,8 @@ class GetTimeItemById @Inject constructor(
             val timeItem = repo.getItemById(id)
             Log.d("GET ITEM", "Got item: $timeItem")
             RepositoryResults.Success(timeItem)
-        } catch (exception: Exception) {
+        } catch (e: Exception) {
+            Log.e("GET ITEM", "Exception - $e")
             RepositoryResults.Error(message = R.string.error_get_item)
         }
     }

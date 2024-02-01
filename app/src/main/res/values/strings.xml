@@ -29,5 +29,6 @@
     <string name="error_add">Sorry, time wasn\'t added to database.</string>
     <string name="error_update">Sorry, we couldn\'t update the item.</string>
     <string name="error_get_item">Error - item couldn\'t be fetched.</string>
+    <string name="error_current_time">There is no start time</string>
 
 </resources>

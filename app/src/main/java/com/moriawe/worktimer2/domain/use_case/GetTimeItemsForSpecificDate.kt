@@ -11,6 +11,8 @@ import javax.inject.Inject
 class GetTimeItemsForSpecificDate @Inject constructor(
     private val repo: TimeRepository
 ) {
+
+    //TODO: Should return repository result?
     operator fun invoke(date: LocalDateTime): Flow<List<TimeItem>> {
         val timeItems = repo.getTimeItems()
         return timeItems.map { list ->

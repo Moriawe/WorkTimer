@@ -1,5 +1,6 @@
 package com.moriawe.worktimer2.data
 
+import com.moriawe.worktimer2.data.entity.CurrentStartTime
 import com.moriawe.worktimer2.data.entity.TimeItem
 import com.moriawe.worktimer2.domain.repository.TimeRepository
 import kotlinx.coroutines.flow.Flow
@@ -8,6 +9,14 @@ import javax.inject.Inject
 class TimeRepositoryImpl @Inject constructor(
     private val timeDao: TimeDao
 ): TimeRepository {
+
+    override fun getCurrentStartTime(): Flow<CurrentStartTime?> {
+        return timeDao.getCurrentStartTime()
+    }
+
+    override suspend fun insertCurrentStartTime(startTime: CurrentStartTime) {
+        timeDao.insertCurrentStartTime(startTime)
+    }
 
     override suspend fun insertTimeItem(timeItem: TimeItem) {
         timeDao.insertTimeItem(timeItem)

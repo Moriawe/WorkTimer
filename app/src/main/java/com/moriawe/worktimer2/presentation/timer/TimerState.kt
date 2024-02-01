@@ -10,6 +10,6 @@ data class TimerState(
     val startTime: LocalDateTime = LocalDateTime.parse(TimeConstant.TIME_DEFAULT_STRING),
     val stopTime: LocalDateTime = LocalDateTime.parse(TimeConstant.TIME_DEFAULT_STRING),
     val isTimerStarted: Boolean = false,
-    val isModifyingTimeCard: Boolean = false,
+    //val isModifyingTimeCard: Boolean = false,
     val totalWorkTime: String = ""
 )

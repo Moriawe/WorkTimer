@@ -17,6 +17,7 @@ class GetListOfMonth @Inject constructor(
     private val repo: TimeRepository
 ) {
 
+    //TODO: Should return repository result?
     operator fun invoke(): Flow<List<Month>> {
         val TAG = "MAPPING LISTS"
         val timeItems = repo.getTimeItems()

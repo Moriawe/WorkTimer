@@ -11,12 +11,11 @@ class SaveTimeItemToDatabase @Inject constructor(
 
     suspend operator fun invoke(timeItem: TimeItem): RepositoryResults<TimeItem> {
 
-        val response = try {
+        return try {
             repo.insertTimeItem(timeItem)
             RepositoryResults.Success(timeItem)
         } catch (exception: Exception) {
             RepositoryResults.Error(R.string.error_add)
         }
-        return response
     }
 }

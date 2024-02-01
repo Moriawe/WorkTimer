@@ -7,7 +7,7 @@ import java.time.LocalDateTime
 @Entity
 data class CurrentStartTime(
     @PrimaryKey
-    val id: Int = 0,
-    val currentStartTime: LocalDateTime,
-    val isTimerStarted: Boolean
+    val id: Int = 1,
+    val currentStartTime: LocalDateTime? = null,
+    val isTimerStarted: Boolean = false
 )

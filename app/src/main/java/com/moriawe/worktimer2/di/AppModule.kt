@@ -2,6 +2,7 @@ package com.moriawe.worktimer2.di
 
 import android.app.Application
 import androidx.room.Room
+import com.moriawe.worktimer2.data.MIGRATION_1_2
 import com.moriawe.worktimer2.data.TimeDatabase
 import com.moriawe.worktimer2.data.TimeRepositoryImpl
 import com.moriawe.worktimer2.domain.repository.TimeRepository
@@ -25,6 +26,7 @@ object AppModule {
             TimeDatabase::class.java,
             "time_db"
         )
+            //.addMigrations(MIGRATION_1_2)
             .build()
     }
 
