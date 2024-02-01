@@ -28,4 +28,14 @@ I chosed to plae my dialog here as well since I wanted it to have its own view m
 I decided to reuse the same dialog for both the daily overview and the yearly overview screen. The dialog will check which date the object is created and just change the time. In the future I might add a bigger dialog where you can use a android date and time picker for this.
 
 # Presentation
+I try to keep the same order in my view models with STATE - UI EVENT - HELPER FUNCTIONS
+I use a EventState to keep the viewmodel and compose loosly coupled. 
 
+# Comments
+I use a lot of extra comments because it helps me when I got back to use this as a support document. Also it might help another newbie like me to understand the code a bit better.
+
+# Mock data
+At line 101 in TimerViewModel there is a piece of code that generates 50 timeitems for testing purposes.
+
+# TODO's
+Here are my thoughts on things that maybe should be changed.
