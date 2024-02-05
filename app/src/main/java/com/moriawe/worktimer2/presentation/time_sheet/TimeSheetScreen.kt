@@ -38,15 +38,15 @@ fun TimeSheetScreen(
     var expandedStates by remember { mutableStateOf(mapOf<String, Boolean>()) }
 
 
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(modifier = modifier.fillMaxSize()) {
 
         // -*- Scrollable Column with all timeItems -*- //
         LazyColumn(
-            modifier = Modifier.fillMaxSize()
+            modifier = modifier.fillMaxSize()
         ) {
             state.months.forEach { month ->
                 stickyHeader {
-                    MonthHeader(month.name, month.totalWorkTimeInHours)
+                    MonthHeader(month.name, month.totalWorkTimeInHours, modifier)
                 }
                 items(month.days) { day ->
                     val isExpanded = expandedStates[day.date] ?: false

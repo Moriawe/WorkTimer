@@ -35,6 +35,7 @@ fun NavigationGraph(
     // -*- SNACKBAR CONFIG -*- //
     val mainViewModel = hiltViewModel<TimerViewModel>()
     val context = LocalContext.current
+    val modifier = Modifier
 
     LaunchedEffect(key1 = true) {
         mainViewModel.eventFlow.collectLatest { event ->
@@ -52,20 +53,27 @@ fun NavigationGraph(
     NavHost(
         navController = navController,
         startDestination = Screen.TimerScreen.route,
-        modifier = Modifier.padding(innerPadding)
+        modifier = modifier.padding(innerPadding)
     ) {
         composable(route = Screen.TimerScreen.route) {
             val viewModel = hiltViewModel<TimerViewModel>()
             val state by viewModel.timerState.collectAsState()
             val onEvent = viewModel::onEvent
-            TimerScreen(state, onEvent, onOpenDialog = {
+            TimerScreen(
+                state = state,
+                modifier = modifier,
+                onEvent = onEvent,
+                onOpenDialog = {
                 navController.navigate(Screen.DialogScreen.withArgs(it))
             })
         }
         composable(route = Screen.TimeSheetScreen.route) {
             val viewModel = hiltViewModel<TimeSheetViewModel>()
             val state by viewModel.timeSheetState.collectAsState()
-            TimeSheetScreen(state, onOpenDialog = {
+            TimeSheetScreen(
+                state = state,
+                modifier = modifier,
+                onOpenDialog = {
                 navController.navigate(Screen.DialogScreen.withArgs(it))
             })
         }
@@ -84,7 +92,10 @@ fun NavigationGraph(
                 hiltViewModel<DialogViewModel, DialogViewModel.DialogViewModelFactory> { factory ->
                 factory.create(entry.arguments?.getInt("timeItemId"))
             }
-            TimeItemDialog(viewModel, onHideDialog = {
+            TimeItemDialog(
+                viewModel = viewModel,
+                modifier = modifier,
+                onHideDialog = {
                 navController.popBackStack()
             })
                 // If you want to receive the navargs in the compose ->

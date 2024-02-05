@@ -41,7 +41,7 @@ fun TimeItemDialog(
 
     // -*- PARENT BOX -*- //
     Box(
-        modifier = Modifier
+        modifier = modifier
             .clip(RoundedCornerShape(20.dp))
             .background(AlertDialogDefaults.containerColor)
             .padding(20.dp)
@@ -50,12 +50,12 @@ fun TimeItemDialog(
         ) {
             // -*- START - STOP TIME -*- //
             Row(
-                modifier = Modifier
+                modifier = modifier
                     .fillMaxWidth()
                     .padding(vertical = 10.dp),
             ) {
                 OutlinedTextField(
-                    modifier = Modifier
+                    modifier = modifier
                         .weight(1f),
                     keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
                     value = state.startTime,
@@ -63,9 +63,9 @@ fun TimeItemDialog(
                     label = { Text(stringResource(id = R.string.start_time)) },
                     isError = state.startTimeError != null
                 )
-                Spacer(modifier = Modifier.width(15.dp))
+                Spacer(modifier = modifier.width(15.dp))
                 OutlinedTextField(
-                    modifier = Modifier
+                    modifier = modifier
                         .weight(1f),
                     keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
                     value = state.stopTime,
@@ -81,7 +81,7 @@ fun TimeItemDialog(
                     color = MaterialTheme.colorScheme.error
                 )
             }
-            Spacer(modifier = Modifier.width(5.dp))
+            Spacer(modifier = modifier.width(5.dp))
 
             // -*- WORK DESCRIPTION -*- //
             OutlinedTextField(
@@ -91,7 +91,7 @@ fun TimeItemDialog(
             )
             // -*- CANCEL & SAVE -*- //
             Row(
-                modifier = Modifier
+                modifier = modifier
                     .fillMaxWidth()
                     .padding(top = 20.dp),
                 horizontalArrangement = Arrangement.End
@@ -99,7 +99,7 @@ fun TimeItemDialog(
                 ClickableText(
                     text = AnnotatedString(stringResource(id = R.string.cancel)),
                     onClick = { onHideDialog() })
-                Spacer(modifier = Modifier.width(20.dp))
+                Spacer(modifier = modifier.width(20.dp))
                 ClickableText(
                     text = AnnotatedString(stringResource(id = R.string.save)),
                     onClick = {

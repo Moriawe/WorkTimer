@@ -51,7 +51,7 @@ fun TimerScreen(
 
         // -*- Total work time Row -*- //
         Row(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxWidth()
                 .padding(vertical = 10.dp),
                 //.weight(1f),
@@ -64,7 +64,7 @@ fun TimerScreen(
 
         // -*- Scrollable column with TimeCards -*- //
         LazyColumn(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxSize()
                 .weight(1f)
         ) {
@@ -88,7 +88,7 @@ fun TimerScreen(
                     }
                 )
                 SwipeToDismiss(
-                    modifier = Modifier
+                    modifier = modifier
                         .padding(horizontal = 15.dp)
                         .padding(top = 15.dp)
                         .animateItemPlacement(),
@@ -109,13 +109,13 @@ fun TimerScreen(
 
         // -*- Bottom row start/stop button -*- //
         Row(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxWidth(),
                 //.weight(1f),
             verticalAlignment = Alignment.Bottom
         ) {
             Button(
-                modifier = Modifier
+                modifier = modifier
                     .padding(10.dp)
                     .fillMaxWidth(),
                 onClick = {
@@ -152,7 +152,7 @@ fun SwipeBackground(
     )
 
     Box(
-        Modifier
+        modifier
             .fillMaxSize()
             .background(color)
             .padding(horizontal = 20.dp),
@@ -161,7 +161,7 @@ fun SwipeBackground(
         Icon(
             Icons.Default.Delete,
             contentDescription = stringResource(id = R.string.delete),
-            modifier = Modifier.scale(scale)
+            modifier = modifier.scale(scale)
         )
     }
 }

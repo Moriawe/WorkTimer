@@ -28,7 +28,7 @@ fun TimeCard(
 
     // -*- Time Card -*- //
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .shadow(3.dp)
             .background(MaterialTheme.colorScheme.secondaryContainer)
@@ -47,7 +47,7 @@ fun TimeCard(
             Text(time.endTime)
         }
         Text(
-            modifier = Modifier
+            modifier = modifier
                 .weight(1f, fill = false)
                 .padding(horizontal = 5.dp),
             text = time.description,
