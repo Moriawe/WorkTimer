@@ -17,7 +17,7 @@ class GetListOfMonth @Inject constructor(
     private val repo: TimeRepository
 ) {
 
-    //TODO: Should return repository result?
+    //TODO: Should return repositoryResult?
     operator fun invoke(): Flow<List<Month>> {
         val TAG = "MAPPING LISTS"
         val timeItems = repo.getTimeItems()
@@ -31,7 +31,7 @@ class GetListOfMonth @Inject constructor(
                 .groupBy { timeItem ->
                     timeItem.month }
                 .map { month ->
-
+                    Log.d(TAG, "List of Months -> $month")
                     // -*- Calculates total work time / day -*- //
                     val sortedDays = month.value
                         .groupBy { timeCardItem -> timeCardItem.date }
@@ -43,9 +43,10 @@ class GetListOfMonth @Inject constructor(
                                 totalWorkTime = formatDurationInHHMMToString(totalDayTime))
                         }
                         .sortedBy { day -> day.date }
-
+                    Log.d(TAG, "List of days -> $sortedDays")
                     // -*- Calculates total work time / month -*- //
                     val totalMonthTime = calculateTotalTime(sortedDays.flatMap { it.items })
+                    Log.d(TAG, "Totalt Monthtime: -> $totalMonthTime")
                     Month(
                         name = month.key,
                         days = sortedDays,

@@ -1,10 +1,12 @@
 package com.moriawe.worktimer2.domain.util
 
 import com.moriawe.worktimer2.data.entity.TimeItem
+import com.moriawe.worktimer2.domain.model.Day
 import com.moriawe.worktimer2.domain.model.TimeCardItem
 import java.time.Duration
 
 // TODO: Can this be a use case instead?
+//  And is there a way to make it accept either or argument?
 fun calculateTotalTime(timeItems: List<TimeCardItem>): Duration {
 
     var totalTime: Duration = Duration.ZERO

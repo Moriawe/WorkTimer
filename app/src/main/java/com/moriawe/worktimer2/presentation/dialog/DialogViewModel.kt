@@ -99,6 +99,8 @@ class DialogViewModel  @AssistedInject constructor(
             when (result) {
                 is RepositoryResults.Success<TimeItem> -> {
                     // If successful, update dialogstate with the correct values
+                    // TODO: Handle null-check in another way?
+                    //  If it was success then it should have an object?
                     _dialogState.update {
                         it.copy(
                             selectedItem = result.data,
@@ -144,7 +146,6 @@ class DialogViewModel  @AssistedInject constructor(
 
         // TODO: Should this be done somewhere else?
         // Update the timeItem from the dialogstate
-
         val timeItem = TimeItem(
             id = dialogState.value.selectedItem!!.id,
             startTime = turnStringIntoLocalDateTime(dialogState.value.startTime),
@@ -166,7 +167,7 @@ class DialogViewModel  @AssistedInject constructor(
                     Log.e(TAG, "ERROR - Item wasn't updated")
                 }
             }
-            // TODO: SHould state be reset if there was an error?
+            // TODO: Should state be reset if there was an error?
             // Reset dialog state
             _dialogState.value = DialogState()
         }

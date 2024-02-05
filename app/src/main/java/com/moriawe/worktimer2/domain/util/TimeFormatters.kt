@@ -18,14 +18,16 @@ object TimeConstant {
     const val TIME_DEFAULT_STRING = "2001-01-01T01:01:01"
 }
 
+// TODO: toHours.part will go within a 24 hour cycle and will misscalculate if there is more than 24 hours
 fun formatDurationInHHToString(duration: Duration): String {
-    val hours = duration.toHoursPart()
+    val hours = duration.toHours()
     return "${hours}h"
 }
 
 fun formatDurationInHHMMToString(duration: Duration): String {
-    val hours = duration.toHoursPart()
-    val minutes = duration.toMinutesPart()
+    val totalTimeInMinutes = duration.toMinutes()
+    val hours = totalTimeInMinutes / 60
+    val minutes = totalTimeInMinutes % 60
     return "${hours}h ${minutes}m"
 }
 

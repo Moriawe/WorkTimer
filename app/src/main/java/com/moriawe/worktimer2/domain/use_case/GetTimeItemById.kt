@@ -12,6 +12,7 @@ class GetTimeItemById @Inject constructor(
     suspend operator fun invoke(id: Int): RepositoryResults<TimeItem> {
         Log.d("GET ITEM", "Fetching id: $id")
 
+        // TODO: Should this error handling be in the repository instead?
         return try {
             val timeItem = repo.getItemById(id)
             Log.d("GET ITEM", "Got item: $timeItem")

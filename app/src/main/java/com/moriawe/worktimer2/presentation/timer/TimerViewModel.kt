@@ -123,6 +123,7 @@ class TimerViewModel  @Inject constructor(
     // -*- Adds a new item to the database when time is stopped -*- //
     private fun addNewTimeItem() {
         // Check if there is an actual change in time
+        // TODO: Use null instead of a default time?
         if (
             timerState.value.startTime == LocalDateTime.parse(
                 TimeConstant.TIME_DEFAULT_STRING
@@ -134,6 +135,7 @@ class TimerViewModel  @Inject constructor(
             return
         }
 
+        // TODO: Should this be done somewhere else?
         val timeItem = TimeItem(
             startTime = timerState.value.startTime,
             stopTime = timerState.value.stopTime
