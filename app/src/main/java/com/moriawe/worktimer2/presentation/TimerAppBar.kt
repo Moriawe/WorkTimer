@@ -28,6 +28,7 @@ fun TimerAppBar(
 ) {
     TopAppBar(
         title = {
+            // TODO: Translate todays date with string resources
             when (currentScreen) {
                 Screen.TimerScreen -> Text(LocalDateTime.now().format(dayFormatter))
                 Screen.TimeSheetScreen -> Text(stringResource(currentScreen.title))
