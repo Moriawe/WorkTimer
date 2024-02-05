@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">WorkTimer</string>
+    <string name="total_worktime">Total arbetstid för idag: %1$s</string>
+    <string name="back_button">Tillbaka</string>
+    <string name="start">Start</string>
+    <string name="stop">Stopp</string>
+    <string name="done">Klar</string>
+    <string name="cancel">Avbryt</string>
+    <string name="save">Spara</string>
+    <string name="delete">Ta bort</string>
+    <string name="start_time">Start tid</string>
+    <string name="end_time">Stop tid</string>
+    <string name="work_description">Arbetsbeskrivning</string>
+    <string name="time_format_error">Du behöver fyll i tiden i formatet HH.MM</string>
+    <string name="start_end_time_incorrect">Starttiden måste vara INNAN sluttiden</string>
+    <string name="success">Lyckat</string>
+    <string name="loading">Laddar</string>
+    <string name="error">Fel</string>
+    <string name="error_delete">Tiden kunde inte tas bort</string>
+    <string name="error_add">Tiden kunde inte läggas till</string>
+    <string name="error_update">Tiden kunde inte uppdateras</string>
+    <string name="error_get_item">Tiden kunde inte hämtas</string>
+    <string name="error_current_time">Det finns ingen starttid</string>
+    <string name="daily_time_cards">Dagens tidskort</string>
+    <string name="worktime_overview">Arbetstids överblick</string>
+    <string name="dialog">Ändra tid</string>
+    <string name="settings">Inställningar</string>
+</resources>
