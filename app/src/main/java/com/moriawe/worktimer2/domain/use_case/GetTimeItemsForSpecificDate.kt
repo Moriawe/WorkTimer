@@ -21,6 +21,9 @@ class GetTimeItemsForSpecificDate @Inject constructor(
                     .format(TimeFormatters.yearMonthDayFormatter) == timeItem.startTime
                     .format(TimeFormatters.yearMonthDayFormatter)
             }
+                .sortedBy { timeItem ->
+                    timeItem.startTime
+                }
         }
     }
 }
