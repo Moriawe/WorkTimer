@@ -57,7 +57,7 @@ fun TimerScreen(
             horizontalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "Total worktime for today: ${state.totalWorkTime}"
+                text = stringResource(id = R.string.total_worktime, state.totalWorkTime)
             )
         }
 
@@ -156,7 +156,7 @@ fun SwipeBackground(dismissState: DismissState) {
     ) {
         Icon(
             Icons.Default.Delete,
-            contentDescription = "Delete",
+            contentDescription = stringResource(id = R.string.delete),
             modifier = Modifier.scale(scale)
         )
     }

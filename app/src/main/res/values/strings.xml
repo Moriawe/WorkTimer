@@ -1,8 +1,13 @@
 <resources>
     <!-- Headers -->
     <string name="app_name">WorkTimer</string>
-    <string name="timer">Timer</string>
-    <string name="time_sheet">Time Sheet</string>
+    <string name="daily_time_cards">Daily Time Cards</string>
+    <string name="worktime_overview">Worktime overview</string>
+    <string name="dialog">Modify time</string>
+    <string name="settings">Settings</string>
+
+    <!-- Text -->
+    <string name="total_worktime">Total worktime for today: %1$s</string>
 
     <!-- Buttons -->
     <string name="back_button">Back</string>
@@ -11,8 +16,9 @@
     <string name="done">Done</string>
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
+    <string name="delete">Delete</string>
 
-    <!-- Labels -->
+    <!-- Dialog Labels -->
     <string name="start_time">Start</string>
     <string name="end_time">End</string>
     <string name="work_description">Work Description</string>

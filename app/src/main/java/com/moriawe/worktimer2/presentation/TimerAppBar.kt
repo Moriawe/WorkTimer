@@ -10,7 +10,9 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
+import com.moriawe.worktimer2.R
 import com.moriawe.worktimer2.domain.util.TimeFormatters.dayFormatter
 import com.moriawe.worktimer2.navigation.Screen
 import java.time.LocalDateTime
@@ -28,9 +30,9 @@ fun TimerAppBar(
         title = {
             when (currentScreen) {
                 Screen.TimerScreen -> Text(LocalDateTime.now().format(dayFormatter))
-                Screen.TimeSheetScreen -> Text(currentScreen.title)
-                Screen.SettingsScreen -> Text(currentScreen.title)
-                Screen.DialogScreen -> Text(currentScreen.title)
+                Screen.TimeSheetScreen -> Text(stringResource(currentScreen.title))
+                Screen.SettingsScreen -> Text(stringResource(currentScreen.title))
+                Screen.DialogScreen -> Text(stringResource(currentScreen.title))
             }
              },
         colors = TopAppBarDefaults.mediumTopAppBarColors(
@@ -43,7 +45,7 @@ fun TimerAppBar(
             ) {
                 Icon(
                     painter = painterResource(id = Screen.TimerScreen.icon),
-                    contentDescription = "Daily Time Card"
+                    contentDescription = stringResource(id = R.string.daily_time_cards)
                 )
             }
             IconButton(
@@ -51,7 +53,7 @@ fun TimerAppBar(
             ) {
                 Icon(
                     painter = painterResource(id = Screen.TimeSheetScreen.icon),
-                    contentDescription = "Worktime overview"
+                    contentDescription = stringResource(id = R.string.worktime_overview)
                 )
             }
         }
