@@ -42,6 +42,7 @@ import com.moriawe.worktimer2.presentation.component.TimeCard
 @Composable
 fun TimerScreen(
     state: TimerState,
+    modifier: Modifier = Modifier,
     onEvent: (TimerEvent) -> Unit,
     onOpenDialog: (Int) -> Unit
 ) {
@@ -135,7 +136,10 @@ fun TimerScreen(
 // -*- The swipe to dismiss handling -*- //
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SwipeBackground(dismissState: DismissState) {
+fun SwipeBackground(
+    dismissState: DismissState,
+    modifier: Modifier = Modifier
+) {
 
     val color by animateColorAsState(
         if (dismissState.targetValue == DismissValue.DismissedToStart) Color.Red

@@ -30,6 +30,7 @@ import com.moriawe.worktimer2.R
 @Composable
 fun TimeItemDialog(
     viewModel: DialogViewModel,
+    modifier: Modifier = Modifier,
     onHideDialog: () -> Unit
 ) {
 

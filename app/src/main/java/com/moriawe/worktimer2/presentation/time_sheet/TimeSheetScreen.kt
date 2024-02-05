@@ -30,6 +30,7 @@ import com.moriawe.worktimer2.presentation.component.TimeCard
 @Composable
 fun TimeSheetScreen(
     state: TimeSheetState,
+    modifier: Modifier = Modifier,
     onOpenDialog: (Int) -> Unit
 ) {
 

@@ -21,7 +21,10 @@ import com.moriawe.worktimer2.domain.model.TimeCardItem
 
 
 @Composable
-fun TimeCard(time: TimeCardItem, onClick: () -> Unit) {
+fun TimeCard(
+    time: TimeCardItem,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit) {
 
     // -*- Time Card -*- //
     Row(
