@@ -28,6 +28,8 @@ import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import javax.inject.Inject
 
+// TODO: Why are some variables and some not?
+
 @HiltViewModel
 class TimerViewModel  @Inject constructor(
     private val deleteTimeItemFromDatabase: DeleteTimeItemFromDatabase,
@@ -99,7 +101,7 @@ class TimerViewModel  @Inject constructor(
     private fun startTimer() {
         viewModelScope.launch {
             // Uncomment to generate 50 objects to the database
-            //generateMockList(50)
+            // generateMockList(50)
             saveCurrentStartTime(
                 CurrentStartTime(
                     currentStartTime = LocalDateTime.now(),

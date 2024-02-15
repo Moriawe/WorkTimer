@@ -9,6 +9,7 @@
     <string name="cancel">Avbryt</string>
     <string name="save">Spara</string>
     <string name="delete">Ta bort</string>
+    <string name="download">Ladda ner</string>
     <string name="start_time">Start tid</string>
     <string name="end_time">Stop tid</string>
     <string name="work_description">Arbetsbeskrivning</string>
@@ -22,6 +23,7 @@
     <string name="error_update">Tiden kunde inte uppdateras</string>
     <string name="error_get_item">Tiden kunde inte hämtas</string>
     <string name="error_current_time">Det finns ingen starttid</string>
+    <string name="network_error">Kunde inte hämta data</string>
     <string name="daily_time_cards">Dagens tidskort</string>
     <string name="worktime_overview">Arbetstids överblick</string>
     <string name="dialog">Ändra tid</string>

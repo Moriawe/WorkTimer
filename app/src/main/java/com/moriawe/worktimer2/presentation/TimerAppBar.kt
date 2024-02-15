@@ -21,6 +21,7 @@ import java.time.LocalDateTime
 @Composable
 fun TimerAppBar(
     currentScreen: Screen,
+    mainViewModel: MainViewModel,
     canNavigateBack: Boolean,
     navigateUp: () -> Unit,
     navController: NavController,
@@ -57,6 +58,17 @@ fun TimerAppBar(
                     contentDescription = stringResource(id = R.string.worktime_overview)
                 )
             }
+            if (currentScreen == Screen.TimeSheetScreen) {
+                IconButton(
+                    onClick = { mainViewModel.exportToCSV() }
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.file_save),
+                        contentDescription = stringResource(id = R.string.download)
+                    )
+                }
+            }
+
         }
     )
 }

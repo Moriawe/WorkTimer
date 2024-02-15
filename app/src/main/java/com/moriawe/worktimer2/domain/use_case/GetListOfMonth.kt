@@ -1,63 +1,27 @@
 package com.moriawe.worktimer2.domain.use_case
 
 import android.util.Log
-import com.moriawe.worktimer2.domain.mapper.mapTimeItemToTimeCardItem
-import com.moriawe.worktimer2.domain.model.Day
+import com.moriawe.worktimer2.R
 import com.moriawe.worktimer2.domain.model.Month
 import com.moriawe.worktimer2.domain.repository.TimeRepository
-import com.moriawe.worktimer2.domain.util.calculateTotalTime
-import com.moriawe.worktimer2.domain.util.formatDurationInHHMMToString
-import com.moriawe.worktimer2.domain.util.formatDurationInHHToString
+import com.moriawe.worktimer2.domain.util.convertTimeItemListToMonthList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 class GetListOfMonth @Inject constructor(
     private val repo: TimeRepository
 ) {
-
-    //TODO: Should return repositoryResult?
-    operator fun invoke(): Flow<List<Month>> {
-        val TAG = "MAPPING LISTS"
-        val timeItems = repo.getTimeItems()
-
-        // -*- Groups the list by day and month -*- //
-        val monthList = timeItems.map { timeList ->
-            timeList
-                .sortedBy { timeItem ->
-                    timeItem.startTime }
-                .map { time -> mapTimeItemToTimeCardItem(time) }
-                .groupBy { timeItem ->
-                    timeItem.month }
-                .map { month ->
-                    Log.d(TAG, "List of Months -> $month")
-                    // -*- Calculates total work time / day -*- //
-                    val sortedDays = month.value
-                        .groupBy { timeCardItem -> timeCardItem.date }
-                        .map { (date, items) ->
-                            val totalDayTime = calculateTotalTime(items)
-                            Day(
-                                date = date,
-                                items = items,
-                                totalWorkTime = formatDurationInHHMMToString(totalDayTime))
-                        }
-                        .sortedBy { day -> day.date }
-                    Log.d(TAG, "List of days -> $sortedDays")
-                    // -*- Calculates total work time / month -*- //
-                    val totalMonthTime = calculateTotalTime(sortedDays.flatMap { it.items })
-                    Log.d(TAG, "Totalt Monthtime: -> $totalMonthTime")
-                    Month(
-                        name = month.key,
-                        days = sortedDays,
-                        totalWorkTimeInHours = formatDurationInHHToString(totalMonthTime))
+    operator fun invoke(): RepositoryResults<Flow<List<Month>>> {
+        return try {
+            val monthList = repo.getTimeItems()
+                .map { timeItemList ->
+                    convertTimeItemListToMonthList(timeItemList)
                 }
-
-        // -*- For logging reasons only -*- //
-        }.onEach { list ->
-            Log.d(TAG, "list -> Months $list")
+            RepositoryResults.Success(monthList)
+        } catch (e: Exception) {
+            Log.e("GET LIST OF MONTH", "Exception - $e")
+            RepositoryResults.Error(message = R.string.error_get_item)
         }
-
-        return monthList
     }
 }

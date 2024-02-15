@@ -16,6 +16,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.dialog
 import androidx.navigation.navArgument
+import com.moriawe.worktimer2.presentation.MainViewModel
 import com.moriawe.worktimer2.presentation.UiEvent
 import com.moriawe.worktimer2.presentation.dialog.DialogViewModel
 import com.moriawe.worktimer2.presentation.dialog.TimeItemDialog
@@ -28,12 +29,14 @@ import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun NavigationGraph(
+    mainViewModel: MainViewModel,
     navController: NavHostController,
     snackbarHostState: SnackbarHostState,
     innerPadding: PaddingValues) {
 
+
+    // TODO: Need to fix so snackbars can be shown on other screens to
     // -*- SNACKBAR CONFIG -*- //
-    val mainViewModel = hiltViewModel<TimerViewModel>()
     val context = LocalContext.current
     val modifier = Modifier
 

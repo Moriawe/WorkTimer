@@ -55,10 +55,11 @@ android {
 }
 
 dependencies {
+    val daggerVersion = "2.50"
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
-    implementation("androidx.activity:activity-compose:1.8.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
     implementation(platform("androidx.compose:compose-bom:2023.08.00"))
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
@@ -69,7 +70,8 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
     // Compose
-    implementation("androidx.navigation:navigation-compose:2.7.6")
+    implementation("androidx.activity:activity-compose:1.8.2")
+    implementation("androidx.navigation:navigation-compose:2.7.7")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
@@ -81,9 +83,9 @@ dependencies {
     kapt("androidx.room:room-compiler:2.6.1")
 
     // Dagger / Hilt
-    implementation("com.google.dagger:hilt-android:2.50")
-    kapt("com.google.dagger:hilt-android-compiler:2.50")
-    implementation("androidx.hilt:hilt-navigation-compose:1.2.0-beta01")
+    implementation("com.google.dagger:hilt-android:$daggerVersion")
+    kapt("com.google.dagger:hilt-android-compiler:$daggerVersion")
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0-rc01")
 
     // For sealed class iteration
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.9.22")
@@ -91,4 +93,7 @@ dependencies {
 
     // Datastore
     implementation("androidx.datastore:datastore-preferences:1.0.0")
+
+    // Export to CSV
+    implementation("com.github.doyaaaaaken:kotlin-csv-jvm:1.9.3")
 }

@@ -1,5 +1,6 @@
 package com.moriawe.worktimer2.di
 
+import android.content.Context
 import com.moriawe.worktimer2.domain.repository.TimeRepository
 import com.moriawe.worktimer2.domain.use_case.DeleteTimeItemFromDatabase
 import com.moriawe.worktimer2.domain.use_case.GetCurrentStartTime
@@ -11,6 +12,7 @@ import com.moriawe.worktimer2.domain.use_case.SaveTimeItemToDatabase
 import com.moriawe.worktimer2.domain.use_case.UpdateTimeItemInDatabase
 import com.moriawe.worktimer2.domain.use_case.validations.ValidateStartTimeUseCase
 import com.moriawe.worktimer2.domain.use_case.validations.ValidateStopTimeUseCase
+import com.moriawe.worktimer2.domain.util.CsvExporter
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -81,5 +83,11 @@ object ViewModelModule {
     @ViewModelScoped
     fun provideValidateStopTimeUseCase(): ValidateStopTimeUseCase {
         return ValidateStopTimeUseCase()
+    }
+
+    @Provides
+    @ViewModelScoped
+    fun provideCsvExporter(context: Context, getListOfMonth: GetListOfMonth): CsvExporter {
+        return CsvExporter(context, getListOfMonth)
     }
 }

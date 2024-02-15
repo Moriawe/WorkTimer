@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.moriawe.worktimer2.navigation.NavigationGraph
@@ -36,6 +37,7 @@ class MainActivity : ComponentActivity() {
 //            val currentScreen = Screen.valueOf(
 //                backStackEntry?.destination?.route ?: Screen.Timer.route )
             val snackbarHostState = remember { SnackbarHostState() }
+            val mainViewModel = hiltViewModel<MainViewModel>()
 
             WorkTimer2Theme {
                 // A surface container using the 'background' color from the theme
@@ -46,6 +48,7 @@ class MainActivity : ComponentActivity() {
                     Scaffold(
                         topBar = {
                             TimerAppBar(
+                                mainViewModel = mainViewModel,
                                 currentScreen = currentScreen,
                                 canNavigateBack = navController.previousBackStackEntry != null,
                                 navController = navController,
@@ -55,7 +58,7 @@ class MainActivity : ComponentActivity() {
                             SnackbarHost(hostState = snackbarHostState)
                         }
                     ) { innerPadding ->
-                        NavigationGraph(navController, snackbarHostState, innerPadding)
+                        NavigationGraph(mainViewModel, navController, snackbarHostState, innerPadding)
                     }
                 }
             }
