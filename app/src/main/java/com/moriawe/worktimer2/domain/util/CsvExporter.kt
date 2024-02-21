@@ -32,18 +32,18 @@ class CsvExporter @Inject constructor(
                 is RepositoryResults.Success -> {
                     Log.d(TAG, "SUCCESS - Got list of months")
                     val monthListFlow = result.data
-                    csvWriter().open(csvFile, append = false) {
-                        writeRow("Date", "Work hours")
-//                        CoroutineScope(Dispatchers.IO).launch {
-//                            monthListFlow?.collect { list ->
-//                                list.forEach { month ->
-//                                    writeRow(month.name, month.totalWorkTimeInHours)
-//                                    month.days.forEach { day ->
-//                                          writeRow(day.date, day.totalWorkTime)
-//                                    }
-//                                }
-//                            }
-//                        }
+                    CoroutineScope(Dispatchers.IO).launch {
+                        csvWriter().openAsync(csvFile, append = false) {
+                            writeRow("Date", "Work hours")
+                            monthListFlow?.collect { list ->
+                                list.forEach { month ->
+                                    writeRow(month.name, month.totalWorkTimeInHours)
+                                    month.days.forEach { day ->
+                                        writeRow(day.date, day.totalWorkTime)
+                                    }
+                                }
+                            }
+                        }
                     }
                     return goToFileIntent()
                 }
