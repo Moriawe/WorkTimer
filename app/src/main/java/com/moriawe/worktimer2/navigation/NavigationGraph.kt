@@ -29,28 +29,12 @@ import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun NavigationGraph(
-    mainViewModel: MainViewModel,
     navController: NavHostController,
     snackbarHostState: SnackbarHostState,
-    innerPadding: PaddingValues) {
+    innerPadding: PaddingValues
+) {
 
-
-    // TODO: Need to fix so snackbars can be shown on other screens to
-    // -*- SNACKBAR CONFIG -*- //
-    val context = LocalContext.current
     val modifier = Modifier
-
-    LaunchedEffect(key1 = true) {
-        mainViewModel.eventFlow.collectLatest { event ->
-            when(event) {
-                is UiEvent.ShowSnackbar -> {
-                    snackbarHostState.showSnackbar(
-                        message = context.resources.getString(event.message)
-                    )
-                }
-            }
-        }
-    }
 
     // -*- NAVIGATION -*- //
     NavHost(

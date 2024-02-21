@@ -21,9 +21,9 @@ import java.time.LocalDateTime
 @Composable
 fun TimerAppBar(
     currentScreen: Screen,
-    mainViewModel: MainViewModel,
     canNavigateBack: Boolean,
     navigateUp: () -> Unit,
+    downloadCsv: () -> Unit,
     navController: NavController,
     modifier: Modifier = Modifier
 ) {
@@ -60,7 +60,7 @@ fun TimerAppBar(
             }
             if (currentScreen == Screen.TimeSheetScreen) {
                 IconButton(
-                    onClick = { mainViewModel.exportToCSV() }
+                    onClick = { downloadCsv() }
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.file_save),
