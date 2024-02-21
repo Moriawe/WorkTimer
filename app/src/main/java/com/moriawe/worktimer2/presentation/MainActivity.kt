@@ -1,6 +1,5 @@
 package com.moriawe.worktimer2.presentation
 
-import android.content.ActivityNotFoundException
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -15,13 +14,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.preferencesDataStore
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.moriawe.worktimer2.domain.util.CsvExporter
 import com.moriawe.worktimer2.navigation.NavigationGraph
 import com.moriawe.worktimer2.navigation.Screen
 import com.moriawe.worktimer2.ui.theme.WorkTimer2Theme

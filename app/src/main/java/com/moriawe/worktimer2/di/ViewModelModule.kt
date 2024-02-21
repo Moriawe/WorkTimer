@@ -12,7 +12,7 @@ import com.moriawe.worktimer2.domain.use_case.SaveTimeItemToDatabase
 import com.moriawe.worktimer2.domain.use_case.UpdateTimeItemInDatabase
 import com.moriawe.worktimer2.domain.use_case.validations.ValidateStartTimeUseCase
 import com.moriawe.worktimer2.domain.use_case.validations.ValidateStopTimeUseCase
-import com.moriawe.worktimer2.domain.util.CsvExporter
+import com.moriawe.worktimer2.domain.use_case.CsvExporter
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

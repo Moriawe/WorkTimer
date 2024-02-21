@@ -1,16 +1,13 @@
-package com.moriawe.worktimer2.domain.util
+package com.moriawe.worktimer2.domain.use_case
 
 import android.content.Context
 import android.content.Intent
 import android.util.Log
 import androidx.core.content.FileProvider
 import com.github.doyaaaaaken.kotlincsv.dsl.csvWriter
-import com.moriawe.worktimer2.data.entity.TimeItem
-import com.moriawe.worktimer2.domain.use_case.GetListOfMonth
-import com.moriawe.worktimer2.domain.use_case.RepositoryResults
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.File
 import javax.inject.Inject
@@ -45,6 +42,9 @@ class CsvExporter @Inject constructor(
                             }
                         }
                     }
+                    //TODO: Need to delay so app shows the proper file,
+                    // Should show message that it is loading / reading ?
+                    delay(2000L)
                     return goToFileIntent()
                 }
                 // When unsuccessful, display error message to user

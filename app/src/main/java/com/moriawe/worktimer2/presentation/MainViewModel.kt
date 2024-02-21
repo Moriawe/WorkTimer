@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.moriawe.worktimer2.R
-import com.moriawe.worktimer2.domain.util.CsvExporter
+import com.moriawe.worktimer2.domain.use_case.CsvExporter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
